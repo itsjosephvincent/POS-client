@@ -1,14 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [],
-  theme: {
-    fontFamily: {
-      sans: ['"Poppins"', 'sans-serif'],
+    content: [
+        "./components/**/*.{js,vue,ts}",
+        "./layouts/**/*.vue",
+        "./pages/**/*.vue",
+        "./plugins/**/*.{js,ts}",
+        "./app.vue",
+        "./error.vue",
+    ],
+    theme: {
+        extend: {
+            colors: {
+                'cm-black': '#1A202C',
+            }
+        },
     },
-    extend: {},
-  },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+    plugins: [],
 }
 

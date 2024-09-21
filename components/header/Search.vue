@@ -1,0 +1,11 @@
+<script setup lang="ts">
+import { gray } from '~/constants/colors.js'
+</script>
+
+<template>
+    <div class="w-72 h-12 bg-white rounded-xl border border-slate-200 flex items-center px-4">
+        <input type="text" name="search" id="search" placeholder="Search category or items..."
+            class="w-3/4 border-0 grow outline-0 text-gray-600 text-xs">
+        <IconSearch :color="gray" />
+    </div>
+</template>
