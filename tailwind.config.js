@@ -12,7 +12,10 @@ export default {
         extend: {
             colors: {
                 'cm-black': '#1A202C',
-            }
+            },
+            transitionProperty: {
+                'height': 'height',
+            },
         },
     },
     plugins: [],

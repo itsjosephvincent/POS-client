@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div class="w-96 h-screen bg-white border-l border-slate-200">
+    <div class="w-full h-screen bg-white border-l border-slate-200">
         
     </div>
 </template>

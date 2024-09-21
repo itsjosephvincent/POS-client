@@ -1,12 +1,32 @@
 <script setup lang="ts">
-    defineProps({
-        name: { type: String, required: true, },
-    })
+import { ref, computed, onMounted } from 'vue'
+import { useCategoryStore } from '~/stores/category.js'
+
+const props = defineProps({
+    name: { type: String, required: true, },
+})
+
+const isActive = ref(false)
+const store = useCategoryStore()
+watch(() => store.getSelected, (selected?: string) => {
+    console.log(selected)
+    selected === props.name ? isActive.value = true : isActive.value = false
+})
+
+const getStyle = computed(() => (
+    isActive.value ? 'w-20 h-20 bg-white border-2 border-slate-500 rounded-xl flex flex-col justify-center items-center gap-2 cursor-pointer' 
+    : 'w-20 h-20 bg-white border border-slate-200 rounded-xl flex flex-col justify-center items-center gap-2 cursor-pointer' 
+))
+
+onMounted(() => {
+    isActive.value = store.getSelected === props.name
+})
+
 </script>
 
 <template>
-    <div class="w-20 h-20 bg-white border-slate-100 rounded-xl flex flex-col justify-center items-center gap-2">
+    <div @click="$emit('categorySelect', name)" :class="getStyle">
         <slot />
-        <div class="font-bold text-cm-black">{{ name }}</div> 
+        <div class="font-bold text-cm-black select-none">{{ name }}</div>
     </div>
 </template>
