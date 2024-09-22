@@ -21,7 +21,7 @@ const iconStyle = computed(() => "cursor-pointer hover:bg-slate-200 rounded-full
 </script>
 
 <template>
-    <div class="md:flex md:flex-col md:items-center md:gap-4 w-full">
+    <div class="md:flex md:flex-col md:items-center md:gap-4">
         <NuxtLink v-for="item in state.menus" :to="item.link">
             <IconSvg :color="black" :class="iconStyle" :icon="item.icon" />
         </NuxtLink>
