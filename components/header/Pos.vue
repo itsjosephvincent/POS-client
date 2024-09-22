@@ -3,22 +3,15 @@ import { watch } from 'vue'
 import { black } from '~/constants/colors.js'
 import { useCategoryStore } from '~/stores/category.js'
 import { categories } from '~/test-data/categories.js'
-import { IconItems, IconCoffee, IconFood, IconMeals } from '#components'
 
 const store = useCategoryStore()
-const iconComponents = {
-    'all': IconItems,
-    'coffee': IconCoffee,
-    'snacks': IconFood,
-    'meals': IconMeals,
-}
 
 function selectCategory(category: string) {
     store.setSelected(category)
 }
 
 
-watch(() => store.getSelected, (selected?: string) => {
+watch(() => store.getSelected, (selected) => {
     console.log(selected)
 })
 
@@ -32,7 +25,7 @@ watch(() => store.getSelected, (selected?: string) => {
         </div>
         <div class="flex gap-4 m-2 mx-8">
             <ItemCategoryCard v-for="item in categories" @category-select="selectCategory" :name="item.name" :key="item.id">
-                <component :is="iconComponents[item.icon]" :color="black"></component>
+                <IconSvg :icon="item.icon" :color="black" />
             </ItemCategoryCard>
         </div>
     </div>
