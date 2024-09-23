@@ -14,8 +14,8 @@ watch(() => store.getSelected, (selected?: string) => {
 })
 
 const getStyle = computed(() => (
-    isActive.value ? 'w-20 h-20 bg-white border-2 border-slate-500 rounded-xl flex flex-col justify-center items-center gap-2 cursor-pointer' 
-    : 'w-20 h-20 bg-white border border-slate-200 rounded-xl flex flex-col justify-center items-center gap-2 cursor-pointer' 
+    isActive.value ? 'w-20 h-20 bg-secondaryBg border-2 border-secondaryBorder rounded-xl flex flex-col justify-center items-center gap-2 cursor-pointer' 
+    : 'w-20 h-20 bg-secondaryBg border border-primaryBorder rounded-xl flex flex-col justify-center items-center gap-2 cursor-pointer' 
 ))
 
 onMounted(() => {
@@ -27,6 +27,6 @@ onMounted(() => {
 <template>
     <div @click="$emit('categorySelect', name)" :class="getStyle">
         <slot />
-        <div class="font-bold text-cm-black select-none">{{ name }}</div>
+        <div class="font-bold text-primaryText select-none">{{ name }}</div>
     </div>
 </template>

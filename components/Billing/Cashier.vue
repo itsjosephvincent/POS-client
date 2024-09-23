@@ -14,13 +14,13 @@ const state = reactive({
 
 <template>
     <div class="w-full flex justify-center">
-        <div class="w-full xl:mx-6 my-2 p-4 flex items-center gap-4 xl:rounded-xl bg-white border-b xl:border border-slate-200">
+        <div class="w-full xl:mx-6 my-2 p-4 flex items-center gap-4 xl:rounded-xl bg-secondaryBg border-b xl:border border-slate-200">
             <img :alt="state.user.name" :src="state.user.avatar" class="object-contain rounded-xl" height="50" width="50" />
             <div class="grow flex flex-col justify-center items-start">
-                <div class="text-xs text-gray-500 font-bold">Cashier Today!</div>
-                <div class="text-lg font-bold text-cm-black">{{ state.user.name }}</div>
+                <div class="text-xs text-secondaryText font-bold">Cashier Today!</div>
+                <div class="text-lg font-bold text-primaryText">{{ state.user.name }}</div>
             </div>
-            <IconSvg icon="bell" :color="black" height="1.7em" width="1.7em" />
+            <IconSvg icon="bell" color="var(--text-primary)" height="1.7em" width="1.7em" />
         </div>
     </div>
     

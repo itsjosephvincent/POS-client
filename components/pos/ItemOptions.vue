@@ -10,7 +10,7 @@ defineProps({
 
 <template>
     <div class="w-1/2 p-2">
-        <div class="text-cm-black mb-2 text-sm font-bold">{{ name }}</div>
+        <div class="text-primaryText mb-2 text-sm font-bold">{{ name }}</div>
         <div class="flex gap-1">
             <PosItemOptionChoice v-for="(item, index) in choices" :key="index" :name="item" :index="index" />   
         </div>

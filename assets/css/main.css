@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global Variables */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f3f4f6;
+    --bg-tertiary: #ebe9d8;
+    --border-primary: #023047;
+    --border-secondary: #219ebc;
+    --text-primary: #1A202C;
+    --text-secondary: #6b7280;
+    --text-tertiary: #9ca3af;
+    --primary-color: #b2ae97;
+    --secondary-color: #b7b49e;
+    --tertiary-color: #cbcabb;
+    --warning-color: #fb8500;
+    --error-color: #c1121f;
+}
+
+.dark {
+    --bg-primary: #212121;
+    --bg-secondary: #171717;
+    --bg-tertiary: #ebe9d8;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --border-primary: #303234;
+    --border-secondary: #ffffff;
+}
+
+html {
+    transition: background-color 0.5s, color 0.5s;
+}
+
 /* total width */
 ::-webkit-scrollbar {
     background-color: transparent;
