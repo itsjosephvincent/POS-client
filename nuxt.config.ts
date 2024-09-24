@@ -13,8 +13,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      appName: process.env.APP_NAME,
-      apiBaseURL: process.env.API_BASE_URL,
+      apiBaseURL: 'http://127.0.0.1:8000/api', // process.env.APP_NAME,
+      appName: process.env.API_BASE_URL,
     },
   },
   css: ['~/assets/css/main.css'],

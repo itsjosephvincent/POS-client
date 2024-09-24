@@ -1,7 +1,7 @@
 import APIError from './APIError'
 
 class BaseAPIService {
-    async request(url: string, method: string, params: object = null): Promise<any> {
+    async request(url: string, method: string, params = null): Promise<any> {
         const runtimeConfig = useRuntimeConfig()
         let config = null
         if (method === 'GET') {
@@ -10,6 +10,7 @@ class BaseAPIService {
                 baseURL: runtimeConfig.public.apiBaseURL,
                 method: method,
                 headers: {
+                    Accept: 'application/json',
                     Authorization: 'Bearer ' + localStorage.getItem('_token'),
                 },
                 async onRequest({ request, options }) {
@@ -22,6 +23,7 @@ class BaseAPIService {
                 baseURL: runtimeConfig.public.apiBaseURL,
                 method: method,
                 headers: {
+                    Accept: 'application/json',
                     Authorization: 'Bearer ' + localStorage.getItem('_token'),
                 },
                 body: params,
@@ -30,7 +32,7 @@ class BaseAPIService {
 
         try {
             return await $fetch(url, config)
-        } catch (error) {
+        } catch (error: any) {
             switch (error.response.status) {
                 case 400:
                 case 422:

@@ -8,7 +8,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <button :class="`w-[calc(90%)] max-w-96 h-12 bg-primaryColor rounded-xl`">
+    <button :class="`w-[calc(90%)] max-w-96 h-12 bg-primaryColor rounded-xl select-none text-lg font-bold text-primaryText`">
         {{ props.label }}
     </button>
 </template>

@@ -2,7 +2,7 @@ import BaseAPIService from './BaseAPIService'
 
 class AuthService extends BaseAPIService {
     async login(params: object): Promise<any> {
-        return await this.request(`/admin/auth/login`, 'POST', params)
+        return await this.request(`/auth/login`, 'POST', params)
     }
 
     async logout(): Promise<any> {
