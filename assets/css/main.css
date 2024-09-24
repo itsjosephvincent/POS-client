@@ -8,7 +8,7 @@
     --bg-secondary: #f3f4f6;
     --bg-tertiary: #ebe9d8;
     --border-primary: #023047;
-    --border-secondary: #219ebc;
+    --border-secondary: #b7b49e;
     --text-primary: #1A202C;
     --text-secondary: #6b7280;
     --text-tertiary: #9ca3af;
@@ -22,7 +22,7 @@
 .dark {
     --bg-primary: #212121;
     --bg-secondary: #171717;
-    --bg-tertiary: #ebe9d8;
+    --bg-tertiary: #212121;
     --text-primary: #ffffff;
     --text-secondary: #ffffff;
     --border-primary: #303234;

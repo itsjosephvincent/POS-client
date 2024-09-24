@@ -13,7 +13,7 @@ watch(() => store.items, (item: string) => {
 <template>
     <div>
         <div class="font-bold text-lg text-primaryText mx-2 xl:mx-6">Bills</div>
-        <div class="mt-2 h-[400px] overflow-y-auto" ref="container-div">
+        <div class="mt-2 h-[calc(100vh-371px)] overflow-y-auto" ref="container-div">
             <BillingItemRow v-for="item in store.items" :image="item.imageSrc" :item="item.item" />
         </div>
     </div>

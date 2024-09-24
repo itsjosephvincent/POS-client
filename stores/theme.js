@@ -8,7 +8,8 @@ export const useThemeStore = defineStore('theme', () => {
     }
 
     const theme = computed(() => isDark.value ? 'dark' : 'light')
+    const isDarkTheme = computed(() => isDark.value)
 
-    return { isDark, toggle, theme }
+    return { isDark, toggle, theme, isDarkTheme }
 
 }, { persist: true, })

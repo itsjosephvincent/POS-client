@@ -30,7 +30,7 @@ function addToBilling() {
 watch(() => itemStore.getCurrent, (current: string) => {
     isActive.value = current === props.item
 })
-const borderClass = computed(() => isActive.value ? 'border-2 border-secondaryBorder scale-110' : 'border border-primaryBorder')
+const borderClass = computed(() => isActive.value ? 'border-2 border-secondaryBorder' : 'border border-primaryBorder')
 
 onMounted(() => {
     isActive.value = itemStore.getCurrent === props.item
@@ -38,7 +38,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div @click="onClick" :class="`w-[calc(95%)] md:w-[80%] lg:w-80 m-3 mb-5 p-3 bg-secondaryBg ${borderClass} rounded-xl cursor-pointer select-none transition ease-in-out delay-200`">
+    <div @click="onClick" :class="`w-[calc(95%)] md:w-[80%] lg:w-80 m-3 mb-5 p-3 bg-secondaryBg ${borderClass} rounded-xl cursor-pointer select-none`">
         <div class="w-full h-full flex flex-col justify-around">
             <div class="flex items-center gap-3 mb-4">
                 <img class="w-28 h-32 rounded-xl object-cover" :src="imageSrc" :alt="item" />
