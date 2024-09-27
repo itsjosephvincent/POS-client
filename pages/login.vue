@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { useThemeStore } from '~/stores/theme.js';
 
+definePageMeta({
+    middleware: ['login'],
+})
+
 </script>
 
 <template>

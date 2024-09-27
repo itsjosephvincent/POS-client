@@ -2,7 +2,8 @@
 import { coffee } from '~/test-data/coffee.js'
 
 definePageMeta({
-    layout: 'pos'
+    layout: 'pos',
+    middleware: ['auth'],
 })
 
 </script>
