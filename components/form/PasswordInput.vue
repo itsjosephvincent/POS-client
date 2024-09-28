@@ -18,9 +18,9 @@ function toggleMode() {
 </script>
 
 <template>
-    <div class="w-[calc(90%)] max-w-96 h-12 bg-secondaryBg rounded-xl border border-secondaryBorder flex items-center px-4 my-4">
-        <IconSvg icon="password" color="var(--text-primary)" height="1.5em" width="1.5em" />
-        <input :value="props.modelValue" @input="$emit('update:modelValue', $event.target.value)" :type="type" :name="props.name" :id="props.name" :placeholder="props.placeholder" class="grow ml-2 w-3/4 border-0 outline-0 text-secondaryText bg-secondaryBg text-xs">
-        <IconSvg @click="toggleMode" class="cursor-pointer" :icon="currentIcon" color="var(--text-primary)" height="1.5em" width="1.5em" />
+    <div class="w-[calc(90%)] max-w-96 h-12 bg-primaryBg rounded-xl flex items-center px-4 my-2">
+        <IconSvg icon="password" color="var(--text-tertiary)" height="1.5em" width="1.5em" />
+        <input :value="props.modelValue" @input="$emit('update:modelValue', $event.target.value)" :type="type" :name="props.name" :id="props.name" :placeholder="props.placeholder" class="grow ml-4 w-3/4 border-0 outline-0 text-secondaryText bg-primaryBg">
+        <IconSvg @click="toggleMode" class="cursor-pointer" :icon="currentIcon" color="var(--text-tertiary)" height="1.5em" width="1.5em" />
     </div>
 </template>

@@ -8,11 +8,9 @@ export default defineNuxtRouteMiddleware(async (from, to) => {
     const token = localStorage.getItem('_token')
     const userStore = useUserStore()
     const state = userStore.state
-
     if (!token) {
         return navigateTo('/login')
     }
-
     if (!state.user) {
         try {
             const response = await authService.user()
@@ -20,11 +18,12 @@ export default defineNuxtRouteMiddleware(async (from, to) => {
                 userStore.setUser(response.data)
                 return
             }
-            authService.revokeAccess()
-            return navigateTo('/login')
+            throw 'Invalid token.'
         } catch (error) {
+            console.error(error)
+            authService.revokeAccess()
+            userStore.resetUser()
            return navigateTo('/login') 
         }
-        return
     }
 })

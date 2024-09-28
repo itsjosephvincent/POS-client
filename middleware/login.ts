@@ -1,3 +1,5 @@
+import { useUserStore } from "~/stores/user.js"
+
 export default defineNuxtRouteMiddleware((from, to) => {
     // skip middleware on server
     if (import.meta.server) return
@@ -6,5 +8,6 @@ export default defineNuxtRouteMiddleware((from, to) => {
     if (token) {
         return navigateTo('/')
     }
+    useUserStore().resetUser()
     return
 })

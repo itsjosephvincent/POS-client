@@ -10,7 +10,7 @@ class APIError extends Error {
 	}
 
 	getErrorMessage() {
-		return 'Something went wrong: ' + this.message
+		return this.message
 	}
 }
 export default APIError

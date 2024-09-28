@@ -8,7 +8,7 @@ definePageMeta({
 </script>
 
 <template>
-    <div class="w-screen h-screen flex items-center justify-center bg-primaryBg ">
+    <div class="w-screen h-screen flex items-center justify-center bg-secondaryBg md:bg-primaryBg">
         <LoginCard />
     </div>
 </template>

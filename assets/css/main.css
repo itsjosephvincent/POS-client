@@ -7,14 +7,14 @@
     --bg-primary: #f3f4f6;
     --bg-secondary: #ffffff;
     --bg-tertiary: #ebe9d8;
-    --border-primary: #023047;
-    --border-secondary: #b7b49e;
+    --border-primary: #e5e7eb;
+    --border-secondary: #264653;
     --text-primary: #1A202C;
     --text-secondary: #6b7280;
     --text-tertiary: #9ca3af;
-    --primary-color: #b2ae97;
-    --secondary-color: #b7b49e;
-    --tertiary-color: #cbcabb;
+    --primary-color: #264653;
+    --secondary-color: #2a9d8f;
+    --tertiary-color: #e9c46a;
     --warning-color: #fb8500;
     --error-color: #c1121f;
 }
