@@ -5,7 +5,6 @@ const state = reactive({
     menus: [
         { id: 'dashboard', link: '/', name: 'Dashboard', icon: 'home' },
         { id: 'accounts', link: '/accounts', name: 'Accounts', icon: 'staff' },
-        { id: 'sku', link: '/sku', name: 'SKUs', icon: 'products' },
     ]
 })
 async function logout() {
@@ -13,6 +12,7 @@ async function logout() {
     useUserStore().resetUser() 
     await navigateTo('/login')
 }
+const labelStyle = `font-lg font-medium text-inherit text-white`
 </script>
 
 <template>
@@ -21,15 +21,15 @@ async function logout() {
         <div class="w-full md:flex md:flex-col md:items-start md:gap-4">
             <NuxtLink class="w-full" v-for="item in state.menus" :to="item.link" :key="item.id">
                 <div id="row"
-                    class="flex justify-start items-center gap-4 px-4 py-2 hover:bg-primaryColor hover:text-white">
-                    <IconSvg color="var(--text-primary)" :key="item.id" :icon="item.icon" size="1.5em" />
-                    <div class="text font-lg text-inherit">{{ item.name }}</div>
+                    class="flex justify-start items-center gap-4 px-4 py-2 pl-8 hover:bg-primaryColor hover:text-white">
+                    <IconSvg color="#fff" :key="item.id" :icon="item.icon" size="1em" />
+                    <div :class="labelStyle">{{ item.name }}</div>
                 </div>
             </NuxtLink>
         </div>
-        <div @click="logout" id="logout" class="flex w-full justify-start items-center gap-4 px-4 py-2 hover:bg-primaryColor hover:text-white cursor-pointer">
-            <IconSvg color="var(--text-primary)" icon="logout" size="1.5em" />
-            <div class="text font-lg text-inherit">Logout</div>
+        <div @click="logout" id="logout" class="flex w-full justify-start items-center gap-4 px-4 py-2 pl-8 hover:bg-primaryColor hover:text-white cursor-pointer">
+            <IconSvg color="#fff" icon="logout" size="1em" />
+            <div :class="labelStyle">Logout</div>
         </div>
     </div>
 </template>

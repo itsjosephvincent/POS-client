@@ -1,10 +1,21 @@
 import { usePageStore } from '~/stores/page.js'
+import { useUserStore } from '~/stores/user.js'
 
-export const useSetPage = () => {
+const pageData = {
+    index: {
+        SuperAdmin: 'Dashboard',
+        Admin: 'Dashboard',
+        Manager: 'Dashboard',
+        Cashier: 'POS',
+    },
+}
+
+export const useSetPage = (currentPage: string) => {
     const pageStore = usePageStore()
     const page = computed(() => pageStore.getPage)
+    const userStore = useUserStore()
     onMounted(() => {
-        pageStore.setPage({ name: 'dashboard', title: 'Super Admin' })
+        pageStore.setPage({ name: pageData[currentPage], title: pageData[currentPage][userStore.getRole] })
     })
     return { page }
 }
