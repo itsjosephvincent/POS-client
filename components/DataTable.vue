@@ -1,4 +1,6 @@
 <script setup lang="ts">
+
+const emit = defineEmits(['sortData'])
 interface DataTableColumns {
     key: string
     label: string
@@ -7,6 +9,7 @@ interface DataTableProps {
     columns: Array<DataTableColumns>
     dataSource?: Array<object>
     columnClass?: Function
+    actions?: Array<object>
     showPagination?: boolean
     rowsPerPage?: number
     totalPages?: number
@@ -16,17 +19,36 @@ const props = defineProps<DataTableProps>()
 const getColumnClass = (row: object, columnKey: string): string => {
     return props.columnClass ? props.columnClass(row, columnKey) : ''
 }
+const currentSortColumn = ref(null)
+const currentSortDirection = ref('asc')
+const getActions = computed(() => props.actions || [])
+function toggleSorting(column: DataTableColumns) {
+    if (column.key === currentSortColumn.value) {
+        currentSortDirection.value = currentSortDirection.value === 'asc' ? 'desc' : 'asc'
+        currentSortColumn.value = column.key
+        emit('sortData', column.key, currentSortDirection.value)
+    } else {
+        currentSortColumn.value = column.key
+        emit('sortData', column.key, currentSortDirection.value)
+    }
+}
 
 </script>
 
 <template>
-    <div class="min-w-full bg-transparent flex flex-col justify-center">
+    <div class="lg:w-[90%] bg-transparent flex flex-col justify-center">
         <div class="min-w-full rounded-xl overflow-hidden border border-gray-200">
             <table class="min-w-full border-collapse rounded-lg">
                 <thead>
                     <tr class="bg-primaryColor text-white font-bold border-gray-200">
-                        <th v-for="column in props.columns" :key="column.key" class="px-4 py-4 text-left">{{
-                            column.label }}
+                        <th v-for="column in props.columns" :key="column.key" @click="toggleSorting(column)"
+                            class="px-4 py-4 text-left">{{ column.label }}
+                            <!-- Add sorting indicator -->
+                            <span v-if="currentSortColumn === column.key">
+                                {{ currentSortDirection === 'asc' ? '▲' : '▼' }}
+                            </span>
+                        </th>
+                        <th v-if="props.actions?.length" class="px-4 py-4 text-center">Actions
                         </th>
                     </tr>
                 </thead>
@@ -38,6 +60,13 @@ const getColumnClass = (row: object, columnKey: string): string => {
                             <slot :name="`column-${column.key}`" :row="row" :column="column">
                                 {{ row[column.key] }}
                             </slot>
+                        </td>
+                        <!-- Render Action Buttons -->
+                        <td v-if="getActions.length" class="px-4 py-4 text-center">
+                            <button v-for="(action, index) in actions" :key="index" @click="action.handler(row)"
+                                class="mx-1 px-4 py-1 text-sm rounded bg-blue-500 text-white hover:bg-blue-700">
+                                {{ action.label }}
+                            </button>
                         </td>
                     </tr>
 

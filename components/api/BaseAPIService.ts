@@ -1,7 +1,7 @@
 import APIError from './APIError'
 
 class BaseAPIService {
-    async request(url: string, method: string, params = null): Promise<any> {
+    async request(url: string, method: string, params: object|null = null): Promise<any> {
         const runtimeConfig = useRuntimeConfig()
         let config = null
         if (method === 'GET') {

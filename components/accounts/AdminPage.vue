@@ -10,20 +10,18 @@ interface DataTableColumns {
     label: string
 }
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'business_name', label: 'Business' },
+    { key: 'lastname', label: 'Lastname' },
+    { key: 'firstname', label: 'Firstname' },
     { key: 'username', label: 'Username' },
-    { key: 'name', label: 'Name' },
-    { key: 'enabled', label: 'Active' },
 ]
 async function fetch(page: number|null = null) {
     try {
-        debugger
         const response = await adminService.admins(page)
         if (response && response.data) {
-            data.value = response.data.admins.data
-            rowsPerPage.value = response.data.admins.per_page
-            totalPages.value = response.data.admins.last_page
-            currentPage.value = response.data.admins.current_page
+            data.value = response.data
+            rowsPerPage.value = response.meta.per_page
+            totalPages.value = response.meta.last_page
+            currentPage.value = response.meta.current_page
             console.log(data.value)
         } else {
             throw 'Empty data.'
@@ -48,18 +46,37 @@ function nextPageClick() {
 function goToPage(page: number) {
     fetch(page)
 }
+function sortData(column: string, direction: string) {
+    console.log('sort', column, direction)
+}
+const tableActions = [
+  {
+    label: 'Edit',
+    handler: (row) => {
+      console.log('Edit action triggered for:', row);
+      // Add your custom edit logic here
+    },
+  },
+  {
+    label: 'Delete',
+    handler: (row) => {
+      console.log('Delete action triggered for:', row);
+      // Add your custom delete logic here
+    },
+  },
+];
 </script>
 
 <template>
-    <div class="flex flex-col items-start justify-center w-full">
-        <div class="p-4 flex flex-wrap items-center">
-            <ReportCard title="1" sub-title="Active" description="Accounts" color="text-white"
+    <div class="flex flex-col items-center justify-center py-4">
+        <div class="w-full lg:w-[90%] py-4 flex flex-wrap justify-start items-center gap-4">
+            <!-- <ReportCard title="1" sub-title="Active" description="Accounts" color="text-white"
                 background="bg-secondaryColor" icon="staff" icon-color="#fff" />
             <ReportCard title="1" sub-title="Inactive" description="Accounts" color="text-white"
-                background="bg-warningColor" icon="staff" icon-color="#fff" />
+                background="bg-warningColor" icon="staff" icon-color="#fff" /> -->
         </div>
-        <DataTable :columns="dataTableColumns" :data-source="admins" :show-pagination="true" :current-page="getCurrentPage" :rows-per-page="getRowsPerPage" 
-            :total-pages="getTotalPages" @previous-page="previousPageClick" @next-page="nextPageClick" @go-to-page="goToPage">
+        <DataTable :columns="dataTableColumns" :data-source="admins" :actions="tableActions" :show-pagination="true" :current-page="getCurrentPage" :rows-per-page="getRowsPerPage" 
+            :total-pages="getTotalPages" @previous-page="previousPageClick" @next-page="nextPageClick" @go-to-page="goToPage" @sort-data="sortData">
             <template #column-enabled="{ row }">
                 <span :class="`${row.enabled ? 'bg-secondaryColor' : 'bg-warningColor'} px-2 py-1 rounded-xl text-sm text-white font-bold`">{{row.enabled ? 'Active' : 'Inactive'  }}</span>
             </template>

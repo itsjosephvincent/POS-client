@@ -15,7 +15,7 @@ const iconColor = computed(() => props.iconColor || '#ffffff')
 </script>
 
 <template>
-    <div :class="`m-3 mb-5 py-1 pl-4 pr-6 ${backgroundStyle} rounded-xl cursor-pointer select-none`">
+    <div :class="`py-1 pl-4 pr-6 ${backgroundStyle} rounded-xl cursor-pointer select-none`">
         <div class="flex items-center justify-start gap-6 mb-4">
             <IconSvg :icon="props.icon" size="2em" :color="iconColor" />
             <div class="grow flex flex-col justify-center">
