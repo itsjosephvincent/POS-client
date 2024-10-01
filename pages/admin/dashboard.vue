@@ -4,8 +4,8 @@ import { usePageStore } from '~/stores/page';
 const pageTitle = 'Dashboard'
 const pageStore = usePageStore()
 definePageMeta({
-    layout: 'superadmin',
-    middleware: ['auth', 'superadmin'],
+    layout: 'admin',
+    middleware: ['auth', 'admin'],
 })
 useHead({
     title: pageTitle,

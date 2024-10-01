@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { useUserStore } from '~/stores/user.js'
-import { adminService } from '~/components/api/AdminService';
+import { storeService } from '~/components/api/StoreService';
 
 definePageMeta({
-    layout: 'superadmin',
-    middleware: ['auth', 'superadmin'],
+    layout: 'admin',
+    middleware: ['auth', 'admin'],
 })
 const userStore = useUserStore()
 const pageStore = usePageStore()
-const pageTitle = 'Accounts'
+const pageTitle = 'Stores'
 useHead({
     title: pageTitle,
 })
@@ -25,14 +25,21 @@ interface DataTableColumns {
     key: string
     label: string
 }
+interface StoreServiceParams {
+    admin_id?: number
+    page?: number
+    sortField?: string
+    sortOrder?: string
+}
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'lastname', label: 'Lastname' },
-    { key: 'firstname', label: 'Firstname' },
+    { key: 'store_name', label: 'Store' },
+    { key: 'branch', label: 'Branch' },
     { key: 'username', label: 'Username' },
 ]
-async function fetch(params: object|null = null) {
+async function fetch(params: StoreServiceParams = {}) {
     try {
-        const response = await adminService.admins(params)
+        params['admin_id'] = userStore.getUser.id
+        const response = await storeService.stores(params)
         if (response && response.data) {
             data.value = response.data
             rowsPerPage.value = response.meta.per_page

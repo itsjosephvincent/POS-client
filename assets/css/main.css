@@ -17,6 +17,8 @@
     --tertiary-color: #8ecae6;
     --warning-color: #fb8500;
     --error-color: #c1121f;
+    --primary-color-transparent: #02304762;
+    --secondary-color-transparent: #219dbc3b;
 }
 
 .dark {

@@ -24,6 +24,8 @@ export default {
                 tertiaryColor: 'var(--tertiary-color)',
                 warningColor: 'var(--warning-color)',
                 errorColor: 'var(--error-color)',
+                primaryColorTransparent: 'var(--primary-color-transparent)',
+                secondaryColorTransparent: 'var(--secondary-color-transparent)',
             },
             transitionProperty: {
                 'height': 'height',

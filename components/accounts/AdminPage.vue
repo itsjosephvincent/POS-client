@@ -14,9 +14,9 @@ const dataTableColumns: Array<DataTableColumns> = [
     { key: 'firstname', label: 'Firstname' },
     { key: 'username', label: 'Username' },
 ]
-async function fetch(page: number|null = null) {
+async function fetch(params: object|null = null) {
     try {
-        const response = await adminService.admins(page)
+        const response = await adminService.admins(params)
         if (response && response.data) {
             data.value = response.data
             rowsPerPage.value = response.meta.per_page
@@ -38,47 +38,59 @@ const getRowsPerPage = computed(() => rowsPerPage.value || 10)
 const getTotalPages = computed(() => totalPages.value)
 const getCurrentPage = computed(() => currentPage.value)
 function previousPageClick() {
-    fetch(currentPage.value - 1)
+    fetch({ page: currentPage.value - 1 })
 }
 function nextPageClick() {
-    fetch(currentPage.value + 1)
+    fetch({ page: currentPage.value + 1 })
 }
 function goToPage(page: number) {
-    fetch(page)
+    fetch({ page })
 }
 function sortData(column: string, direction: string) {
-    console.log('sort', column, direction)
+    currentPage.value = 1
+    fetch({
+        page: currentPage.value,
+        sortField: column,
+        sortOrder: direction,
+    })
+
 }
 const tableActions = [
-  {
-    label: 'Edit',
-    handler: (row) => {
-      console.log('Edit action triggered for:', row);
-      // Add your custom edit logic here
+    {
+        key: 'edit',
+        label: 'Edit',
+        handler: (row: object) => {
+        console.log('Edit action triggered for:', row);
+        // Add your custom edit logic here
+        },
     },
-  },
-  {
-    label: 'Delete',
-    handler: (row) => {
-      console.log('Delete action triggered for:', row);
-      // Add your custom delete logic here
+    {
+        key: 'delete',
+        label: 'Delete',
+        handler: (row: object) => {
+        console.log('Delete action triggered for:', row);
+        // Add your custom delete logic here
+        },
     },
-  },
-];
+]
 </script>
 
 <template>
     <div class="flex flex-col items-center justify-center py-4">
-        <div class="w-full lg:w-[90%] py-4 flex flex-wrap justify-start items-center gap-4">
-            <!-- <ReportCard title="1" sub-title="Active" description="Accounts" color="text-white"
-                background="bg-secondaryColor" icon="staff" icon-color="#fff" />
-            <ReportCard title="1" sub-title="Inactive" description="Accounts" color="text-white"
-                background="bg-warningColor" icon="staff" icon-color="#fff" /> -->
-        </div>
         <DataTable :columns="dataTableColumns" :data-source="admins" :actions="tableActions" :show-pagination="true" :current-page="getCurrentPage" :rows-per-page="getRowsPerPage" 
-            :total-pages="getTotalPages" @previous-page="previousPageClick" @next-page="nextPageClick" @go-to-page="goToPage" @sort-data="sortData">
+            :total-pages="getTotalPages" @previous-page="previousPageClick" @next-page="nextPageClick" @go-to-page="goToPage" @sort-data="sortData" search-placeholder="Filter admin accounts...">
             <template #column-enabled="{ row }">
                 <span :class="`${row.enabled ? 'bg-secondaryColor' : 'bg-warningColor'} px-2 py-1 rounded-xl text-sm text-white font-bold`">{{row.enabled ? 'Active' : 'Inactive'  }}</span>
+            </template>
+            <template #action-edit="{ action }">
+                <button class="p-1 rounded-full hover:bg-sky-500/30">
+                    <IconSvg icon="edit" color="var(--secondary-color)" size="1.5em" />
+                </button>
+            </template>
+            <template #action-delete="{ action }">
+                <button class="p-1 rounded-full hover:bg-red-500/30">
+                    <IconSvg icon="delete" color="var(--error-color)" size="1.5em" />
+                </button>
             </template>
         </DataTable>
     </div>

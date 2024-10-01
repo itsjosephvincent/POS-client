@@ -9,7 +9,7 @@ export default defineNuxtRouteMiddleware(async (from, to) => {
     const userStore = useUserStore()
     const state = userStore.state
     if (!token) {
-        return navigateTo('/login')
+        return navigateTo('/admin/login')
     }
     if (!state.user) {
         try {
@@ -23,7 +23,7 @@ export default defineNuxtRouteMiddleware(async (from, to) => {
             console.error(error)
             authService.revokeAccess()
             userStore.resetUser()
-           return navigateTo('/login') 
+           return navigateTo('/admin/login') 
         }
     }
 })

@@ -14,6 +14,7 @@ export const useUserStore = defineStore('user', () => {
     }
 
     const getRole = computed(() => state.user && state.user.role ? state.user.role : null)
+    const getUser = computed(() => state.user)
 
-    return { state, setUser, resetUser, getRole }
+    return { state, setUser, resetUser, getRole, getUser }
 }, { persist: true, })

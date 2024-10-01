@@ -21,12 +21,12 @@ async function login(username: string, password:string) {
             username,
             password,
         }
-        const response = await authService.superAdminLogin(params)
+        const response = await authService.adminLogin(params)
         if (response.data) {
             localStorage.setItem("_token", response.data.token)
-            response.data.user.role = 'SuperAdmin'
+            response.data.user.role = 'Admin'
             userStore.setUser(response.data.user)
-            await navigateTo('/superadmin/dashboard')
+            await navigateTo('/admin/dashboard')
         }
     } catch (error: any) {
         console.log(error)
