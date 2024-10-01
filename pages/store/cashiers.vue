@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { useUserStore } from '~/stores/user.js'
-import { storeService } from '~/components/api/StoreService';
+import { cashierService } from '~/components/api/CashierService';
 
 definePageMeta({
-    layout: 'admin',
-    middleware: ['auth', 'admin'],
+    layout: 'store',
+    middleware: ['store'],
 })
 const userStore = useUserStore()
 const pageStore = usePageStore()
-const pageTitle = 'Stores'
+const pageTitle = 'Cashiers'
 useHead({
     title: pageTitle,
 })
@@ -32,14 +32,13 @@ interface StoreServiceParams {
     sortOrder?: string
 }
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'store_name', label: 'Store' },
-    { key: 'branch', label: 'Branch' },
+    { key: 'name', label: 'Name' },
     { key: 'username', label: 'Username' },
 ]
 async function fetch(params: StoreServiceParams = {}) {
     try {
-        params['admin_id'] = userStore.getUser.id
-        const response = await storeService.stores(params)
+        params['store_id'] = userStore.getUser.id
+        const response = await cashierService.cashiers(params)
         if (response && response.data) {
             data.value = response.data
             rowsPerPage.value = response.meta.per_page

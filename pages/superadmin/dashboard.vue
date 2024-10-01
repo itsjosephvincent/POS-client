@@ -5,7 +5,7 @@ const pageTitle = 'Dashboard'
 const pageStore = usePageStore()
 definePageMeta({
     layout: 'superadmin',
-    middleware: ['auth', 'superadmin'],
+    middleware: ['superadmin'],
 })
 useHead({
     title: pageTitle,

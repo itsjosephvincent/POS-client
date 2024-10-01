@@ -21,12 +21,12 @@ async function login(username: string, password:string) {
             username,
             password,
         }
-        const response = await authService.adminLogin(params)
+        const response = await authService.storeLogin(params)
         if (response.data) {
             localStorage.setItem("_token", response.data.token)
-            response.data.user.role = 'Admin'
+            response.data.user.role = 'Store'
             userStore.setUser(response.data.user)
-            await navigateTo('/admin/dashboard')
+            await navigateTo('/store/dashboard')
         }
     } catch (error: any) {
         console.log(error)
@@ -39,6 +39,6 @@ async function login(username: string, password:string) {
 
 <template>
     <div class="w-screen h-screen flex items-center justify-center bg-secondaryBg md:bg-primaryBg">
-        <LoginCard :login-handler="login" :has-error="getHasError" :error-message="getErrorMessage" />
+        <LoginCard :login-handler="login" :has-error="getHasError" :error-message="getErrorMessage" button-label="Login as store" />
     </div>
 </template>

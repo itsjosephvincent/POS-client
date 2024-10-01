@@ -7,11 +7,13 @@ const props = defineProps<{
     loginHandler: Function;
     hasError?: boolean;
     errorMessage: string;
+    buttonLabel?: string
 }>()
 
 const usernameModel = defineModel('username')
 const passwordModel = defineModel('password')
 const isLoading = ref(false)
+const buttonLabel = computed(() => props.buttonLabel ? props.buttonLabel : 'Login')
 
 async function onLogin() {
     isLoading.value = true
@@ -35,7 +37,7 @@ const getError = computed(() => props.errorMessage)
                 @update:modelValue="$event => (usernameModel = $event)" />
             <PasswordInput name="password" icon="password" post-icon="eyeClosed" placeholder="Password" type="password"
                 :modelValue="passwordModel" @update:modelValue="$event => (passwordModel = $event)" />
-            <FormButton type="submit" label="Login" :loading="isLoading" />
+            <FormButton type="submit" :label="buttonLabel" :loading="isLoading" />
         </form>
     </div>
 </template>

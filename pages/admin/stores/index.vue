@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { useUserStore } from '~/stores/user.js'
-import { adminService } from '~/components/api/AdminService';
+import { storeService } from '~/components/api/StoreService';
 
 definePageMeta({
-    layout: 'superadmin',
-    middleware: ['superadmin'],
+    layout: 'admin',
+    middleware: ['admin'],
 })
 const userStore = useUserStore()
 const pageStore = usePageStore()
-const pageTitle = 'Accounts'
+const pageTitle = 'Stores'
 useHead({
     title: pageTitle,
 })
@@ -25,14 +25,21 @@ interface DataTableColumns {
     key: string
     label: string
 }
+interface StoreServiceParams {
+    admin_id?: number
+    page?: number
+    sortField?: string
+    sortOrder?: string
+}
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'lastname', label: 'Lastname' },
-    { key: 'firstname', label: 'Firstname' },
+    { key: 'store_name', label: 'Store' },
+    { key: 'branch', label: 'Branch' },
     { key: 'username', label: 'Username' },
 ]
-async function fetch(params: object|null = null) {
+async function fetch(params: StoreServiceParams = {}) {
     try {
-        const response = await adminService.admins(params)
+        params['admin_id'] = userStore.getUser.id
+        const response = await storeService.stores(params)
         if (response && response.data) {
             data.value = response.data
             rowsPerPage.value = response.meta.per_page
@@ -71,6 +78,15 @@ function sortData(column: string, direction: string) {
     })
 
 }
+function handleRowClick(row: object) {
+    if (row && row.admin_id) {
+        // // set Page State
+        // pageStore.setPage('Stores')
+        // pageStore.setParams(['Store', row.store_name, row.branch])
+        navigateTo('/admin/stores/' + row.uuid)
+    }
+        
+}
 const tableActions = [
     {
         key: 'edit',
@@ -97,7 +113,7 @@ const tableActions = [
             <DataTable :columns="dataTableColumns" :data-source="admins" :actions="tableActions" :show-pagination="true"
                 :current-page="getCurrentPage" :rows-per-page="getRowsPerPage" :total-pages="getTotalPages"
                 @previous-page="previousPageClick" @next-page="nextPageClick" @go-to-page="goToPage"
-                @sort-data="sortData" search-placeholder="Filter admin accounts...">
+                @sort-data="sortData" @row-click="handleRowClick" search-placeholder="Filter stores...">
                 <template #column-enabled="{ row }">
                     <span
                         :class="`${row.enabled ? 'bg-secondaryColor' : 'bg-warningColor'} px-2 py-1 rounded-xl text-sm text-white font-bold`">{{ row.enabled

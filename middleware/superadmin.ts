@@ -6,8 +6,13 @@ export default defineNuxtRouteMiddleware(async (from, to) => {
 
     const userStore = useUserStore()
     const user = userStore.getUser
+    const token = localStorage.getItem('_token')
 
-    if (user.role !== 'SuperAdmin')
-        return navigateTo(`/${user.role.toLowerCase()}/dashboard`)
+    if (!user || !token) {
+        userStore.resetUser()
+        return navigateTo('/superadmin/login')
+    }
+    if (userStore.getRole !== 'SuperAdmin')
+        return navigateTo(`/${userStore.getRole.toLowerCase()}/dashboard`)
     return 
 })

@@ -12,7 +12,7 @@ export default defineNuxtRouteMiddleware(async (from, to) => {
         userStore.resetUser()
         return navigateTo('/login')
     }
-    if (userStore.getRole !== 'Admin')
+    if (userStore.getRole !== 'Store')
         return navigateTo(`/${userStore.getRole.toLowerCase()}/dashboard`)
     return 
 })

@@ -39,6 +39,6 @@ async function login(username: string, password:string) {
 
 <template>
     <div class="w-screen h-screen flex items-center justify-center bg-secondaryBg md:bg-primaryBg">
-        <LoginCard :login-handler="login" :has-error="getHasError" :error-message="getErrorMessage" />
+        <LoginCard :login-handler="login" :has-error="getHasError" :error-message="getErrorMessage" button-label="Login as superadmin" />
     </div>
 </template>

@@ -1,5 +1,5 @@
-import { usePageStore } from '~/stores/page.js'
-import { useUserStore } from '~/stores/user.js'
+import { usePageStore } from '~/stores/page'
+import { useUserStore } from '~/stores/user'
 
 const pageData = {
     index: {

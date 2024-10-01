@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-const emit = defineEmits(['sortData', 'nextPage', 'previousPage'])
+const emit = defineEmits(['sortData', 'nextPage', 'previousPage', 'rowClick'])
 interface DataTableColumns {
     key: string
     label: string
@@ -43,7 +43,7 @@ function toggleSorting(column: DataTableColumns) {
 </script>
 
 <template>
-    <div class="lg:w-[90%] bg-transparent flex flex-col justify-center">
+    <div class="w-[90%] bg-transparent flex flex-col justify-center">
         <DataSearch class="mb-2 self-end" :placeholder="props.searchPlaceholder ? props.searchPlaceholder : ''" />
         <div class="min-w-full rounded-xl overflow-hidden border border-gray-200">
             <table class="min-w-full border-collapse rounded-lg">
@@ -64,7 +64,7 @@ function toggleSorting(column: DataTableColumns) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(row, rowIndex) in props.dataSource" :key="rowIndex"
+                    <tr v-for="(row, rowIndex) in props.dataSource" :key="rowIndex" @click="$emit('rowClick', row)"
                         class="odd:bg-white even:bg-gray-100">
                         <td v-for="column in props.columns" :key="column.key"
                             :class="[getColumnClass(row, column.key), 'px-4 py-2']">

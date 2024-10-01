@@ -4,6 +4,9 @@ const role = userStore.getRole
 const getName = computed(() => {
     if (role === 'SuperAdmin')
         return userStore.getUser.name || ''
+    else if (role === 'Store') {
+        return `${userStore.getUser.store_name} ${userStore.getUser.branch}` || ''
+    }
     else
         return `${userStore.getUser.firstname} ${userStore.getUser.lastname}` || ''
 })

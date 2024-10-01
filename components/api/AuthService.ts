@@ -7,6 +7,9 @@ class AuthService extends BaseAPIService {
     async adminLogin(params: object|null): Promise<any> {
         return await this.request(`/admin/auth/login`, 'POST', params)
     }
+    async storeLogin(params: object|null): Promise<any> {
+        return await this.request(`/store/auth/login`, 'POST', params)
+    }
 
     async user(): Promise<any> {
         return await this.request(`/user`, 'GET')

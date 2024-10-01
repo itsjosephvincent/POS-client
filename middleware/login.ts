@@ -5,8 +5,9 @@ export default defineNuxtRouteMiddleware((from, to) => {
     if (import.meta.server) return
 
     const token = localStorage.getItem('_token')
-    if (token) {
-        return navigateTo('/')
+    const userStore = useUserStore()
+    if (token && userStore.getUser) {
+        return navigateTo(`/${userStore.getRole.toLowerCase()}/dashboard`)
     }
     useUserStore().resetUser()
     return
