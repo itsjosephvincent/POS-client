@@ -2,6 +2,8 @@
 const sidebarMenus = [
     { id: 'dashboard', link: '/admin/dashboard', name: 'Dashboard', icon: 'home' },
     { id: 'stores', link: '/admin/stores', name: 'Stores', icon: 'warehouse' },
+    { id: 'skus', link: '/admin/skus', name: 'SKUs', icon: 'orders' },
+    { id: 'classifications', link: '/admin/classifications', name: 'Classifications', icon: 'categories' },
 ]
 </script>
 

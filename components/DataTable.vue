@@ -13,6 +13,7 @@ interface DataTableActions {
 interface DataTableProps {
     columns: Array<DataTableColumns>
     dataSource?: Array<object>
+    columnHeaderClass?: Function
     columnClass?: Function
     actions?: Array<DataTableActions>
     showPagination?: boolean
@@ -20,11 +21,15 @@ interface DataTableProps {
     totalPages?: number
     currentPage?: number
     searchPlaceholder?: string
+    hasCreateButton?: boolean
+    createButtonLabel?: string
+    createButtonHandler?: Function
 }
 const props = defineProps<DataTableProps>()
 const getColumnClass = (row: object, columnKey: string): string => {
     return props.columnClass ? props.columnClass(row, columnKey) : ''
 }
+const getHeaderColumnClass = (columnKey: string): string => props.columnHeaderClass ? props.columnHeaderClass(columnKey) : ''
 const currentSortColumn = ref('')
 const currentSortDirection = ref('ascend')
 const getActions = computed(() => props.actions || [])
@@ -39,19 +44,22 @@ function toggleSorting(column: DataTableColumns) {
         emit('sortData', column.key, currentSortDirection.value)
     }
 }
+function onAddNew() {
+    if (props.createButtonHandler)
+        props.createButtonHandler()
+}
 
 </script>
 
 <template>
-    <div class="w-[90%] bg-transparent flex flex-col justify-center">
-        <DataSearch class="mb-2 self-end" :placeholder="props.searchPlaceholder ? props.searchPlaceholder : ''" />
+    <div class="w-full bg-transparent flex flex-col justify-center">
         <div class="min-w-full rounded-xl overflow-hidden border border-gray-200">
             <table class="min-w-full border-collapse rounded-lg">
                 <thead>
                     <tr class="bg-primaryColor text-white font-bold border-gray-200">
                         <th v-for="column in props.columns" :key="column.key" @click="toggleSorting(column)"
-                            class="px-4 py-3 text-left cursor-pointer select-none">
-                            <div class="flex items-center gap-2">
+                            :class="['px-4 py-3 cursor-pointer select-none']">
+                            <div :class="[getHeaderColumnClass(column.key), 'flex items-center gap-2']">
                                 {{ column.label }}
                                 <!-- Add sorting indicator -->
                                 <span v-if="currentSortColumn === column.key">
@@ -65,7 +73,7 @@ function toggleSorting(column: DataTableColumns) {
                 </thead>
                 <tbody>
                     <tr v-for="(row, rowIndex) in props.dataSource" :key="rowIndex" @click="$emit('rowClick', row)"
-                        class="odd:bg-white even:bg-gray-100">
+                        class="odd:bg-white even:bg-gray-100 cursor-default hover:bg-sky-300/20">
                         <td v-for="column in props.columns" :key="column.key"
                             :class="[getColumnClass(row, column.key), 'px-4 py-2']">
                             <slot :name="`column-${column.key}`" :row="row" :column="column">

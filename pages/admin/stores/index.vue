@@ -57,6 +57,9 @@ async function fetch(params: StoreServiceParams = {}) {
 onMounted(() => {
     fetch()
 })
+onBeforeUnmount(() => {
+    pageStore.setParams([])
+})
 const getRowsPerPage = computed(() => rowsPerPage.value || 10)
 const getTotalPages = computed(() => totalPages.value)
 const getCurrentPage = computed(() => currentPage.value)
@@ -85,39 +88,50 @@ function handleRowClick(row: object) {
         // pageStore.setParams(['Store', row.store_name, row.branch])
         navigateTo('/admin/stores/' + row.uuid)
     }
-        
+
 }
 const tableActions = [
     {
         key: 'edit',
         label: 'Edit',
         handler: (row: object) => {
-        console.log('Edit action triggered for:', row);
-        // Add your custom edit logic here
+            console.log('Edit action triggered for:', row);
+            // Add your custom edit logic here
         },
     },
     {
         key: 'delete',
         label: 'Delete',
         handler: (row: object) => {
-        console.log('Delete action triggered for:', row);
-        // Add your custom delete logic here
+            console.log('Delete action triggered for:', row);
+            // Add your custom delete logic here
         },
     },
 ]
+function onCreateNew() {
+    navigateTo('/admin/stores/new')
+}
+
 </script>
 
 <template>
-    <div class="h-[calc(100vh-60px)] overflow-y-scroll">
-        <div class="flex flex-col items-center justify-center py-4">
-            <DataTable :columns="dataTableColumns" :data-source="admins" :actions="tableActions" :show-pagination="true"
-                :current-page="getCurrentPage" :rows-per-page="getRowsPerPage" :total-pages="getTotalPages"
-                @previous-page="previousPageClick" @next-page="nextPageClick" @go-to-page="goToPage"
-                @sort-data="sortData" @row-click="handleRowClick" search-placeholder="Filter stores...">
+    <div class="h-[calc(100vh-60px)] flex flex-col items-center  overflow-y-scroll">
+        <div class="w-[90%] flex flex-col items-center justify-center py-4">
+            <div class="w-full flex justify-between items-center mb-4">
+                <AddNewButton label="New Store" @click="onCreateNew" />
+                <DataSearch class="self-end" placeholder="Find items..." />
+            </div>
+            <DataTable :columns="dataTableColumns" :data-source="admins" :has-create-button="true"
+                create-button-label="New Store" :create-button-handler="onCreateNew" :actions="tableActions"
+                :show-pagination="true" :current-page="getCurrentPage" :rows-per-page="getRowsPerPage"
+                :total-pages="getTotalPages" @previous-page="previousPageClick" @next-page="nextPageClick"
+                @go-to-page="goToPage" @sort-data="sortData" @row-click="handleRowClick"
+                search-placeholder="Filter stores...">
                 <template #column-enabled="{ row }">
                     <span
-                        :class="`${row.enabled ? 'bg-secondaryColor' : 'bg-warningColor'} px-2 py-1 rounded-xl text-sm text-white font-bold`">{{ row.enabled
-                            ? 'Active' : 'Inactive' }}</span>
+                        :class="`${row.enabled ? 'bg-secondaryColor' : 'bg-warningColor'} px-2 py-1 rounded-xl text-sm text-white font-bold`">{{
+                            row.enabled
+                                ? 'Active' : 'Inactive' }}</span>
                 </template>
                 <template #action-edit="{ action }">
                     <button class="p-1 rounded-full hover:bg-sky-500/30">

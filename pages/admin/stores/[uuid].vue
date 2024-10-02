@@ -28,7 +28,7 @@ async function fetch() {
         if (response && response.data) {
             console.log(response)
             const data = response.data
-            pageStore.setParams([data.store_name, data.branch])
+            pageStore.setParams([data.store_name + ' ' + data.branch])
         } else {
             throw 'Empty data.'
         }

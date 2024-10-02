@@ -14,7 +14,7 @@ export const usePageStore = defineStore('page', () => {
     }
 
     const getPage = computed(() => state.page)
-    const getParamsString = computed(() => state.params.join(' / '))
+    const getParams = computed(() => state.params)
 
-    return { state, setPage, getPage, setParams, getParamsString }
+    return { state, setPage, getPage, setParams, getParams }
 }, { persist: false, })

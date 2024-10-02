@@ -76,6 +76,21 @@ export default {
         fill: true,
         stroke: false,
     },
+    coffee: {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><g fill="currentColor"><path d="M3 1v.5c0 .47.274.706.8 1.1l.04.03C4.314 2.985 5 3.498 5 4.5V5H4v-.5c0-.47-.274-.706-.8-1.1l-.04-.03C2.686 3.015 2 2.502 2 1.5V1zm3 0v.5c0 .47.274.706.8 1.1l.04.03C7.314 2.985 8 3.498 8 4.5V5H7v-.5c0-.47-.274-.706-.8-1.1l-.04-.03C5.686 3.015 5 2.502 5 1.5V1zm3 0v.5c0 .47.274.706.8 1.1l.04.03c.474.355 1.16.868 1.16 1.87V5h-1v-.5c0-.47-.274-.706-.8-1.1l-.04-.03C8.686 3.015 8 2.502 8 1.5V1z"/><path fill-rule="evenodd" d="m2 7l1-1h10.5a2.5 2.5 0 0 1 0 5h-.626A4 4 0 0 1 9 14H6a4 4 0 0 1-4-4zm10 3V7H3v3a3 3 0 0 0 3 3h3a3 3 0 0 0 3-3m1-3v3h.5a1.5 1.5 0 0 0 0-3z" clip-rule="evenodd"/></g></svg>',
+        fill: true,
+        stroke: false,
+    },
+    beverage: {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><path fill="currentColor" d="M10 6.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0zM7.5 6a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5M6 6.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0zM5.25 1A2.25 2.25 0 0 0 3 3.25V13.5A1.5 1.5 0 0 0 4.5 15h6a1.5 1.5 0 0 0 1.5-1.5V12h.75A2.25 2.25 0 0 0 15 9.75v-3.5A2.25 2.25 0 0 0 12.75 4H12v-.75A2.25 2.25 0 0 0 9.75 1zM12 5h.75c.69 0 1.25.56 1.25 1.25v3.5c0 .69-.56 1.25-1.25 1.25H12zM4 3.25C4 2.56 4.56 2 5.25 2h4.5c.69 0 1.25.56 1.25 1.25V4H4zM4 5h7v8.5a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1-.5-.5z"/></svg>',
+        fill: true,
+        stroke: false,
+    },
+    cake: {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 2048 2048"><path fill="currentColor" d="M1216 256q-26 0-45-19t-19-45q0-12 8-31t18-40t21-40t17-30q6 11 16 30t21 40t19 40t8 31q0 26-19 45t-45 19m832 640v1152H0V896l1152-384V352q0-9 7-15t18-10t21-5t18-2q7 0 17 1t21 5t18 10t8 16v117l256-85zm-832-128q-7 0-17-1t-21-5t-18-10t-8-16v-89L405 896h1462l-366-366l-221 74v132q0 9-7 15t-18 10t-21 5t-18 2M128 1024v384h1792v-384zm1792 896v-384H128v384z"/></svg>',
+        fill: true,
+        stroke: false,
+    },
     bell: {
         svg: '<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 256 256"><path fill="#1A202C" d="M221.8 175.94c-5.55-9.56-13.8-36.61-13.8-71.94a80 80 0 1 0-160 0c0 35.34-8.26 62.38-13.81 71.94A16 16 0 0 0 48 200h40.81a40 40 0 0 0 78.38 0H208a16 16 0 0 0 13.8-24.06M128 216a24 24 0 0 1-22.62-16h45.24A24 24 0 0 1 128 216m-80-32c7.7-13.24 16-43.92 16-80a64 64 0 1 1 128 0c0 36.05 8.28 66.73 16 80Z"/></svg>',
         fill: true,
@@ -88,6 +103,11 @@ export default {
     },
     delete: {
         svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zm2-4h2V8H9zm4 0h2V8h-2z"/></svg>',
+        fill: true,
+        stroke: false,
+    },
+    plus: {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><g fill="currentColor"><path d="M5 11a1 1 0 1 1 0-2h10a1 1 0 1 1 0 2z"/><path d="M9 5a1 1 0 0 1 2 0v10a1 1 0 1 1-2 0z"/></g></svg>',
         fill: true,
         stroke: false,
     },
@@ -161,5 +181,15 @@ export default {
         fill: false,
         stroke: true,
     },
+    categories: {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M20 4H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1M4 2a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h16a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3zm2 5h2v2H6zm5 0a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2zm-3 4H6v2h2zm2 1a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2h-6a1 1 0 0 1-1-1m-2 3H6v2h2zm2 1a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2h-6a1 1 0 0 1-1-1" clip-rule="evenodd"/></svg>',
+        fill: true,
+        stroke: false,
+    },
+    csv: {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M15.959 20.046H4V4.004h6.979v4.98h4.98V10h2.051V8.014l-2.05-2.052L14 4.004l-1.99-1.99h-8a1.997 1.997 0 0 0-1.99 2l-.01 16a1.997 1.997 0 0 0 1.99 2h14.01v-2Zm5.301-2.032l1.75-6h-1.5l-1 3.43l-1-3.43h-1.5l1.75 6z"/><path fill="currentColor" d="M10.01 12.014h-3a1.003 1.003 0 0 0-1 1v4a1.003 1.003 0 0 0 1 1h3a1.003 1.003 0 0 0 1-1v-1h-1.5v.5h-2v-3h2v.5h1.5v-1a1.003 1.003 0 0 0-1-1m7 1.506v-1.506h-4a1 1 0 0 0-1 1v1.757a1 1 0 0 0 1 1h2.51v.743h-3.51v1.507h4a1 1 0 0 0 1-1v-1.757a1 1 0 0 0-1-1H13.5v-.743Z"/></svg>',
+        fill: true,
+        stroke: false,
+    }
 }
 
