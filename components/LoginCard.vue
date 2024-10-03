@@ -33,7 +33,7 @@ const getError = computed(() => props.errorMessage)
             <div :class="`${!getHasError ? 'invisible' : ''} w-[calc(90%)] max-w-96 rounded-lg bg-red-100 p-3 text-errorColor flex items-center gap-4`">
                 <IconSvg icon="error" color="var(--error-color)" /><span>{{ getError }}</span>
             </div>
-            <FormTextInput name="username" icon="user" placeholder="Username" type="text" :modelValue="usernameModel"
+            <FormTextInput name="username" bg-class="bg-primaryBg" icon="user" placeholder="Username" type="text" :modelValue="usernameModel"
                 @update:modelValue="$event => (usernameModel = $event)" />
             <PasswordInput name="password" icon="password" post-icon="eyeClosed" placeholder="Password" type="password"
                 :modelValue="passwordModel" @update:modelValue="$event => (passwordModel = $event)" />

@@ -176,6 +176,21 @@ export default {
         fill: false,
         stroke: true,
     },
+    downSmall: {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M36 18L24 30L12 18"/></svg>',
+        fill: false,
+        stroke: true,
+    },
+    upSmall: {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 48"><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M13 30L25 18L37 30"/></svg>',
+        fill: false,
+        stroke: true,
+    },
+    left: {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 16l-4-4m0 0l4-4m-4 4h18"/></svg>',
+        fill: false,
+        stroke: true,
+    },
     warehouse: {
         svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 14 14"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 6.94a1 1 0 0 0-.32-.74L7 .5L.82 6.2a1 1 0 0 0-.32.74v5.56a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1z"/><path d="M7.25 10.001h2.999s.25 0 .25.25v2.999s0 .25-.25.25H7.25s-.25 0-.25-.25v-2.999s0-.25.25-.25m-1.75-3.5h2.999s.25 0 .25.25V9.75s0 .25-.25.25H5.5s-.25 0-.25-.25V6.751s0-.25.25-.25m-1.749 3.5H6.75s.25 0 .25.25v2.999s0 .25-.25.25H3.751s-.25 0-.25-.25v-2.999s0-.25.25-.25"/></g></svg>',
         fill: false,
@@ -190,6 +205,11 @@ export default {
         svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M15.959 20.046H4V4.004h6.979v4.98h4.98V10h2.051V8.014l-2.05-2.052L14 4.004l-1.99-1.99h-8a1.997 1.997 0 0 0-1.99 2l-.01 16a1.997 1.997 0 0 0 1.99 2h14.01v-2Zm5.301-2.032l1.75-6h-1.5l-1 3.43l-1-3.43h-1.5l1.75 6z"/><path fill="currentColor" d="M10.01 12.014h-3a1.003 1.003 0 0 0-1 1v4a1.003 1.003 0 0 0 1 1h3a1.003 1.003 0 0 0 1-1v-1h-1.5v.5h-2v-3h2v.5h1.5v-1a1.003 1.003 0 0 0-1-1m7 1.506v-1.506h-4a1 1 0 0 0-1 1v1.757a1 1 0 0 0 1 1h2.51v.743h-3.51v1.507h4a1 1 0 0 0 1-1v-1.757a1 1 0 0 0-1-1H13.5v-.743Z"/></svg>',
         fill: true,
         stroke: false,
+    },
+    import: {
+        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 3v12m-4-4l4 4l4-4"/><path d="M8 5H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-4"/></g></svg>',
+        fill: false,
+        stroke: true,
     }
 }
 

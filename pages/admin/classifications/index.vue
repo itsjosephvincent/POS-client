@@ -13,6 +13,9 @@ useHead({
 onMounted(() => {
     pageStore.setPage(pageTitle)
 })
+onBeforeUnmount(() => {
+    pageStore.setParams([])
+})
 interface Classifications {
     id: number
     name: string,
@@ -37,7 +40,7 @@ function cardClickHandler(row: Classifications) {
 <template>
     <div class="h-[calc(100vh-60px)] w-full flex flex-col items-center justify-start overflow-y-scroll">
         <div class="w-[90%] flex flex-col items-start">
-            <AddNewButton class="mb-6" @click="onAddNew" />
+            <PrimaryButton class="mb-6" label="New Classification" icon="plus" @click="onAddNew" />
             <div class="flex items-center justify-start flex-wrap gap-4">
                 <CategoryCard v-for="item in sampleData" :name="item.name" :icon="item.icon" :description="item.description" @click="cardClickHandler(item)" />
             </div>

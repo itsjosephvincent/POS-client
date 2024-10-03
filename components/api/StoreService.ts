@@ -9,8 +9,11 @@ class StoreService extends BaseAPIService {
     async stores(params: StoreServiceParams): Promise<any> {
         return await this.request(`/admin/stores`, 'GET', params)
     }
-    async store(id: string, params) {
+    async store(id: string, params: object) {
         return await this.request(`/admin/stores/${id}`, 'GET', params)
+    }
+    async create(params: object) {
+        return await this.request(`/admin/stores`, 'POST', params)
     }
 }
 

@@ -118,7 +118,7 @@ function onCreateNew() {
     <div class="h-[calc(100vh-60px)] flex flex-col items-center  overflow-y-scroll">
         <div class="w-[90%] flex flex-col items-center justify-center py-4">
             <div class="w-full flex justify-between items-center mb-4">
-                <AddNewButton label="New Store" @click="onCreateNew" />
+                <PrimaryButton label="New Store" icon="plus" @click="onCreateNew" />
                 <DataSearch class="self-end" placeholder="Find items..." />
             </div>
             <DataTable :columns="dataTableColumns" :data-source="admins" :has-create-button="true"

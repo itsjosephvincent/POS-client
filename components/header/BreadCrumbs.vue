@@ -12,11 +12,16 @@ function getUrl(item, index) {
     if (diff) url.splice(diff * -1)
     return url.join('/')
 }
+function onBackClick() {
+    const router = useRouter()
+    router.back()
+}
 
 </script>
 
 <template>
-    <div class="text text-primaryText font-medium">
+    <div class="text text-primaryText font-medium flex items-center justify-start gap-2">
+        <IconSvg v-if="breadCrumbs.length > 1" class="cursor-pointer" @click="onBackClick" icon="left" color="var(--text-primary)" size="1.5em" />
         <span v-for="(item, index) in breadCrumbs" :key="item">
             <NuxtLink class="hover:text-secondaryColor hover:underline" :to="getUrl(item, index)">{{ item }}</NuxtLink> {{  index < breadCrumbs.length - 1 ? ' / ' : ''  }}
         </span>
