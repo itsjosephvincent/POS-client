@@ -21,6 +21,7 @@ const admins = computed(() => data.value)
 const rowsPerPage = ref(10)
 const totalPages = ref(0)
 const currentPage = ref(1)
+const isLoading = ref(false)
 interface DataTableColumns {
     key: string
     label: string
@@ -38,8 +39,10 @@ const dataTableColumns: Array<DataTableColumns> = [
 ]
 async function fetch(params: StoreServiceParams = {}) {
     try {
+        isLoading.value = true
         params['admin_id'] = userStore.getUser.id
         const response = await storeService.stores(params)
+        isLoading.value = false
         if (response && response.data) {
             data.value = response.data
             rowsPerPage.value = response.meta.per_page
@@ -51,6 +54,7 @@ async function fetch(params: StoreServiceParams = {}) {
         }
 
     } catch (error) {
+        isLoading.value = false
         console.error(error)
     }
 }
@@ -121,7 +125,7 @@ function onCreateNew() {
                 <PrimaryButton label="New Store" icon="plus" @click="onCreateNew" />
                 <DataSearch class="self-end" placeholder="Find items..." />
             </div>
-            <DataTable :columns="dataTableColumns" :data-source="admins" :has-create-button="true"
+            <DataTable :loading="isLoading" :columns="dataTableColumns" :data-source="admins" :has-create-button="true"
                 create-button-label="New Store" :create-button-handler="onCreateNew" :actions="tableActions"
                 :show-pagination="true" :current-page="getCurrentPage" :rows-per-page="getRowsPerPage"
                 :total-pages="getTotalPages" @previous-page="previousPageClick" @next-page="nextPageClick"

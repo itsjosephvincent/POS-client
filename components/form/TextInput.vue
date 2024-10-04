@@ -12,15 +12,18 @@ const props = defineProps<{
     iconColor?: string
     bgClass?: string
     borderClass?: string
+    error?: string
 }>()
 
 const viewPassword = ref(false)
 const getType = computed(() => props.type || 'text')
 const getBgClass = computed(() => props.bgClass || 'bg-secondaryBg')
 const getBorderClass = computed(() => props.borderClass || 'border border-primaryBorder')
+const errorClass = computed(() => props.error ? 'border-2 border-red-500' : '')
 const getIconSize = computed(() => props.iconSize || '1.5em' )
 const inputPadding = computed(() => props.icon ? 'pl-[60px]' : '')
 const postIconInputPadding = computed(() => props.postIcon ? 'pr-[57px]' : '')
+
 
 </script>
 
@@ -31,8 +34,9 @@ const postIconInputPadding = computed(() => props.postIcon ? 'pr-[57px]' : '')
             <IconSvg v-if="props.icon" class="mr-4 absolute left-[10px]" :icon="props.icon" color="var(--text-tertiary)" height="1.5em" width="1.5em" />
             <input :value="props.modelValue" @input="$emit('update:modelValue', $event.target.value)" :type="props.type"
                 :name="props.name" :id="props.name" :placeholder="props.placeholder"
-                :class="['grow border-0 outline-0 text-primaryText focus:border focus:border-secondaryColor focus:ring-1 focus:ring-sky-500 h-full w-full rounded-xl px-4', getBgClass, inputPadding, postIconInputPadding]">
+                :class="['grow border-0 outline-0 text-primaryText focus:border focus:border-secondaryColor focus:ring-1 focus:ring-sky-500 h-full w-full rounded-xl px-4', getBgClass, inputPadding, postIconInputPadding, errorClass]">
             <IconSvg v-if="props.postIcon" class="mr-4 absolute right-[10px]" :icon="props.postIcon" :color="props.iconColor || 'var(--text-primary)'" :size="getIconSize" />
         </div>
+        <div :class="['px-1 pt-1 text-sm text-errorColor', props.error ? 'visible': 'invisible']">{{ props.error }}</div>
     </div>
 </template>

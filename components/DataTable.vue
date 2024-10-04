@@ -24,6 +24,7 @@ interface DataTableProps {
     hasCreateButton?: boolean
     createButtonLabel?: string
     createButtonHandler?: Function
+    loading?: boolean
 }
 const props = defineProps<DataTableProps>()
 const getColumnClass = (row: object, columnKey: string): string => {
@@ -52,9 +53,9 @@ function onAddNew() {
 </script>
 
 <template>
-    <div class="w-full bg-transparent flex flex-col justify-center">
+    <div :class="['relative w-full bg-transparent flex flex-col justify-center', props.loading ? 'opacity-50' : '']">
         <div class="min-w-full rounded-xl overflow-hidden border border-gray-200">
-            <table class="min-w-full border-collapse rounded-lg">
+            <table :class="['min-w-full border-collapse rounded-lg']">
                 <thead>
                     <tr class="bg-primaryColor text-white font-bold border-gray-200">
                         <th v-for="column in props.columns" :key="column.key" @click="toggleSorting(column)"
@@ -72,7 +73,7 @@ function onAddNew() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(row, rowIndex) in props.dataSource" :key="rowIndex" @click="$emit('rowClick', row)"
+                    <tr v-if="!props.loading" v-for="(row, rowIndex) in props.dataSource" :key="rowIndex" @click="$emit('rowClick', row)"
                         class="odd:bg-white even:bg-gray-100 cursor-default hover:bg-sky-300/20">
                         <td v-for="column in props.columns" :key="column.key"
                             :class="[getColumnClass(row, column.key), 'px-4']">
@@ -88,14 +89,14 @@ function onAddNew() {
                             </div>
                         </td>
                     </tr>
-
+                    
                 </tbody>
             </table>
 
 
         </div>
         <!-- Pagination Controls -->
-        <div v-if="props.showPagination" class="flex justify-center items-center mt-4 select-none">
+        <div v-if="props.showPagination && !props.loading" class="flex justify-center items-center mt-4 select-none">
             <button :disabled="props.currentPage === 1" @click="$emit('previousPage')"
                 class="px-4 py-2 disabled:text-gray-500">
                 Previous
@@ -110,6 +111,10 @@ function onAddNew() {
                 class="px-4 py-2 disabled:text-gray-500">
                 Next
             </button>
+        </div>
+
+        <div v-if="props.loading" class="absolute top-[55px] left-1/2 z-20">
+            <IconSvg icon="loading" color="var(--primary-color)" size="3em" />
         </div>
     </div>
 

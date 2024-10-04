@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { usePageStore } from '~/stores/page';
+import { classificationService } from '~/components/api/ClassificationService'
 
 const pageTitle = 'Classifications'
 const pageStore = usePageStore()
+const classificationsData = ref([])
 definePageMeta({
     layout: 'admin',
     middleware: ['admin'],
@@ -12,6 +14,7 @@ useHead({
 })
 onMounted(() => {
     pageStore.setPage(pageTitle)
+    pageStore.setParams([])
 })
 onBeforeUnmount(() => {
     pageStore.setParams([])
@@ -29,11 +32,26 @@ const sampleData: Array<Classifications> = [
     { id: 4, name: 'Pasta', icon: 'meal', description: 'Lorem ipsum dolor sit amet' },
     { id: 5, name: 'Cake', icon: 'cake', description: 'Lorem ipsum dolor sit amet' },
 ]
+onMounted(() => {
+    fetch()
+})
+
+async function fetch() {
+    try {
+        const response = await classificationService.all()
+        if (response.data) {
+            classificationsData.value = response.data
+            console.log(classificationsData.value)
+        }
+    } catch(error) {
+        console.error(error)
+    }
+}
 function onAddNew() {
     navigateTo('/admin/classifications/new')
 }
 function cardClickHandler(row: Classifications) {
-    navigateTo('/admin/classifications/' + row.id)
+    navigateTo('/admin/classifications/' + row.uuid)
 }
 </script>
 
@@ -42,7 +60,7 @@ function cardClickHandler(row: Classifications) {
         <div class="w-[90%] flex flex-col items-start">
             <PrimaryButton class="mb-6" label="New Classification" icon="plus" @click="onAddNew" />
             <div class="flex items-center justify-start flex-wrap gap-4">
-                <CategoryCard v-for="item in sampleData" :name="item.name" :icon="item.icon" :description="item.description" @click="cardClickHandler(item)" />
+                <CategoryCard v-for="item in classificationsData" :name="item.name" @click="cardClickHandler(item)" />
             </div>
         </div>
     </div>

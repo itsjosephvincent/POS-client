@@ -27,21 +27,28 @@ const branchModel = defineModel('branch')
 const storeModel = defineModel('store')
 const getLoading = computed(() => loading.value)
 
-async function onFormSubmit() {
-    loading.value = true
-    const params = {
-        admin_id: userStore.getUser.id,
-        store_name: storeModel.value,
-        branch: branchModel.value,
-        username: usernameModel.value,
-        password: passwordModel.value,
-    }
+const errorState = reactive({})
+
+function validate() {
+    if (!usernameModel.value) {
+        errorState.username = "Username is required"
+    } 
 
     if (passwordModel.value !== confirmPasswordModel.value) {
         return console.error("Password doesn't match")
     }
-
+}
+async function onFormSubmit() {
     try {
+        validate()
+        loading.value = true
+        const params = {
+            admin_id: userStore.getUser.id,
+            store_name: storeModel.value,
+            branch: branchModel.value,
+            username: usernameModel.value,
+            password: passwordModel.value,
+        }
         const response = await storeService.create(params)
         if (response.data) {
             console.log("saved store: ", response.data)
@@ -60,7 +67,7 @@ async function onFormSubmit() {
     <div class="h-[calc(100vh-60px)] w-full max-w-[400px] overflow-y-scroll p-4 ml-6">
         <form @submit.prevent="onFormSubmit">
             <FormTextInput class="my-3" name="store" placeholder="Enter Store Name" label="Store" :model-value="storeModel" @update:modelValue="$event => (storeModel = $event)"
-                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" />
+                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :error="errorState.username"/>
             <FormTextInput class="my-3" name="branch" placeholder="Enter Branch Name" label="Branch" :model-value="branchModel" @update:modelValue="$event => (branchModel = $event)"
                 bg-class="bg-secondaryBg" border-class="border border-primaryBorder" />
             <FormTextInput class="my-3" name="username" placeholder="Enter Store Account Username" label="Username" :model-value="usernameModel" @update:modelValue="$event => (usernameModel = $event)"
