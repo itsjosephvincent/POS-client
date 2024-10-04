@@ -9,7 +9,7 @@ class ProductService extends BaseAPIService {
     async all(params: ProductServiceParams): Promise<any> {
         return await this.request(`/admin/products`, 'GET', params)
     }
-    async product(id: string, params: object) {
+    async product(id: string|string[], params: object) {
         return await this.request(`/admin/products/${id}`, 'GET', params)
     }
     async create(params: object) {

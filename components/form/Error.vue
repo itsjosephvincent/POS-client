@@ -1,14 +1,14 @@
-<template>
-    <p class="text-sm text-red-500" v-if="props.error">
-        {{ props.error }}
-    </p>
-</template>
-
 <script setup lang="ts">
-const props = defineProps({
-    error: {
-        type: String,
-        required: false,
-    },
-})
+
+const props = defineProps<{
+    error: string
+}>()
+
 </script>
+
+<template>
+    <div
+        :class="`${!props.error ? 'invisible' : ''} w-full rounded-lg bg-red-100 p-3 text-errorColor flex items-center gap-4`">
+        <IconSvg icon="error" color="var(--error-color)" /><span>{{ props.error }}</span>
+    </div>
+</template>

@@ -21,7 +21,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="h-[calc(100vh-60px)] w-full overflow-y-scroll p-4">
+    <div class="h-[calc(100vh-60px)] w-full overflow-y-scroll bg-secondaryBg lg:bg-primaryBg lg:p-4 lg:ml-6">
        
     </div>
 </template>

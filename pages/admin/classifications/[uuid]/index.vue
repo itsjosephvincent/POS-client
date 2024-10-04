@@ -8,30 +8,34 @@ definePageMeta({
 })
 const route = useRoute()
 const pageStore = usePageStore()
+const classificationStore = useClassificationStore()
 const pageTitle = 'Classifications'
 useHead({
     title: pageTitle,
 })
+interface DataTableColumns {
+    key: string
+    label: string
+}
+interface ProductServiceParams {
+    category_uuid?: string | string[]
+    page?: number
+    sortField?: string
+    sortOrder?: string
+}
 onMounted(() => {
-    pageStore.setPage(pageTitle)
-    classificationFetch()
+    initializePageData()
     fetch({ category_uuid: route.params.uuid })
 })
-onBeforeUnmount(() => {
-    // pageStore.setParams([])
-})
-async function classificationFetch() {
-    try {
-        const response = await classificationService.find(route.params.uuid)
-        if (response.data) {
-            classificationData.value = response.data
-            pageStore.setParams([response.data.name])
-            pageStore.setData(response.data)
-        }
-
-    } catch (error) {
-        console.error(error)
+function initializePageData() {
+    pageStore.setPage(pageTitle)
+    let classifications = classificationStore.getClassifications
+    let current = classifications.find((classification) => classification.uuid === route.params.uuid)
+    if (!current) {
+        return navigateTo('/admin/classifications')
     }
+    classificationStore.setCurrent(current)
+    pageStore.setParams([current.name])
 }
 
 const isLoading = ref(false)
@@ -46,12 +50,6 @@ const getRowsPerPage = computed(() => rowsPerPage.value || 10)
 const getTotalPages = computed(() => totalPages.value)
 const getCurrentPage = computed(() => currentPage.value)
 
-interface ProductServiceParams {
-    category_uuid?: string | string[]
-    page?: number
-    sortField?: string
-    sortOrder?: string
-}
 async function fetch(params: ProductServiceParams = {}) {
     try {
         isLoading.value = true
@@ -69,8 +67,7 @@ async function fetch(params: ProductServiceParams = {}) {
         console.error(error)
     }
 }
-
-const dataTableColumns: Array<object> = [
+const dataTableColumns: Array<DataTableColumns> = [
     { key: 'name', label: 'Name' },
     { key: 'cost', label: 'Cost of Goods' },
     { key: 'price', label: 'SRP' },
@@ -121,7 +118,7 @@ function columnClass(row, columnKey) {
         ? 'text-right' : ''
 }
 function handleRowClick(row: object) {
-    // navigateTo('/admin/skus/' + row.uuid)
+    navigateTo(`/admin/classifications/${route.params.uuid}/${row.uuid}`)
 }
 function createButtonHandler() {
     navigateTo(`/admin/classifications/${route.params.uuid}/new`)
@@ -132,7 +129,7 @@ function importButtonHandler() {
 </script>
 
 <template>
-    <div class="h-[calc(100vh-60px)] flex flex-col items-center  overflow-y-scroll">
+    <div class="h-[calc(100vh-60px)] w-full overflow-y-scroll bg-secondaryBg lg:bg-primaryBg lg:p-4 lg:ml-6">
         <div class="w-[90%] flex flex-col items-center justify-center py-4">
             <div class="w-full flex justify-start items-center gap-2 mb-4">
                 <PrimaryButton :label="`New ${getClassificationName}`" icon="plus" @click="createButtonHandler" />

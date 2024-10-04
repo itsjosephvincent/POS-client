@@ -11,6 +11,10 @@ export const useClassificationStore = defineStore('classification', () => {
     function setCurrent(classificationData) {
         state.current = classificationData
     }
+    const getClassifications = computed(() => state.classifications)
+    const getCurrent = computed(() => state.current)
+    const getCurrentUUID = computed(() => state.current.uuid)
+    const hasCurrent = computed(() => !!state.current)
 
-    return { state, setClassifications, setCurrent, }
+    return { state, setClassifications, setCurrent, getClassifications, getCurrent, hasCurrent, getCurrentUUID }
 }, { persist: true, })

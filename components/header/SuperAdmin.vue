@@ -6,7 +6,7 @@ const pageStore = usePageStore()
 
 <template>
     <div class="w-full">
-        <div class="flex h-[60px] w-full p-2 z-10 bg-primaryBg items-center justify-center md:justify-between">
+        <div class="flex h-[60px] w-full p-2 z-10 bg-secondaryBg lg:bg-primaryBg items-end lg:items-center justify-end md:justify-between">
             <div class="hidden md:block px-6 font-bold text-lg text-primaryText">
                 <HeaderBreadCrumbs />
             </div>

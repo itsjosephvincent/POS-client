@@ -28,7 +28,7 @@ const postIconInputPadding = computed(() => props.postIcon ? 'pr-[57px]' : '')
 </script>
 
 <template>
-    <div class="w-full max-w-96 ">
+    <div class="w-full">
         <div v-if="label" :class="['ml-2 text-primaryText']">{{ props.label }}</div>
         <div :class="['relative h-12 rounded-xl flex items-center', getBgClass, getBorderClass]">
             <IconSvg v-if="props.icon" class="mr-4 absolute left-[10px]" :icon="props.icon" color="var(--text-tertiary)" height="1.5em" width="1.5em" />
