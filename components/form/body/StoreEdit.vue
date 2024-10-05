@@ -1,46 +1,45 @@
 <script setup lang="ts">
 import { storeService } from '~/components/api/StoreService'
 
-definePageMeta({
-    layout: 'admin',
-    middleware: ['admin'],
-})
 const route = useRoute()
+const emit = defineEmits(['storeFetch'])
 const userStore = useUserStore()
-const pageStore = usePageStore()
-const pageTitle = 'Stores'
-useHead({
-    title: pageTitle,
-})
+
 onMounted(() => {
-    pageStore.setPage(pageTitle)
     fetch()
 })
-onBeforeUnmount(() => {
-    pageStore.setParams([])
-})
+
+const storeData = ref(null)
+const isFetching = ref(true)
+
 async function fetch() {
     try {
+        isFetching.value = true
         let params = {
             admin_id: userStore.getUser.id,
         }
         const response = await storeService.store(route.params.uuid, params)
+        isFetching.value = false
         if (response && response.data) {
-            console.log(response)
+            console.log(response.data)
             const data = response.data
-            pageStore.setParams([data.store_name + ' ' + data.branch])
+            storeData.value = data
+            emit('storeFetch', data)
         } else {
             throw 'Empty data.'
         }
 
     } catch (error) {
+        isFetching.value = false
         console.error(error)
     }
 }
+
 </script>
 
 <template>
-    <div>
-        
+    <div class="w-full">
+        <LoadingFormSkeleton v-if="isFetching" />
+        <FormBodyStore v-else :is-edit="true" :edit-data="storeData" />
     </div>
 </template>

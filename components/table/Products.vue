@@ -46,8 +46,7 @@ const tableActions = [
         key: 'edit',
         label: 'Edit',
         handler: (row: object) => {
-            console.log('Edit action triggered for:', row);
-            // Add your custom edit logic here
+            navigateTo(`/admin/skus/${row?.uuid}/edit`)
         },
     },
     {

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { usePageStore } from '~/stores/page';
 
-const route = useRoute()
 const pageTitle = 'SKUs'
 const pageStore = usePageStore()
 definePageMeta({

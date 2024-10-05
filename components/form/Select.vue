@@ -13,6 +13,7 @@ const props = defineProps<{
     bgClass?: string
     borderClass?: string
     options: Array<SelectOptions>
+    preSelectedData: SelectOptions
 }>()
 const emit = defineEmits(['selectClassification'])
 const isDropdown = ref(false)
@@ -21,6 +22,16 @@ const getBorderClass = computed(() => props.borderClass || 'border boder-primary
 const inputModel = defineModel('input')
 const selectedValue = ref('')
 const searchValue = ref('')
+
+onMounted(() => {
+    setPreSelectedData()
+})
+
+function setPreSelectedData() {
+    if (props.preSelectedData) {
+        onSelect(props.preSelectedData)
+    }
+}
 function onFocus() {
     isDropdown.value = true
 }

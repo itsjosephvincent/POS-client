@@ -3,7 +3,8 @@ import { classificationService } from '~/components/api/ClassificationService'
 import { productService } from '~/components/api/ProductService'
 
 const props = defineProps<{
-
+    isEdit?: boolean
+    editData?: object
 }>()
 const imageUrl = ref(null)
 const selectedFile = ref(null)
@@ -11,6 +12,7 @@ const errors = ref({})
 const categories = ref([])
 const errorMessage = ref(null)
 const isLoading = ref(false)
+const isFetching = ref(true)
 
 const productModel = defineModel('product')
 const classificationModel = defineModel('classification')
@@ -22,8 +24,17 @@ const categoryUuid = ref(null)
 
 onMounted(() => {
     fetchCategories()
+    setEditData()
 })
 
+function setEditData() {
+    if (!props.isEdit) return
+    productModel.value = props.editData?.name || ''
+    costModel.value = props.editData?.cost || ''
+    priceModel.value = props.editData?.price || ''
+    inventoryModel.value = props.editData?.inventory || ''
+    imageUrl.value = props.editData.image || ''
+}
 function handleFileChange(event: object) {
     const file = event.target.files[0]
     if (file) {
@@ -35,7 +46,7 @@ function handleFileChange(event: object) {
         reader.readAsDataURL(file)
     }
 }
-function onClassificationSelect(value:string) {
+function onClassificationSelect(value: string) {
     const selectedCategory = categories.value.find(d => value === d.uuid)
     if (selectedCategory) {
         categoryId.value = selectedCategory.id
@@ -44,12 +55,15 @@ function onClassificationSelect(value:string) {
 }
 async function fetchCategories() {
     try {
+        isFetching.value = true
         const response = await classificationService.all()
         if (response.data) {
             categories.value = response.data
+            isFetching.value = false
         }
-    } catch(error) {
+    } catch (error) {
         console.error(error)
+        isFetching.value = false
     }
 }
 async function save() {
@@ -74,7 +88,7 @@ async function save() {
         if (response.data) {
             console.log(response.data)
         }
-    } catch(error: any) {
+    } catch (error: any) {
         console.error(error)
         isLoading.value = false
         errorMessage.value = error.getErrorMessage()
@@ -92,30 +106,50 @@ const getCategorySelect = computed(() => categories.value.map(d => ({
         label: d.name,
     })
 ))
+const getSelectedProp = computed(() => {
+    if (!props.editData) return null
+    return {
+        key: props.editData.category?.uuid,
+        value: props.editData.category?.uuid,
+        label: props.editData.category?.name,
+    }
+})
 </script>
 
 <template>
-    <div class="w-full bg-white border border-primaryBorder rounded-xl p-6">
-        <label for="file-upload" class="block cursor-pointer w-40 h-40 rounded-xl">
-            <div v-if="!imageUrl"
-                class="w-40 h-40 rounded-xl border-2 border-dashed flex justify-center items-center border-gray-300 p-4 text-secondaryText text-center">
-                Click to select an image
-            </div>
-            <img v-if="imageUrl" :src="imageUrl" alt="Preview"
-                class="w-40 h-40 rounded-xl object-cover border border-primaryBorder" />
-        </label>
-        <input id="file-upload" type="file" accept="image/*" @change="handleFileChange" class="hidden" />
+    <div class="w-full bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl p-6">
+        <LoadingProductSkeleton v-if="isFetching" />
+        <div v-else class="w-full">
+            <label for="file-upload" class="block cursor-pointer w-40 h-40 rounded-xl">
+                <div v-if="!imageUrl"
+                    class="w-40 h-40 rounded-xl border-2 border-dashed flex justify-center items-center border-gray-300 p-4 text-secondaryText text-center">
+                    Click to select an image
+                </div>
+                <img v-if="imageUrl" :src="imageUrl" alt="Preview"
+                    class="w-40 h-40 rounded-xl object-contain border border-primaryBorder" />
+            </label>
+            <input id="file-upload" type="file" accept="image/*" @change="handleFileChange" class="hidden" />
 
-        <FormTextInput class="my-3" name="name" placeholder="Enter Product Name" label="Product"
-            bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :model-value="productModel" @update:modelValue="$event => (productModel = $event)" :error="getNameError"/>
-        <FormSelect :options="getCategorySelect" label="Classification" name="category" placeholder="Select Classification" :model-value="classificationModel" @update:modelValue="$event => (classificationModel = $event)" @select-classification="onClassificationSelect" />
-        <FormTextInput class="my-3" type="number" name="cost" placeholder="Enter Cost of Goods" label="Cost of Goods"
-            bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :model-value="costModel" @update:modelValue="$event => (costModel = $event)" :error="getCostError" />
-        <FormTextInput class="my-3" type="number" name="price" placeholder="Enter Suggested Retail Price" label="SRP"
-            bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :model-value="priceModel" @update:modelValue="$event => (priceModel = $event)" :error="getPriceError" />
-        <FormTextInput class="my-3" type="number" name="inventory" placeholder="Enter Current Inventory Count"
-            label="Inventory Count" bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :model-value="inventoryModel" @update:modelValue="$event => (inventoryModel = $event)" :error="getInventoryError" />
-        <FormError v-if="errorMessage" :error="errorMessage" />
-        <PrimaryButton :loading="isLoading" @click="save" class="w-full my-3" label="Save" />
+            <FormTextInput class="my-3" name="name" placeholder="Enter Product Name" label="Product"
+                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :model-value="productModel"
+                @update:modelValue="$event => (productModel = $event)" :error="getNameError" />
+            <FormSelect :options="getCategorySelect" label="Classification" name="category"
+                placeholder="Select Classification" :model-value="classificationModel"
+                @update:modelValue="$event => (classificationModel = $event)"
+                @select-classification="onClassificationSelect"
+                :pre-selected-data="getSelectedProp" />
+            <FormTextInput class="my-3" type="number" name="cost" placeholder="Enter Cost of Goods"
+                label="Cost of Goods" bg-class="bg-secondaryBg" border-class="border border-primaryBorder"
+                :model-value="costModel" @update:modelValue="$event => (costModel = $event)" :error="getCostError" />
+            <FormTextInput class="my-3" type="number" name="price" placeholder="Enter Suggested Retail Price"
+                label="SRP" bg-class="bg-secondaryBg" border-class="border border-primaryBorder"
+                :model-value="priceModel" @update:modelValue="$event => (priceModel = $event)" :error="getPriceError" />
+            <FormTextInput class="my-3" type="number" name="inventory" placeholder="Enter Current Inventory Count"
+                label="Inventory Count" bg-class="bg-secondaryBg" border-class="border border-primaryBorder"
+                :model-value="inventoryModel" @update:modelValue="$event => (inventoryModel = $event)"
+                :error="getInventoryError" />
+            <FormError v-if="errorMessage" :error="errorMessage" />
+            <PrimaryButton :loading="isLoading" @click="save" class="w-full my-3" :label="!props.isEdit ? 'Save Product' : 'Update Product'" />
+        </div>
     </div>
 </template>
