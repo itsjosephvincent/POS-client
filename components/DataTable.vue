@@ -35,6 +35,7 @@ const currentSortColumn = ref('')
 const currentSortDirection = ref('ascend')
 const getActions = computed(() => props.actions || [])
 function toggleSorting(column: DataTableColumns) {
+    if (!column.sortable) return
     if (column.key === currentSortColumn.value) {
         currentSortDirection.value = currentSortDirection.value === 'ascend' ? 'descend' : 'ascend'
         currentSortColumn.value = column.key
@@ -63,7 +64,7 @@ function onAddNew() {
                             <div :class="[getHeaderColumnClass(column.key), 'flex items-center gap-2']">
                                 {{ column.label }}
                                 <!-- Add sorting indicator -->
-                                <span v-if="currentSortColumn === column.key">
+                                <span v-if="currentSortColumn === column.key && !!column.sortable">
                                     <IconSvg :icon="currentSortDirection === 'ascend' ? 'up' : 'down'" color="#ffffff" size="1.5em" />
                                 </span>
                             </div>
@@ -82,8 +83,8 @@ function onAddNew() {
                             </slot>
                         </td>
                         <!-- Render Action Buttons -->
-                        <td v-if="getActions.length" class="px-4 py-1 text-center flex items-center justify-center">
-                            <div v-for="(action, index) in actions" :key="index" @click.stop="action.handler(row)" class="mx-1">
+                        <td v-if="getActions.length" class="h-full px-4 py-1 text-center flex items-center justify-center">
+                            <div v-for="(action, index) in actions" :key="index" @click.stop="action.handler(row)" class="h-full mx-1">
                                 <slot :name="`action-${action.key}`">
                                 </slot>
                             </div>

@@ -1,19 +1,29 @@
 <script setup lang="ts">
+import { classificationService } from '~/components/api/ClassificationService'
 import { productService } from '~/components/api/ProductService'
 
 const props = defineProps<{
-    category_id: number
-    category_uuid: string
+
 }>()
 const imageUrl = ref(null)
 const selectedFile = ref(null)
 const errors = ref({})
+const categories = ref([])
 const errorMessage = ref(null)
 const isLoading = ref(false)
+
 const productModel = defineModel('product')
+const classificationModel = defineModel('classification')
 const costModel = defineModel('cost')
 const priceModel = defineModel('price')
 const inventoryModel = defineModel('inventory')
+const categoryId = ref(null)
+const categoryUuid = ref(null)
+
+onMounted(() => {
+    fetchCategories()
+})
+
 function handleFileChange(event: object) {
     const file = event.target.files[0]
     if (file) {
@@ -25,13 +35,33 @@ function handleFileChange(event: object) {
         reader.readAsDataURL(file)
     }
 }
+function onClassificationSelect(value:string) {
+    const selectedCategory = categories.value.find(d => value === d.uuid)
+    if (selectedCategory) {
+        categoryId.value = selectedCategory.id
+        categoryUuid.value = selectedCategory.uuid
+    }
+}
+async function fetchCategories() {
+    try {
+        const response = await classificationService.all()
+        if (response.data) {
+            categories.value = response.data
+        }
+    } catch(error) {
+        console.error(error)
+    }
+}
 async function save() {
     try {
         errors.value = {}
         isLoading.value = true
         const formData = new FormData()
-        formData.append('category_id', props.category_id)
-        formData.append('category_uuid', props.category_uuid)
+        if (!categoryId.value || !categoryUuid.value) {
+            console.error('undefined selected category')
+        }
+        formData.append('category_id', categoryId.value)
+        formData.append('category_uuid', categoryUuid.value)
         formData.append('name', productModel.value)
         formData.append('cost', costModel.value)
         formData.append('price', priceModel.value)
@@ -39,7 +69,6 @@ async function save() {
         if (imageUrl.value) {
             formData.append('image', selectedFile.value)
         }
-
         const response = await productService.create(formData)
         isLoading.value = false
         if (response.data) {
@@ -57,6 +86,12 @@ const getNameError = computed(() => errors.value?.name?.[0] || '')
 const getCostError = computed(() => errors.value?.cost?.[0] || '')
 const getPriceError = computed(() => errors.value?.price?.[0] || '')
 const getInventoryError = computed(() => errors.value?.inventory?.[0] || '')
+const getCategorySelect = computed(() => categories.value.map(d => ({
+        key: d.uuid,
+        value: d.uuid,
+        label: d.name,
+    })
+))
 </script>
 
 <template>
@@ -73,6 +108,7 @@ const getInventoryError = computed(() => errors.value?.inventory?.[0] || '')
 
         <FormTextInput class="my-3" name="name" placeholder="Enter Product Name" label="Product"
             bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :model-value="productModel" @update:modelValue="$event => (productModel = $event)" :error="getNameError"/>
+        <FormSelect :options="getCategorySelect" label="Classification" name="category" placeholder="Select Classification" :model-value="classificationModel" @update:modelValue="$event => (classificationModel = $event)" @select-classification="onClassificationSelect" />
         <FormTextInput class="my-3" type="number" name="cost" placeholder="Enter Cost of Goods" label="Cost of Goods"
             bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :model-value="costModel" @update:modelValue="$event => (costModel = $event)" :error="getCostError" />
         <FormTextInput class="my-3" type="number" name="price" placeholder="Enter Suggested Retail Price" label="SRP"
