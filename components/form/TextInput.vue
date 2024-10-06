@@ -31,7 +31,7 @@ const postIconInputPadding = computed(() => props.postIcon ? 'pr-[57px]' : '')
     <div class="w-full">
         <div v-if="label" :class="['ml-2 text-primaryText']">{{ props.label }}</div>
         <div :class="['relative h-12 rounded-xl flex items-center', getBgClass, getBorderClass]">
-            <IconSvg v-if="props.icon" class="mr-4 absolute left-[10px]" :icon="props.icon" color="tertiaryText" size="30px" />
+            <IconSvg v-if="props.icon" class="mr-4 absolute left-[10px]" :icon="props.icon" color="tertiaryText" size="20px" />
             <input :value="props.modelValue" @input="$emit('update:modelValue', $event.target.value)" :type="props.type"
                 :name="props.name" :id="props.name" :placeholder="props.placeholder"
                 :class="['grow border-0 outline-0 text-primaryText focus:border focus:border-secondaryColor focus:ring-1 focus:ring-sky-500 h-full w-full rounded-xl px-4', getBgClass, inputPadding, postIconInputPadding, errorClass]">

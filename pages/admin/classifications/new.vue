@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { usePageStore } from '~/stores/page';
-
 const pageTitle = 'Classifications'
 const pageStore = usePageStore()
 definePageMeta({
@@ -17,11 +15,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
     pageStore.setParams([])
 })
-
 </script>
 
 <template>
-    <div class="h-[calc(100vh-60px)] w-full overflow-y-scroll bg-secondaryBg lg:bg-primaryBg lg:p-4 lg:ml-6">
-       
+    <div class="w-full lg:max-w-[600px] overflow-y-scroll">
+        <FormBodyClassification />
     </div>
 </template>

@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   ssr: false,
-  modules: ['@nuxtjs/google-fonts', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt'],
+  modules: ['@nuxtjs/google-fonts', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', 'nuxt-viewport'],
   devServer: {
     host: '0.0.0.0',
   },
@@ -11,6 +11,9 @@ export default defineNuxtConfig({
     families: {
       'Poppins': true,
     }
+  },
+  viewport: {
+    /* Viewport options */
   },
   runtimeConfig: {
     public: {

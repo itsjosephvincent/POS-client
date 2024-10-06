@@ -10,6 +10,7 @@ const props = defineProps<{
     isEdit?: boolean
     editData?: StoreData
 }>()
+const userStore = useUserStore()
 
 const loading = ref(false)
 const errorState = reactive({})

@@ -25,8 +25,8 @@ const getInitials = computed(() => {
 </script>
 
 <template>
-    <div class="flex items-center justify-end gap-4 mr-4">
-        <div class="font-medium text-primaryText">{{ getName }}</div>
+    <div class="flex items-center justify-end gap-4">
+        <div class="hidden lg:block  font-medium text-primaryText">{{ getName }}</div>
         <div class="h-[40px] w-[40px] rounded-full flex items-center justify-center">
             <span v-if="false" class="h-full w-full bg-secondaryColor text-center font-bold text-white">{{ getInitials }}</span>
             <img v-if="true" class="h-full w-full" src="/img/user.svg" :alt="getName">

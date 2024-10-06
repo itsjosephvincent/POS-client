@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="h-[calc(100vh-60px)] flex flex-col items-center  overflow-y-scroll">
+    <div class="w-full">
         <TableStores />
     </div>
 </template>

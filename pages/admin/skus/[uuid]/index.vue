@@ -22,7 +22,7 @@ function initializePageData(product: object) {
 
 
 <template>
-    <div class="h-[calc(100vh-60px)] w-full lg:max-w-[600px] overflow-y-scroll bg-secondaryBg lg:bg-primaryBg lg:p-4 lg:ml-6">
-        <ProductDisplay @product-fetch="initializePageData" />
+    <div class="w-full">
+        <ProductDisplayItem @product-fetch="initializePageData" />
     </div>
 </template>

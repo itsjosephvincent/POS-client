@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { productService } from '~/components/api/ProductService'
 
+const viewport = useViewport()
+
 const props = defineProps<{
     categoryUuid?: string
 }>()
@@ -147,14 +149,15 @@ function importButtonHandler() {
                 <span class="grow"></span>
                 <DataSearch class="self-end" placeholder="Find items..." />
             </div>
-            <DataTable :loading="isLoading" :columns="dataTableColumns" :data-source="productsData" :column-class="columnClass"
+            <DataList v-if="viewport.isLessThan('desktop')" :data-source="productsData" />
+            <DataTable v-else :loading="isLoading" :columns="dataTableColumns" :data-source="productsData" :column-class="columnClass"
                 :actions="tableActions" :has-create-button="true" create-button-label="New SKU"
                 :column-header-class="columnHeaderClass" @row-click="handleRowClick"
                 :create-button-handler="createButtonHandler" :show-pagination="true" :current-page="getCurrentPage"
                 :rows-per-page="getRowsPerPage" :total-pages="getTotalPages" @previous-page="previousPageClick"
                 @next-page="nextPageClick" @go-to-page="goToPage" @sort-data="sortData">
                 <template #column-image="{ row, column }">
-                    <div class="w-full rounded-full flex items-center justify-center py-2">
+                    <div class="hidden w-full min-w-[100px] rounded-full md:flex items-center justify-center py-2">
                         <img v-if="row[column.key]" :src="row[column.key]" :alt="row.name" class="object-fill rounded-full h-[40px] w-[40px]">
                         
                     </div>

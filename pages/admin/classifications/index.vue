@@ -45,8 +45,8 @@ function cardClickHandler(row: object) {
 </script>
 
 <template>
-    <div class="h-[calc(100vh-60px)] w-full overflow-y-scroll bg-secondaryBg lg:bg-primaryBg lg:p-4 lg:ml-6">
-        <div class="w-[90%] flex flex-col items-start">
+    <div class="w-full">
+        <div class="w-full flex flex-col items-start">
             <PrimaryButton class="mb-6" label="New Classification" icon="plus" @click="onAddNew" />
             <div class="flex items-center justify-start flex-wrap gap-4">
                 <CategoryCard v-for="item in classificationsData" :name="item.name" @click="cardClickHandler(item)" />

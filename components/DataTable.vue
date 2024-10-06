@@ -46,17 +46,13 @@ function toggleSorting(column: DataTableColumns) {
         emit('sortData', column.key, currentSortDirection.value)
     }
 }
-function onAddNew() {
-    if (props.createButtonHandler)
-        props.createButtonHandler()
-}
 
 </script>
 
 <template>
     <div :class="['relative w-full bg-transparent flex flex-col justify-center', props.loading ? 'opacity-50' : '']">
         <div class="min-w-full rounded-xl overflow-hidden border border-gray-200">
-            <table :class="['min-w-full border-collapse rounded-lg']">
+            <table :class="['table-fixed min-w-full border-collapse rounded-lg select-none']">
                 <thead>
                     <tr class="bg-primaryColor text-white font-bold border-gray-200">
                         <th v-for="column in props.columns" :key="column.key" @click="toggleSorting(column)"
@@ -75,7 +71,7 @@ function onAddNew() {
                 </thead>
                 <tbody>
                     <tr v-if="!props.loading" v-for="(row, rowIndex) in props.dataSource" :key="rowIndex" @click="$emit('rowClick', row)"
-                        class="odd:bg-white even:bg-gray-100 cursor-default hover:bg-sky-300/20">
+                        class="odd:bg-white even:bg-gray-100 cursor-default hover:bg-sky-300/20 overflow-x-auto">
                         <td v-for="column in props.columns" :key="column.key"
                             :class="[getColumnClass(row, column.key), 'px-4']">
                             <slot :name="`column-${column.key}`" :row="row" :column="column">
@@ -115,7 +111,7 @@ function onAddNew() {
         </div>
 
         <div v-if="props.loading" class="absolute top-[55px] left-1/2 z-20">
-            <IconSvg icon="loading" color="primaryColor" />
+            <IconSvg icon="loading" color="primaryColor" size="40px" />
         </div>
     </div>
 

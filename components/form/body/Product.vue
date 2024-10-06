@@ -82,7 +82,8 @@ async function handleSubmit() {
         formData.append('cost', costModel.value)
         formData.append('price', priceModel.value)
         formData.append('inventory', inventoryModel.value)
-        if (imageUrl.value) {
+        
+        if (selectedFile.value) {
             formData.append('image', selectedFile.value)
         }
         let response
@@ -93,7 +94,7 @@ async function handleSubmit() {
         }
         isLoading.value = false
         if (response.data) {
-            console.log(response.data)
+            navigateTo('/admin/skus')
         }
     } catch (error: any) {
         console.error(error)
@@ -124,7 +125,7 @@ const getSelectedProp = computed(() => {
 </script>
 
 <template>
-    <div class="w-full bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl p-6">
+    <div class="w-full bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl lg:p-6">
         <LoadingProductSkeleton v-if="isFetching" />
         <div v-else class="w-full">
             <label for="file-upload" class="block cursor-pointer w-40 h-40 rounded-xl">

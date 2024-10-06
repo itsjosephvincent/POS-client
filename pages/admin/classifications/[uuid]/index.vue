@@ -29,7 +29,7 @@ const getCurrentCategoryUuid = computed(() => classificationStore.getCurrent?.uu
 </script>
 
 <template>
-    <div class="h-[calc(100vh-60px)] w-[90%] flex flex-col items-center justify-start  overflow-y-scroll bg-secondaryBg lg:bg-primaryBg lg:p-4 lg:ml-6">
+    <div class="w-full">
         <TableProducts :category-uuid="getCurrentCategoryUuid" />
     </div>
 </template>

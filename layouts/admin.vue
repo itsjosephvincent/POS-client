@@ -9,11 +9,12 @@ const sidebarMenus = [
 
 <template>
     <div class="md:flex bg-primaryBg h-screen w-screen overflow-hidden">
-        <SideBarComponent :menus="sidebarMenus"
-            class="max-w-[280px] md:w-[280px] h-full border-r border-primaryBorder pt-24 hidden md:flex" />
-        <div class="h-full w-full flex flex-col justify-start">
+        <SideBarComponent :menus="sidebarMenus" />
+        <div class="h-full w-full lg:px-0 bg-secondaryBg lg:bg-primaryBg flex flex-col justify-start">
             <HeaderSuperAdmin />
-            <slot />
+            <div class="h-[calc(100vh-60px)] w-full lg:w-[90%] flex flex-col items-center lg:items-start justify-start  overflow-y-auto bg-secondaryBg lg:bg-primaryBg lg:p-4 lg:ml-6">
+                <slot />
+            </div>
         </div>
     </div>
 </template>

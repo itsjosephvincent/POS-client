@@ -101,7 +101,7 @@ function onCreateNew() {
 </script>
 
 <template>
-    <div class="w-[90%] flex flex-col items-center justify-center py-4">
+    <div class="w-full flex flex-col items-center justify-center py-4">
         <div class="w-full flex justify-between items-center mb-4">
             <PrimaryButton label="New Store" icon="plus" @click="onCreateNew" />
             <DataSearch class="self-end" placeholder="Find items..." />
