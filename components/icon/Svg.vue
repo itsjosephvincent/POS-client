@@ -1,31 +1,24 @@
 <script setup lang="ts">
-import { reactive, onMounted, computed } from 'vue'
 import icons from '~/constants/icons.js'
 
-const props = defineProps({
-    icon: { type: String, required: true, },
-    color: { type: String, required: true, },
-    size: { type: String, required: false, },
-})
+const props = defineProps<{
+    icon: string
+    color?: string
+    bgColor?: string
+    size?: string
+    customClass?: string
+}>()
 
-const getFillColor = computed(() => icons[props.icon]['fill'] ? props.color : 'none')
-const getStrokeColor = computed(() => icons[props.icon]['stroke'] ? props.color : 'none')
-const getSize = computed(() => props.size ? props.size : '2em')
+const bgClass = computed(() => props.bgColor ? 'bg-' + props.bgColor : '')
+const iconColor = computed(() => props.color ? 'text-' + props.color : 'text-primaryText')
+const width = computed(() => props.size ? `w-[${props.size}]` : 'w-[20px]')
+const height = computed(() => props.size ? `h-[${props.size}]` : 'h-[20px]')
+const customClass = computed(() => props.customClass || '')
 
 </script>
 
 <template>
-    <div class="icon" v-html="icons[props.icon]['svg']">
+    <div :class="[bgClass, iconColor, width, height, customClass]" v-html="icons[props.icon]">
     </div>
 </template>
 
-<style scoped>
-    :deep(svg) {
-        height: v-bind(getSize);
-        width: v-bind(getSize);
-    }
-    :deep(path), :deep(g) {
-        fill: v-bind(getFillColor);
-        stroke: v-bind(getStrokeColor);
-    }
-</style>

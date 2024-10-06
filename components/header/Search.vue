@@ -5,6 +5,6 @@ import { gray } from '~/constants/colors.js'
 <template>
     <div class="w-[calc(90%)] md:w-4/6 lg:w-72 h-12 bg-secondaryBg rounded-xl border border-secondaryBorder flex items-center px-4">
         <input type="text" name="search" id="search" placeholder="Search category or items..." class="w-3/4 border-0 grow outline-0 text-secondaryText bg-secondaryBg text-xs">
-        <IconSvg icon="search" color="var(--text-primary)" height="1.5em" width="1.5em" />
+        <IconSvg icon="search" color="primaryText" />
     </div>
 </template>

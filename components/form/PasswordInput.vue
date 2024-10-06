@@ -22,12 +22,11 @@ function toggleMode() {
 <template>
     <div class="w-full">
         <div :class="['relative h-12 rounded-xl flex items-center bg-primaryBg border border-primaryBorder',]">
-            <IconSvg v-if="props.icon" class="mr-4 absolute left-[10px]" icon="password" color="var(--text-tertiary)"
-                height="1.5em" width="1.5em" />
+            <IconSvg v-if="props.icon" class="mr-4 absolute left-[10px]" icon="password" color="tertiaryText" size="30px" />
             <input :value="props.modelValue" @input="$emit('update:modelValue', $event.target.value)" :type="type"
                 :name="props.name" :id="props.name" :placeholder="props.placeholder"
                 :class="['grow border-0 outline-0 text-primaryText focus:border focus:border-secondaryColor focus:ring-1 focus:ring-sky-500 h-full w-full rounded-xl px-4 pl-[60px] pr-[57px]', getBgClass,]">
-            <IconSvg @click="toggleMode" class="mr-4 absolute right-[10px]" :icon="currentIcon" color="var(--text-tertiary)" size="2em" />
+            <IconSvg @click="toggleMode" class="mr-4 absolute right-[10px]" :icon="currentIcon" color="tertiaryText" size="30px" />
         </div>
     </div>
 </template>

@@ -39,11 +39,11 @@ async function uploadFile() {
     <div class="w-full bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl p-6">
         <div @click="fileInputClick"
             class="w-full h-[200px] flex flex-col items-center justify-center  border border-dashed border-tertiaryText rounded-xl">
-            <IconSvg icon="csv" color="var(--text-secondary)" size="3em" />
+            <IconSvg icon="csv" color="secondaryText" size="40px" />
             <button v-if="!getFileUpload" class="p-2 text-secondaryText font-bold">Browse Files (.xlsx, .xls, & .csv)</button>
             <div v-if="getFileUpload" class="p-2 text-secondaryColor font-bold flex items-center justify-center gap-2">
                 {{ getFileUpload.name }}
-                <IconSvg @click="removeFile" icon="close" size="1.3em" color="var(--text-secondary)"
+                <IconSvg @click="removeFile" icon="close" color="secondaryText" size="30px"
                     class="cursor-pointer p-1 rounded-full hover:bg-red-400/40" />
             </div>
             <input class="hidden" ref="file-input" type="file" name="file" size="10" @change="handleFileChange" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">

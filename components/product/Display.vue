@@ -39,6 +39,6 @@ const getImage = computed(() => productData?.value?.image || '')
 <template>
     <div>
         <LoadingCardSkeleton v-if="isFetching" />
-        <ProductCard v-else :uuid="getUUID" :name="getName" :cost="getCost" :price="getPrice"          :inventory="getInventory" :image="getImage" />
+        <ProductCard v-else :uuid="getUUID" :name="getName" :cost="getCost" :price="getPrice" :inventory="getInventory" :image="getImage" />
     </div>
 </template>

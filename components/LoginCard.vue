@@ -31,7 +31,7 @@ const getError = computed(() => props.errorMessage)
             class="w-screen max-w-[500px] h-[350px] bg-secondaryBg md:bg-secondaryBg md:rounded-xl md:border md:border-primaryBorder flex flex-col justify-center items-center gap-4 px-12"
             @submit.prevent="onLogin">
             <div :class="`${!getHasError ? 'invisible' : ''} w-[calc(90%)] max-w-96 rounded-lg bg-red-100 p-3 text-errorColor flex items-center gap-4`">
-                <IconSvg icon="error" color="var(--error-color)" /><span>{{ getError }}</span>
+                <IconSvg icon="error" color="errorColor" /><span>{{ getError }}</span>
             </div>
             <FormTextInput name="username" bg-class="bg-primaryBg" icon="user" placeholder="Username" type="text" :modelValue="usernameModel"
                 @update:modelValue="$event => (usernameModel = $event)" />

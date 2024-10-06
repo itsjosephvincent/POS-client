@@ -111,12 +111,12 @@ const tableActions = [
                 </template>
                 <template #action-edit="{ action }">
                     <button class="p-1 rounded-full hover:bg-sky-500/30">
-                        <IconSvg icon="edit" color="var(--secondary-color)" size="1.5em" />
+                        <IconSvg icon="edit" color="secondaryColor" size="1.5em" />
                     </button>
                 </template>
                 <template #action-delete="{ action }">
                     <button class="p-1 rounded-full hover:bg-red-500/30">
-                        <IconSvg icon="delete" color="var(--error-color)" size="1.5em" />
+                        <IconSvg icon="delete" color="errorColor" size="1.5em" />
                     </button>
                 </template>
             </DataTable>

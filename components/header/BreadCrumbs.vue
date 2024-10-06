@@ -21,7 +21,7 @@ function onBackClick() {
 
 <template>
     <div class="flex items-center justify-start gap-2 select-none text text-primaryText font-medium ">
-        <IconSvg class="cursor-pointer" @click="onBackClick" icon="left" color="var(--text-primary)" size="1.5em" />
+        <IconSvg class="cursor-pointer" @click="onBackClick" icon="left" color="primaryText" size="25px" custom-class="hover:text-secondaryColor" />
         <span v-for="(item, index) in breadCrumbs" :key="item">
             <NuxtLink class="hover:text-secondaryColor hover:underline" :to="getUrl(item, index)">{{ item }}</NuxtLink> {{  index < breadCrumbs.length - 1 ? ' / ' : ''  }}
         </span>

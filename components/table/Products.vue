@@ -12,6 +12,8 @@ const getClassificationName = computed(() => classificationData.value && classif
 const rowsPerPage = ref(10)
 const totalPages = ref(0)
 const currentPage = ref(1)
+const showDeleteModal = ref(false)
+const itemToDelete = ref({})
 
 const getRowsPerPage = computed(() => rowsPerPage.value || 10)
 const getTotalPages = computed(() => totalPages.value)
@@ -53,8 +55,8 @@ const tableActions = [
         key: 'delete',
         label: 'Delete',
         handler: (row: object) => {
-            console.log('Delete action triggered for:', row);
-            // Add your custom delete logic here
+            showDeleteModal.value = true
+            itemToDelete.value = row
         },
     },
 ]
@@ -83,6 +85,19 @@ async function fetch(params: ProductServiceParams = {}) {
         isLoading.value = false
         console.error(error)
     }
+}
+async function handleDelete(row: object) {
+    try {
+        const response = await productService.delete(row.uuid)
+        console.log(response)
+        fetch()
+    } catch(error) {
+        console.error(error)
+    }
+}
+function closeDeleteModal() {
+    showDeleteModal.value = false
+    itemToDelete.value = {}
 }
 function previousPageClick() {
     fetch({ page: currentPage.value - 1 })
@@ -146,14 +161,22 @@ function importButtonHandler() {
                 </template>
                 <template #action-edit="{ action }">
                     <button class="p-2 rounded-full hover:bg-sky-500/30">
-                        <IconSvg icon="edit" color="var(--secondary-color)" size="1.5em" />
+                        <IconSvg icon="edit" color="secondaryColor" />
                     </button>
                 </template>
                 <template #action-delete="{ action }">
                     <button class="p-2 rounded-full hover:bg-red-500/30">
-                        <IconSvg icon="delete" color="var(--error-color)" size="1.5em" />
+                        <IconSvg icon="delete" color="errorColor" />
                     </button>
                 </template>
             </DataTable>
+            <Teleport to="body">
+                <ModalDelete :visible="showDeleteModal" @close-delete-modal="closeDeleteModal" >
+                    <div class="flex items-center gap-4 my-4">
+                        <IconSvg icon="error" color="errorColor" />
+                        <div class="text text-primaryText">Are you sure you want to delete <span class="font-bold">{{ itemToDelete?.name || 'this product' }}</span>?</div>
+                    </div>
+                </ModalDelete>
+            </Teleport>
         </div>
 </template>

@@ -15,6 +15,12 @@ class ProductService extends BaseAPIService {
     async create(params: object) {
         return await this.request(`/admin/products`, 'POST', params)
     }
+    async update(params: object, uuid: string) {
+        return await this.request(`/admin/products/${uuid}?_method=PUT`, 'POST', params)
+    }
+    async delete(uuid: string) {
+        return await this.request(`/admin/products/${uuid}`, 'DELETE')
+    }
     async import(params: object) {
         return await this.request(`/admin/products/import/file`, 'POST', params)
     }

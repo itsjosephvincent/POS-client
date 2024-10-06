@@ -17,6 +17,7 @@ onMounted(() => {
 interface DataTableColumns {
     key: string
     label: string
+    sortable?: boolean
 }
 interface StoreServiceParams {
     admin_id?: number
@@ -25,9 +26,9 @@ interface StoreServiceParams {
     sortOrder?: string
 }
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'store_name', label: 'Store' },
-    { key: 'branch', label: 'Branch' },
-    { key: 'username', label: 'Username' },
+    { key: 'store_name', label: 'Store', sortable: true },
+    { key: 'branch', label: 'Branch', sortable: true },
+    { key: 'username', label: 'Username', sortable: true },
 ]
 async function fetch(params: StoreServiceParams = {}) {
     try {
@@ -119,12 +120,12 @@ function onCreateNew() {
             </template>
             <template #action-edit="{ action }">
                 <button class="p-1 rounded-full hover:bg-sky-500/30">
-                    <IconSvg icon="edit" color="var(--secondary-color)" size="1.5em" />
+                    <IconSvg icon="edit" color="secondaryColor" />
                 </button>
             </template>
             <template #action-delete="{ action }">
                 <button class="p-1 rounded-full hover:bg-red-500/30">
-                    <IconSvg icon="delete" color="var(--error-color)" size="1.5em" />
+                    <IconSvg icon="delete" color="errorColor" />
                 </button>
             </template>
         </DataTable>

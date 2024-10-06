@@ -66,7 +66,7 @@ const filteredItems = computed(() => {
             <input v-model="inputModel" @input="onSearch" @focus="onFocus" @blur="onBlur" type="text"
                 :name="props.name" :id="props.name" :placeholder="props.placeholder"
                 :class="['grow border-0 outline-0 text-primaryText focus:border focus:border-secondaryColor focus:ring-1 focus:ring-sky-500 h-full w-full rounded-xl px-4 pr-[57px]', getBgClass]">
-            <IconSvg class="mr-4 absolute right-0" icon="downSmall" color="var(--text-secondary)" size="1.5em" />
+            <IconSvg class="mr-4 absolute right-0" icon="downSmall" color="secondaryText" />
         </div>
         <div v-if="isDropdown" class="z-20 w-full max-h-[180px] absolute top-[73px] left-0 overflow-y-auto bg-secondaryBg border border-primaryBorder py-2">
             <div v-if="!filteredItems.length" class="py-2 px-4 cursor-default text-primaryText">No results.</div>

@@ -20,7 +20,7 @@ const state = reactive({
                 <div class="text-xs text-secondaryText font-bold">Cashier Today!</div>
                 <div class="text-lg font-bold text-primaryText">{{ state.user.name }}</div>
             </div>
-            <IconSvg icon="bell" color="var(--text-primary)" height="1.7em" width="1.7em" />
+            <IconSvg icon="bell" />
         </div>
     </div>
     

@@ -28,7 +28,7 @@ const props = defineProps<{
             </div>
             <div class="w-full flex flex-col md:flex-row gap-2 mt-4">
                 <PrimaryButton label="Edit" class="w-full h-[38px]"/>
-                <PrimaryButton label="Delete" bg-color="bg-errorColor" class="w-full h-[38px]"/>
+                <PrimaryButton label="Delete" custom-class="bg-errorColor text-white" class="w-full h-[38px]"/>
             </div>
         </div>
     </div>

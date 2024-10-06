@@ -65,7 +65,7 @@ function onAddNew() {
                                 {{ column.label }}
                                 <!-- Add sorting indicator -->
                                 <span v-if="currentSortColumn === column.key && !!column.sortable">
-                                    <IconSvg :icon="currentSortDirection === 'ascend' ? 'up' : 'down'" color="#ffffff" size="1.5em" />
+                                    <IconSvg :icon="currentSortDirection === 'ascend' ? 'up' : 'down'" color="white" />
                                 </span>
                             </div>
                         </th>
@@ -115,7 +115,7 @@ function onAddNew() {
         </div>
 
         <div v-if="props.loading" class="absolute top-[55px] left-1/2 z-20">
-            <IconSvg icon="loading" color="var(--primary-color)" size="3em" />
+            <IconSvg icon="loading" color="primaryColor" />
         </div>
     </div>
 

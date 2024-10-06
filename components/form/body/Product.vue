@@ -2,6 +2,8 @@
 import { classificationService } from '~/components/api/ClassificationService'
 import { productService } from '~/components/api/ProductService'
 
+const route = useRoute()
+
 const props = defineProps<{
     isEdit?: boolean
     editData?: object
@@ -66,7 +68,7 @@ async function fetchCategories() {
         isFetching.value = false
     }
 }
-async function save() {
+async function handleSubmit() {
     try {
         errors.value = {}
         isLoading.value = true
@@ -83,7 +85,12 @@ async function save() {
         if (imageUrl.value) {
             formData.append('image', selectedFile.value)
         }
-        const response = await productService.create(formData)
+        let response
+        if (props.isEdit && route.params.uuid) {
+            response = await productService.update(formData, route.params.uuid)
+        } else {
+            response = await productService.create(formData)
+        }
         isLoading.value = false
         if (response.data) {
             console.log(response.data)
@@ -149,7 +156,7 @@ const getSelectedProp = computed(() => {
                 :model-value="inventoryModel" @update:modelValue="$event => (inventoryModel = $event)"
                 :error="getInventoryError" />
             <FormError v-if="errorMessage" :error="errorMessage" />
-            <PrimaryButton :loading="isLoading" @click="save" class="w-full my-3" :label="!props.isEdit ? 'Save Product' : 'Update Product'" />
+            <PrimaryButton :loading="isLoading" @click="handleSubmit" class="w-full my-3" :label="!props.isEdit ? 'Save Product' : 'Update Product'" />
         </div>
     </div>
 </template>

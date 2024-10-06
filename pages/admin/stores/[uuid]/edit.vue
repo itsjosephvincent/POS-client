@@ -14,7 +14,6 @@ onMounted(() => {
 })
 
 function initializePageData(data: object) {
-    pageStore.setParams([data.store_name + ' ' + data.branch])
     pageStore.setParams([`${data.store_name} ${data.branch}`, 'Edit'])
 }
 </script>
