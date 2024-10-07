@@ -14,6 +14,7 @@ async function logout() {
     const role = userStore.getRole
     localStorage.removeItem('_token')
     userStore.resetUser()
+    pageStore.resetPageData()
     await navigateTo(`/${role.toLowerCase()}/login`)
 }
 function toggleOpen() {
@@ -32,21 +33,21 @@ const containerDisplayCss = computed(() => isOpen.value ? 'w-screen' : 'w-0')
 <template>
     <div class="fixed lg:relative z-50">
         <button @click="toggleOpen" class="fixed lg:hidden top-[7px] ml-[8px] text-primaryText hover:text-secondaryColor hover:bg-secondaryColorTransparent rounded-full p-2">
-            <IconSvg :icon="toggleIcon" color="current" />
+            <IconSvg :icon="toggleIcon" color="current" size="2em" />
         </button>
-        <div :class="['overflow-hidden transition-all duration-500 bg-secondaryBg h-screen lg:w-[280px] lg:border-r lg:border-primaryBorder pt-24 flex flex-col items-start justify-between pb-6', containerDisplayCss]">
+        <div :class="['overflow-hidden transition-all duration-500 bg-secondaryBg h-screen lg:w-[200px] xl:w-[280px] lg:border-r lg:border-primaryBorder pt-24 flex flex-col items-start justify-between pb-6', containerDisplayCss]">
             <div class="w-full min-w-[200px] lg:flex lg:flex-col lg:items-start">
                 <NuxtLink class="w-full" v-for="item in props.menus" :to="item.link" :key="item.id" @click="linkCick">
                     <div id="row" :class="[rowStyle, currentPage === item.name ? 'bg-secondaryColorTransparent' : '']">
                         <IconSvg :color="currentPage === item.name ? 'secondaryColor' : 'current'" :key="item.id"
-                            :icon="item.icon" />
+                            :icon="item.icon" size="1.5em" />
                         <div :class="[labelStyle, currentPage === item.name ? 'text-secondaryColor' : 'text-current']">
                             {{ item.name }}</div>
                     </div>
                 </NuxtLink>
             </div>
             <div @click="logout" id="logout" :class="rowStyle">
-                <IconSvg color="current" icon="logout" />
+                <IconSvg color="current" icon="logout" size="1.5em" />
                 <div :class="labelStyle">Logout</div>
             </div>
         </div>

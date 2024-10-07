@@ -10,7 +10,7 @@ const pageStore = usePageStore()
             <div class="md:block ml-[10px] lg:ml-0 px-6 font-bold text-lg text-primaryText">
                 <HeaderBreadCrumbs />
             </div>
-            <div class="flex gap-4 items-center">
+            <div class="flex gap-4 items-center mr-4 lg:mr-0">
                 <HeaderCurrentUser />
             </div>
         </div>

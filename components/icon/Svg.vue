@@ -11,8 +11,8 @@ const props = defineProps<{
 
 const bgClass = computed(() => props.bgColor ? 'bg-' + props.bgColor : '')
 const iconColor = computed(() => props.color ? 'text-' + props.color : 'text-primaryText')
-const width = computed(() => props.size ? `w-[${props.size}]` : 'w-[20px]')
-const height = computed(() => props.size ? `h-[${props.size}]` : 'h-[20px]')
+const width = computed(() => props.size ? `w-[${props.size}]` : 'w-[1.5em]')
+const height = computed(() => props.size ? `h-[${props.size}]` : 'h-[1.5em]')
 const customClass = computed(() => props.customClass || '')
 
 </script>

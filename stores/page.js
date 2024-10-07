@@ -17,6 +17,7 @@ export const usePageStore = defineStore('page', () => {
         state.data = data
     }
     function resetPageData() {
+        state.page = null
         state.params = []
         state.data = null
     }

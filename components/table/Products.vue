@@ -142,12 +142,12 @@ function importButtonHandler() {
 </script>
 
 <template>
-    <div class="w-full flex flex-col items-center justify-center py-4">
-            <div class="w-full flex justify-start items-center gap-2 mb-4">
+    <div class="w-full flex flex-col items-center justify-center py-4 mx-4 lg:mx-0">
+            <div class="w-full flex justify-start items-center gap-2 mb-4 ">
                 <PrimaryButton label="New SKU" icon="plus" @click="createButtonHandler" />
                 <PrimaryButton class="" icon="import" label="Import SKUs" @click="importButtonHandler" />
                 <span class="grow"></span>
-                <DataSearch class="self-end" placeholder="Find items..." />
+                <DataSearch class="self-end mr-4 lg:mr-0" placeholder="Find items..." />
             </div>
             <DataList v-if="viewport.isLessThan('desktop')" :data-source="productsData" />
             <DataTable v-else :loading="isLoading" :columns="dataTableColumns" :data-source="productsData" :column-class="columnClass"
