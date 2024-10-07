@@ -24,15 +24,19 @@ onMounted(() => {
     fetch()
 })
 
+const isFetching = ref(false)
 async function fetch() {
     try {
+        isFetching.value = true
         const response = await classificationService.all()
+        isFetching.value = false
         if (response.data) {
             classificationsData.value = response.data
             classificationStore.setClassifications(response.data)
             console.log(classificationsData.value)
         }
     } catch(error) {
+        isFetching.value = false
         console.error(error)
     }
 }
@@ -45,10 +49,11 @@ function cardClickHandler(row: object) {
 </script>
 
 <template>
-    <div class="w-full">
-        <div class="w-full flex flex-col items-start">
+    <div class="w-full px-2 md:px-4">
+        <LoadingClassificationListSkeleton v-if="isFetching" />
+        <div v-else class="w-full flex flex-col items-start">
             <PrimaryButton class="mb-6" label="New Classification" icon="plus" @click="onAddNew" />
-            <div class="flex items-center justify-start flex-wrap gap-4">
+            <div class="w-full flex items-center justify-start flex-wrap gap-4">
                 <CategoryCard v-for="item in classificationsData" :name="item.name" @click="cardClickHandler(item)" />
             </div>
         </div>

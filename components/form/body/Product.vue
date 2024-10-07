@@ -134,7 +134,7 @@ const getSelectedProp = computed(() => {
                     Click to select an image
                 </div>
                 <img v-if="imageUrl" :src="imageUrl" alt="Preview"
-                    class="w-40 h-40 rounded-xl object-contain border border-primaryBorder" />
+                    class="w-40 h-40 rounded-xl object-cover border border-primaryBorder" />
             </label>
             <input id="file-upload" type="file" accept="image/*" @change="handleFileChange" class="hidden" />
 

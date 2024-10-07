@@ -20,7 +20,7 @@ onBeforeUnmount(() => {
 
 
 <template>
-    <div class="w-full lg:max-w-[600px] overflow-y-scroll">
+    <div class="w-full px-2 md:px-4 lg:max-w-[600px] overflow-y-scroll">
         <FormBodyProduct />
     </div>
 </template>

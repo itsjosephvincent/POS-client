@@ -37,7 +37,9 @@ async function fetch() {
 
 <template>
     <div class="w-full">
-        <LoadingFormSkeleton v-if="isFetching" />
+        <div v-if="isFetching" class="w-full bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl lg:p-6">
+            <LoadingProductSkeleton />
+        </div>
         <FormBodyProduct v-else :is-edit="true" :edit-data="productData" />
     </div>
 </template>

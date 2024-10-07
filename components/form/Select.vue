@@ -13,7 +13,7 @@ const props = defineProps<{
     bgClass?: string
     borderClass?: string
     options: Array<SelectOptions>
-    preSelectedData: SelectOptions
+    preSelectedData: SelectOptions|null
 }>()
 const emit = defineEmits(['selectClassification'])
 const isDropdown = ref(false)

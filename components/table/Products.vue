@@ -30,12 +30,6 @@ interface DataTableColumns {
     label: string
     sortable: boolean
 }
-interface ProductServiceParams {
-    category_uuid?: string | string[]
-    page?: number
-    sortField?: string
-    sortOrder?: string
-}
 
 const dataTableColumns: Array<DataTableColumns> = [
     { key: 'image', label: '', sortable: false },
@@ -45,24 +39,26 @@ const dataTableColumns: Array<DataTableColumns> = [
     { key: 'price', label: 'SRP', sortable: true },
     { key: 'inventory', label: 'Inventory Count', sortable: true },
 ]
+const editHandler = (row: object) => {
+    navigateTo(`/admin/skus/${row?.uuid}/edit`)
+}
+const deleteHandler = (row: object) => {
+    showDeleteModal.value = true
+    itemToDelete.value = row
+}
 const tableActions = [
     {
         key: 'edit',
         label: 'Edit',
-        handler: (row: object) => {
-            navigateTo(`/admin/skus/${row?.uuid}/edit`)
-        },
+        handler: editHandler,
     },
     {
         key: 'delete',
         label: 'Delete',
-        handler: (row: object) => {
-            showDeleteModal.value = true
-            itemToDelete.value = row
-        },
+        handler: deleteHandler,
     },
 ]
-async function fetch(params: ProductServiceParams = {}) {
+async function fetch(params: object = {}) {
     try {
         isLoading.value = true
         if (props.categoryUuid) {
@@ -88,10 +84,15 @@ async function fetch(params: ProductServiceParams = {}) {
         console.error(error)
     }
 }
-async function handleDelete(row: object) {
+function filterData(value: string) {
+    const params = { name: value }
+    fetch(params)
+}
+async function handleDelete() {
     try {
-        const response = await productService.delete(row.uuid)
-        console.log(response)
+        const uuid: string = itemToDelete.value.uuid
+        closeDeleteModal()
+        await productService.delete(uuid)
         fetch()
     } catch(error) {
         console.error(error)
@@ -120,11 +121,11 @@ function sortData(column: string, direction: string) {
     })
 
 }
-function columnHeaderClass(column) {
+function columnHeaderClass(column: string) {
     return column === 'cost' || column === 'price' || column === 'inventory'
         ? 'justify-end' : ''
 }
-function columnClass(row, columnKey) {
+function columnClass(row: object, columnKey: string) {
     if (columnKey === 'image') return 'max-w-[90px] pl-4'
     return columnKey === 'cost' || columnKey === 'price' || columnKey === 'inventory'
         ? 'text-right' : ''
@@ -142,14 +143,17 @@ function importButtonHandler() {
 </script>
 
 <template>
-    <div class="w-full flex flex-col items-center justify-center py-4 mx-4 lg:mx-0">
+    <div class="w-full flex flex-col items-center justify-center py-4 px-2 lg:mx-0">
             <div class="w-full flex justify-start items-center gap-2 mb-4 ">
                 <PrimaryButton label="New SKU" icon="plus" @click="createButtonHandler" />
                 <PrimaryButton class="" icon="import" label="Import SKUs" @click="importButtonHandler" />
                 <span class="grow"></span>
-                <DataSearch class="self-end mr-4 lg:mr-0" placeholder="Find items..." />
+                <DataSearch class="self-end mr-4 lg:mr-0" placeholder="Find Products..." @on-filter="filterData" />
             </div>
-            <DataList v-if="viewport.isLessThan('desktop')" :data-source="productsData" />
+            <DataList v-if="viewport.isLessThan('desktop')" :data-source="productsData"         :loading="isLoading"
+                :delete-handler="deleteHandler" :edit-handler="editHandler" :show-pagination="true" :current-page="getCurrentPage"
+                :rows-per-page="getRowsPerPage" :total-pages="getTotalPages" @previous-page="previousPageClick"
+                @next-page="nextPageClick" @go-to-page="goToPage" />
             <DataTable v-else :loading="isLoading" :columns="dataTableColumns" :data-source="productsData" :column-class="columnClass"
                 :actions="tableActions" :has-create-button="true" create-button-label="New SKU"
                 :column-header-class="columnHeaderClass" @row-click="handleRowClick"
@@ -174,9 +178,9 @@ function importButtonHandler() {
                 </template>
             </DataTable>
             <Teleport to="body">
-                <ModalDelete :visible="showDeleteModal" @close-delete-modal="closeDeleteModal" >
+                <ModalDelete :visible="showDeleteModal" @close-delete-modal="closeDeleteModal" @delete-confirmed="handleDelete" >
                     <div class="flex items-center gap-4 my-4">
-                        <IconSvg icon="error" color="errorColor" />
+                        <IconSvg icon="error" color="errorColor" size="2em" />
                         <div class="text text-primaryText">Are you sure you want to delete <span class="font-bold">{{ itemToDelete?.name || 'this product' }}</span>?</div>
                     </div>
                 </ModalDelete>

@@ -73,17 +73,17 @@ function toggleSorting(column: DataTableColumns) {
                     <tr v-if="!props.loading" v-for="(row, rowIndex) in props.dataSource" :key="rowIndex" @click="$emit('rowClick', row)"
                         class="odd:bg-white even:bg-gray-100 cursor-default hover:bg-sky-300/20 overflow-x-auto">
                         <td v-for="column in props.columns" :key="column.key"
-                            :class="[getColumnClass(row, column.key), 'px-4']">
+                            :class="[getColumnClass(row, column.key), 'px-4 h-10']">
                             <slot :name="`column-${column.key}`" :row="row" :column="column">
                                 {{ row[column.key] }}
                             </slot>
                         </td>
                         <!-- Render Action Buttons -->
-                        <td v-if="getActions.length" class="h-full px-4 py-1 text-center flex items-center justify-center">
-                            <div v-for="(action, index) in actions" :key="index" @click.stop="action.handler(row)" class="h-full mx-1">
+                        <td v-if="getActions.length" class="px-4 ">
+                            <span v-for="(action, index) in actions" :key="index" @click.stop="action.handler(row)" class="h-full mx-1">
                                 <slot :name="`action-${action.key}`">
                                 </slot>
-                            </div>
+                            </span>
                         </td>
                     </tr>
                     

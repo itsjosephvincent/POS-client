@@ -9,16 +9,22 @@ const props = defineProps<{
     customClass?: string
 }>()
 
+const getSize = computed(() => props.size ? props.size : '1em')
 const bgClass = computed(() => props.bgColor ? 'bg-' + props.bgColor : '')
 const iconColor = computed(() => props.color ? 'text-' + props.color : 'text-primaryText')
-const width = computed(() => props.size ? `w-[${props.size}]` : 'w-[1em]')
-const height = computed(() => props.size ? `h-[${props.size}]` : 'h-[1em]')
 const customClass = computed(() => props.customClass || '')
 
 </script>
 
 <template>
-    <div :class="[bgClass, iconColor, width, height, customClass]" v-html="icons[props.icon]">
+    <div :class="[bgClass, iconColor, customClass]" v-html="icons[props.icon]">
     </div>
 </template>
+
+<style scoped>
+    :deep(svg) {
+        height: v-bind(getSize);
+        width: v-bind(getSize);
+    }
+</style>
 

@@ -11,20 +11,43 @@ const props = defineProps<{
     rowsPerPage?: number
     totalPages?: number
     currentPage?: number
+    deleteHandler: Function
+    editHandler: Function
 }>()
+
+const emit = defineEmits(['sortData', 'nextPage', 'previousPage', 'rowClick'])
+
 
 </script>
 
 <template>
-    <div class="w-full flex justify-start items-start flex-wrap gap-2">
-        <div v-for="item in props.dataSource" :key="item.id" class="w-full md:w-[200px] bg-secondaryBg md:rounded-xl border-b md:border border-primaryBorder flex flex-col items-start justify-start">
-            <img v-if="item.image" :src="item.image" :alt="item.name" class="w-full h-[150px] object-contain md:object-cover py-4 md:py-0 md:rounded-t-xl">
-            <img v-else src="~/assets/img/noimg_medium.png" :alt="item.name" class="w-full h-[150px] object-contain md:object-cover py-4 md:py-0 md:rounded-t-xl" >
-            <div class="block p-4">
-                <div class="font-bold text-primaryText">{{ item.price }}</div>
-                <div class="text-secondaryText">{{ item.name }}</div>
-                <div class="text-secondaryText">{{ item.inventory }} remaining</div>
+    <div class="w-full">
+        <LoadingProductListSkeleton v-if="props.loading" />
+        <div v-else class="w-full">
+            <div class="w-full grid grid-cols-3 md:grid-cols-4 justify-start items-start flex-wrap gap-2">
+                <ProductItemCard v-for="item in props.dataSource" :key="item.id" :product-data="item"
+                    :delete-handler="props.deleteHandler" :edit-handler="props.editHandler" />
+
+
             </div>
+        </div>
+        <!-- Pagination Controls -->
+        <div v-if="props.showPagination && !props.loading"
+            class="w-full flex justify-center items-center mt-4 select-none">
+            <button :disabled="props.currentPage === 1" @click="$emit('previousPage')"
+                class="px-4 py-2 disabled:text-gray-500">
+                Previous
+            </button>
+            <button v-for="page in totalPages" :key="page" @click="$emit('goToPage', page)" :class="[
+                'px-4 py-2',
+                currentPage === page ? 'text-secondaryColor font-semibold' : 'text-secondaryText hover:bg-gray-400/20 rounded-full',
+            ]">
+                {{ page }}
+            </button>
+            <button :disabled="props.currentPage === totalPages" @click="$emit('nextPage')"
+                class="px-4 py-2 disabled:text-gray-500">
+                Next
+            </button>
         </div>
     </div>
 </template>
