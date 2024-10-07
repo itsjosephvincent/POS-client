@@ -28,7 +28,7 @@ const getError = computed(() => props.errorMessage)
 <template>
     <div>
         <form
-            class="w-screen max-w-[500px] h-[350px] bg-secondaryBg md:bg-secondaryBg md:rounded-xl md:border md:border-primaryBorder flex flex-col justify-center items-center gap-4 px-12"
+            class="w-screen max-w-md h-96 bg-secondaryBg md:bg-secondaryBg md:rounded-xl md:border md:border-primaryBorder flex flex-col justify-center items-center gap-4 px-4 lg:px-8"
             @submit.prevent="onLogin">
             <div :class="`${!getHasError ? 'invisible' : ''} w-full rounded-xl bg-red-100 p-3 text-errorColor flex items-center gap-4`">
                 <IconSvg icon="error" color="errorColor" /><span>{{ getError }}</span>

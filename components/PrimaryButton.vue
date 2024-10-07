@@ -19,10 +19,10 @@ const roundedClass = computed(() => {
 </script>
 
 <template>
-    <button :class="['h-[46px] flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-70', getClass, roundedClass]" 
+    <button :class="['h-10 flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-70', getClass, roundedClass]" 
     :disabled="props.disabled">
         <IconSvg v-if="props.icon" :icon="props.icon" :color="props.iconColor || 'white'" />
         <span v-if="!loading && !(props.icon && viewport.isLessThan('desktop'))">{{ getLabel }}</span>
-        <IconSvg v-if="loading" icon="loading" color="white" size="30px" />
+        <IconSvg v-if="loading" icon="loading" color="white" size="2em" />
     </button>
 </template>
