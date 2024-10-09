@@ -16,6 +16,6 @@
                 <IconSvg icon="creditCard" :color="gray" />
             </div>
         </div>
-        <button type="button" class="p-2 rounded-lg bg-primaryColor text-white font-bold text-lg">Print Bills</button>
+        <button type="button" class="p-2 rounded-lg bg-primaryColor text-white font-bold text-lg">Process Transaction</button>
     </div>
 </template>

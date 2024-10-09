@@ -8,8 +8,6 @@
             <PosHeader />
             <slot />
         </div>
-        <div>
-            <PosBillingDrawer />
-        </div>
+        <PosBillingDrawer />
     </div>
 </template>

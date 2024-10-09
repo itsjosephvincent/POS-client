@@ -13,12 +13,20 @@ const hasBilling = computed(() => store.getItems.length > 0)
 const getContainerCss = computed(() => {
     if (viewport.isLessThan('desktop')) {
         if (openDrawer.value) {
-            return 'z-50 fixed transition-all duration-500 bottom-0 h-screen w-screen bg-secondaryBg'
+            return 'h-screen w-screen fixed bottom-0 left-0 bg-gray-700/70'
+        }
+    }
+    return ''
+})
+const getDrawerCss = computed(() => {
+    if (viewport.isLessThan('desktop')) {
+        if (openDrawer.value) {
+            return 'z-50 fixed bottom-0 left-0 h-screen w-screen transition-height duration-500 bg-secondaryBg'
         } else {
-            return 'z-50 fixed transition-all duration-500 bottom-0 h-0 w-screen'
+            return 'z-50 fixed bottom-0 left-0 h-0 w-screen transition-height duration-500 bg-secondaryBg'
         }
     } else {
-        return 'z-50 lg:w-72 transition-all duration-500 h-screen lg:flex flex-col bg-secondaryBg border-l border-primaryBorder'
+        return 'z-50 lg:w-72 transition-height duration-500 h-screen flex flex-col bg-secondaryBg border-l border-primaryBorder'
     }
 })
 const getButtonCss = computed(() => {
@@ -32,20 +40,20 @@ const getButtonCss = computed(() => {
 </script>
 
 <template>
-    <div>
+    <div :class="getContainerCss">
         <Teleport v-if="viewport.isLessThan('desktop') && !openDrawer" to="body">
             <div :class="['w-full flex justify-center px-2 fixed bottom-2 transition delay-[2000ms] ease-in-out', getButtonCss]">
                 <PrimaryButton @click="toggle" label="Proceed New Order - P 200" custom-class="bg-secondaryColor rounded-xl w-full text-white" />
             </div>
         </Teleport>
-        <div :class="[getContainerCss]">
-            <div class="flex justify-start items-center gap-2 mx-2 md:mx-0 border-b border-primaryBorder xl:border-0">
+        <div :class="[getDrawerCss]">
+            <div class="w-full flex justify-start items-center gap-2 pt-2 px-2">
                 <IconSvg @click="openDrawer = false" v-if="viewport.isLessThan('desktop')" icon="left" size="1.5em" class="cursor-pointer" />
-                <BillingCashier />
+                <div class="font-bold text-lg text-primaryText mx-2 xl:mx-6">Billing Details</div>
             </div>
-            <BillingItems class="my-2 grow" />
-            <BillingTotal class="" v-if="hasBilling" />
-            <BillingPayment class="" v-if="hasBilling" />
+            <PurchaseBillingItems class="mt-10 grow" />
+            <PurchaseBillingTotal class="" v-if="hasBilling" />
+            <PurchaseBillingPayment class="" v-if="hasBilling" />
         </div>
     </div>
     

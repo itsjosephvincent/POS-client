@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useUserStore } from '~/stores/user.js'
-import { usePageStore } from '~/stores/page';
 
+const viewport = useViewport()
 const pageStore = usePageStore()
 const userStore = useUserStore()
 const props = defineProps<{
@@ -28,27 +27,45 @@ const rowStyle = `flex justify-start items-center gap-4 px-4 py-2 pl-4 cursor-po
 const currentPage = computed(() => pageStore.getPage)
 const toggleIcon = computed(() => isOpen.value ? 'close' : 'hamburger')
 const containerDisplayCss = computed(() => isOpen.value ? 'w-screen' : 'w-0')
+const getContainerCss = computed(() => {
+    if (viewport.isLessThan('desktop')) {
+        if (isOpen.value) {
+            return 'h-screen w-screen fixed top-0 left-0 bg-gray-700/70'
+        } else {
+            return 'h-screen w-0 fixed top-0 transition-all delay-600 left-0 bg-gray-700/70'
+        }
+    }
+    return ''
+})
+
 </script>
 
 <template>
-    <div class="fixed lg:relative z-50">
-        <button @click="toggleOpen" class="fixed lg:hidden top-[11px] ml-[8px] text-primaryText hover:text-secondaryColor hover:bg-secondaryColorTransparent rounded-full p-2">
-            <IconSvg :icon="toggleIcon" color="current" size="1.5em" />
-        </button>
-        <div :class="['overflow-hidden transition-all duration-500 bg-secondaryBg h-screen lg:w-[200px] xl:w-[280px] lg:border-r lg:border-primaryBorder pt-24 flex flex-col items-start justify-between pb-6', containerDisplayCss]">
-            <div class="w-full min-w-[200px] lg:flex lg:flex-col lg:items-start">
-                <NuxtLink class="w-full" v-for="item in props.menus" :to="item.link" :key="item.id" @click="linkCick">
-                    <div id="row" :class="[rowStyle, currentPage === item.name ? 'bg-secondaryColorTransparent' : '']">
-                        <IconSvg :color="currentPage === item.name ? 'secondaryColor' : 'current'" :key="item.id"
-                            :icon="item.icon" size="1em" />
-                        <div :class="[labelStyle, currentPage === item.name ? 'text-secondaryColor' : 'text-current']">
-                            {{ item.name }}</div>
-                    </div>
-                </NuxtLink>
-            </div>
-            <div @click="logout" id="logout" :class="rowStyle">
-                <IconSvg color="current" icon="logout" size="1em" />
-                <div :class="labelStyle">Logout</div>
+    <div :class="[getContainerCss]">
+        <div class="fixed lg:relative z-50 border-r-2 border-primaryBorder">
+            <button @click="toggleOpen"
+                class="fixed lg:hidden top-[11px] ml-[8px] text-primaryText hover:text-secondaryColor hover:bg-secondaryColorTransparent rounded-full p-2">
+                <IconSvg :icon="toggleIcon" color="current" size="1.5em" />
+            </button>
+            <div
+                :class="['overflow-hidden transition-all duration-500 bg-secondaryBg h-screen lg:w-[200px] xl:w-[280px] lg:border-r lg:border-primaryBorder pt-24 flex flex-col items-start justify-between pb-6', containerDisplayCss]">
+                <div class="w-full min-w-[200px] lg:flex lg:flex-col lg:items-start">
+                    <NuxtLink class="w-full" v-for="item in props.menus" :to="item.link" :key="item.id"
+                        @click="linkCick">
+                        <div id="row"
+                            :class="[rowStyle, currentPage === item.name ? 'bg-secondaryColorTransparent' : '']">
+                            <IconSvg :color="currentPage === item.name ? 'secondaryColor' : 'current'" :key="item.id"
+                                :icon="item.icon" size="1em" />
+                            <div
+                                :class="[labelStyle, currentPage === item.name ? 'text-secondaryColor' : 'text-current']">
+                                {{ item.name }}</div>
+                        </div>
+                    </NuxtLink>
+                </div>
+                <div @click="logout" id="logout" :class="rowStyle">
+                    <IconSvg color="current" icon="logout" size="1em" />
+                    <div :class="labelStyle">Logout</div>
+                </div>
             </div>
         </div>
     </div>

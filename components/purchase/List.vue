@@ -2,17 +2,11 @@
 
 const props = defineProps<{
     dataSource?: Array<object>
-    searchPlaceholder?: string
-    hasCreateButton?: boolean
-    createButtonLabel?: string
-    createButtonHandler?: Function
     loading?: boolean
     showPagination?: boolean
     rowsPerPage?: number
     totalPages?: number
     currentPage?: number
-    deleteHandler?: Function
-    editHandler?: Function
 }>()
 
 const emit = defineEmits(['sortData', 'nextPage', 'previousPage', 'rowClick'])
@@ -23,12 +17,9 @@ const emit = defineEmits(['sortData', 'nextPage', 'previousPage', 'rowClick'])
 <template>
     <div class="w-full">
         <LoadingProductListSkeleton v-if="props.loading" />
-        <div v-else class="w-full">
-            <div class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 justify-start items-start flex-wrap gap-2">
-                <ProductItemCard v-for="item in props.dataSource" :key="item.id" :product-data="item"
-                    :delete-handler="props.deleteHandler" :edit-handler="props.editHandler" />
-
-
+        <div v-else class="w-full flex justify-center">
+            <div class="w-full md:max-w-[95%] flex flex-wrap justify-center md:justify-start items-start gap-4">
+                <PurchaseListItem v-for="item in props.dataSource" :key="item.id" :product-data="item" />
             </div>
         </div>
         <!-- Pagination Controls -->

@@ -1,15 +1,19 @@
 import { defineStore } from 'pinia'
 
 export const useBillingStore = defineStore('billing', () => {
-    const items = ref([])
-
-    function addItem(item) {
-        items.value.push(item)
-    }
-
-    const getItems = computed(() => {
-        return items.value
+    const state = reactive({
+        items: [],
     })
 
-    return { items, addItem, getItems }
-}, { persist: false, })
+    function addItem(item) {
+        state.items.push(item)
+    }
+    function removeItem(uuid) {
+        state.items = state.items.filter(item => item.uuid !== uuid)
+    }
+
+    const getItems = computed(() => state.items)
+    const getTotal = computed(() => state.items.reduce((total, item) => total + item.price * item.quantity, 0))
+
+    return { state, addItem, removeItem, getItems, getTotal }
+}, { persist: true, })
