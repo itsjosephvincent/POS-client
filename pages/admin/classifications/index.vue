@@ -44,7 +44,7 @@ function onAddNew() {
     navigateTo('/admin/classifications/new')
 }
 function cardClickHandler(row: object) {
-    navigateTo('/admin/classifications/' + row.uuid)
+    // navigateTo('/admin/classifications/' + row.uuid)
 }
 </script>
 
@@ -54,7 +54,7 @@ function cardClickHandler(row: object) {
         <div v-else class="w-full flex flex-col items-start">
             <PrimaryButton class="mb-6" label="New Classification" icon="plus" @click="onAddNew" />
             <div class="w-full flex items-center justify-start flex-wrap gap-4">
-                <CategoryCard v-for="item in classificationsData" :name="item.name" @click="cardClickHandler(item)" />
+                <CategoryCard v-for="item in classificationsData" :classification-data="item" @fetch-classifications="fetch" />
             </div>
         </div>
     </div>

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { usePageStore } from '~/stores/page';
-
-const pageTitle = 'Dashboard'
+const pageTitle = 'Cashiers'
 const pageStore = usePageStore()
 definePageMeta({
     layout: 'store',
@@ -12,6 +10,7 @@ useHead({
 })
 onMounted(() => {
     pageStore.setPage(pageTitle)
+    pageStore.setParams(['New Cashier'])
 })
 onBeforeUnmount(() => {
     pageStore.setParams([])
@@ -19,7 +18,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div>
-        
+    <div class="w-full lg:max-w-[600px] overflow-y-scroll">
+        <FormBodyCashier />
     </div>
 </template>

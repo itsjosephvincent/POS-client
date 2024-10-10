@@ -9,7 +9,9 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     families: {
-      'Poppins': true,
+      Poppins: true,
+      Roboto: true,
+      Montserrat: true,
     }
   },
   viewport: {

@@ -30,7 +30,12 @@ async function onFormSubmit() {
             admin_id: userStore?.getUser?.id,
             name: nameModel.value,
         }
-        const response = await classificationService.create(params)
+        let response
+        if (props.isEdit) {
+            response = await classificationService.update(params, props.editData?.uuid)
+        } else {
+            response = await classificationService.create(params)
+        }
         if (response.data) {
             console.log("saved store: ", response.data)
             navigateTo(`/admin/classifications`)

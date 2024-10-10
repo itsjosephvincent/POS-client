@@ -2,7 +2,7 @@
 
 const props = defineProps<{
     name: string
-    label: string
+    label?: string
     placeholder: string
     type?: string
     modelValue?: any
@@ -29,14 +29,14 @@ const postIconInputPadding = computed(() => props.postIcon ? 'pr-[57px]' : '')
 
 <template>
     <div class="w-full">
-        <div v-if="label" :class="['ml-2 text-primaryText']">{{ props.label }}</div>
+        <div v-if="label" :class="['ml-2 text-primaryText']">{{ label }}</div>
         <div :class="['relative h-12 rounded-xl flex items-center', getBgClass, getBorderClass]">
-            <IconSvg v-if="props.icon" class="mr-4 absolute left-2" :icon="props.icon" color="tertiaryText" size="1.5em" />
-            <input :value="props.modelValue" @input="$emit('update:modelValue', $event.target.value)" :type="props.type"
-                :name="props.name" :id="props.name" :placeholder="props.placeholder"
+            <IconSvg v-if="icon" class="mr-4 absolute left-2" :icon="icon" color="tertiaryText" size="1.5em" />
+            <input :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" :type="type"
+                :name="name" :id="name" :placeholder="placeholder"
                 :class="['grow border-0 outline-0 text-primaryText focus:border focus:border-secondaryColor focus:ring-1 focus:ring-sky-500 h-full w-full rounded-xl px-4', getBgClass, inputPadding, postIconInputPadding, errorClass]">
-            <IconSvg v-if="props.postIcon" class="mr-4 absolute right-2" :icon="props.postIcon" :color="props.iconColor || 'primaryText'" size="1.5em" />
+            <IconSvg v-if="postIcon" class="mr-4 absolute right-2" :icon="postIcon" :color="iconColor || 'primaryText'" size="1.5em" />
         </div>
-        <div :class="['px-1 pt-1 text-sm text-errorColor', props.error ? 'visible': 'invisible']">{{ props.error }}</div>
+        <div :class="['px-1 pt-1 text-sm text-errorColor', error ? 'visible': 'invisible']">{{ error }}</div>
     </div>
 </template>

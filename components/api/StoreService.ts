@@ -15,6 +15,12 @@ class StoreService extends BaseAPIService {
     async create(params: object) {
         return await this.request(`/admin/stores`, 'POST', params)
     }
+    async update(params: object, uuid: string) {
+        return await this.request(`/admin/stores/${uuid}?_method=PUT`, 'POST', params)
+    }
+    async delete(uuid: string) {
+        return await this.request(`/admin/stores/${uuid}?_method=PUT`, 'DELETE')
+    }
 }
 
 export const storeService = new StoreService()

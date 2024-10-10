@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { usePageStore } from '~/stores/page';
 
-const pageTitle = 'Dashboard'
-const pageStore = usePageStore()
 definePageMeta({
-    layout: 'store',
-    middleware: ['store'],
+    layout: 'superadmin',
+    middleware: ['superadmin'],
 })
+const userStore = useUserStore()
+const pageStore = usePageStore()
+const pageTitle = 'Accounts'
 useHead({
     title: pageTitle,
 })
@@ -16,10 +16,11 @@ onMounted(() => {
 onBeforeUnmount(() => {
     pageStore.setParams([])
 })
+
 </script>
 
 <template>
-    <div>
-        
+    <div class="w-full">
+        <TableAccounts />
     </div>
 </template>

@@ -23,7 +23,7 @@ function linkCick() {
     isOpen.value = false
 }
 const labelStyle = `font-lg font-medium`
-const rowStyle = `flex justify-start items-center gap-4 px-4 py-2 pl-4 cursor-pointer mx-4 my-2 rounded-xl text-primaryText hover:text-secondaryColor`
+const rowStyle = `flex justify-start items-center gap-4 px-4 py-2 pl-4 cursor-pointer mx-2 my-2 rounded-xl text-primaryText hover:text-secondaryColor`
 const currentPage = computed(() => pageStore.getPage)
 const toggleIcon = computed(() => isOpen.value ? 'close' : 'hamburger')
 const containerDisplayCss = computed(() => isOpen.value ? 'w-screen' : 'w-0')
@@ -42,7 +42,7 @@ const getContainerCss = computed(() => {
 
 <template>
     <div :class="[getContainerCss]">
-        <div class="fixed lg:relative z-50 border-r-2 border-primaryBorder">
+        <div class="fixed lg:relative z-50 border-r-1 border-primaryBorder">
             <button @click="toggleOpen"
                 class="fixed lg:hidden top-[11px] ml-[8px] text-primaryText hover:text-secondaryColor hover:bg-secondaryColorTransparent rounded-full p-2">
                 <IconSvg :icon="toggleIcon" color="current" size="1.5em" />

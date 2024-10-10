@@ -17,6 +17,7 @@
     --tertiary-color: #8ecae6;
     --warning-color: #fb8500;
     --error-color: #c1121f;
+    --success-color: #4c956c;
     --primary-color-transparent: #02304762;
     --secondary-color-transparent: #219dbc3b;
 }
@@ -33,6 +34,10 @@
 
 html {
     transition: background-color 0.5s, color 0.5s;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
 }
 
 /* total width */

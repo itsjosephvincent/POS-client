@@ -10,6 +10,12 @@ class ClassificationService extends BaseAPIService {
     async create(params: object) {
         return await this.request(`/admin/categories`, 'POST', params)
     }
+    async update(params: object, uuid: string) {
+        return await this.request(`/admin/categories/${uuid}?_method=PUT`, 'POST', params)
+    }
+    async delete(uuid: string) {
+        return await this.request(`/admin/categories/${uuid}`, 'DELETE')
+    }
 }
 
 export const classificationService = new ClassificationService()

@@ -1,34 +1,25 @@
 <script setup lang="ts">
-import { useUserStore } from '~/stores/user.js'
 import { adminService } from '~/components/api/AdminService';
-
-definePageMeta({
-    layout: 'superadmin',
-    middleware: ['superadmin'],
-})
-const userStore = useUserStore()
-const pageStore = usePageStore()
-const pageTitle = 'Accounts'
-useHead({
-    title: pageTitle,
-})
-onMounted(() => {
-    pageStore.setPage(pageTitle)
-})
 
 const data = ref([])
 const admins = computed(() => data.value)
 const rowsPerPage = ref(10)
 const totalPages = ref(0)
 const currentPage = ref(1)
+
+const showDeleteModal = ref(false)
+const itemToDelete = ref({})
+
 interface DataTableColumns {
     key: string
     label: string
+    sortable: boolean
 }
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'lastname', label: 'Lastname' },
-    { key: 'firstname', label: 'Firstname' },
-    { key: 'username', label: 'Username' },
+    { key: 'lastname', label: 'Lastname', sortable: true, },
+    { key: 'firstname', label: 'Firstname', sortable: true, },
+    { key: 'username', label: 'Username', sortable: true, },
+    { key: 'is_active', label: 'Active', sortable: true, },
 ]
 async function fetch(params: object|null = null) {
     try {
@@ -71,33 +62,52 @@ function sortData(column: string, direction: string) {
     })
 
 }
+const deleteHandler = (row: object) => {
+    showDeleteModal.value = true
+    itemToDelete.value = row
+}
+const editHandler = (row: object) => {
+    navigateTo(`/superadmin/accounts/${row?.uuid}/edit`)
+}
 const tableActions = [
     {
         key: 'edit',
         label: 'Edit',
-        handler: (row: object) => {
-        console.log('Edit action triggered for:', row);
-        // Add your custom edit logic here
-        },
+        handler: editHandler,
     },
     {
         key: 'delete',
         label: 'Delete',
-        handler: (row: object) => {
-        console.log('Delete action triggered for:', row);
-        // Add your custom delete logic here
-        },
+        handler: deleteHandler,
     },
 ]
+function createButtonHandler() {
+    navigateTo('/superadmin/accounts/new')
+}
+function filterData(value: string) {
+    const params = { name: value, }
+    fetch(params)
+}
+
 </script>
 
 <template>
-    <div class="h-[calc(100vh-60px)] overflow-y-scroll">
-        <div class="flex flex-col items-center justify-center py-4">
+    <div class="w-full flex flex-col items-center justify-center py-4 px-2 lg:mx-0">
+            <div class="w-full flex justify-start items-center gap-2 mb-4 ">
+                <PrimaryButton label="New Account" icon="plus" @click="createButtonHandler" />
+                <span class="grow"></span>
+                <DataSearch class="self-end mr-4 lg:mr-0" placeholder="Find Account" @on-filter="filterData" />
+            </div>
             <DataTable :columns="dataTableColumns" :data-source="admins" :actions="tableActions" :show-pagination="true"
                 :current-page="getCurrentPage" :rows-per-page="getRowsPerPage" :total-pages="getTotalPages"
                 @previous-page="previousPageClick" @next-page="nextPageClick" @go-to-page="goToPage"
                 @sort-data="sortData" search-placeholder="Filter admin accounts...">
+                <template #column-is_active="{ row }">
+                    <span
+                        :class="`${row.is_active ? 'bg-green-400/30 text-successColor' : 'bg-orange-400/30 text-warningColor'} px-2 py-1 rounded-lg text-sm font-medium text-center`">{{
+                            row.is_active
+                                ? 'Active' : 'Inactive' }}</span>
+                </template>
                 <template #column-enabled="{ row }">
                     <span
                         :class="`${row.enabled ? 'bg-secondaryColor' : 'bg-warningColor'} px-2 py-1 rounded-xl text-sm text-white font-bold`">{{ row.enabled
@@ -115,5 +125,4 @@ const tableActions = [
                 </template>
             </DataTable>
         </div>
-    </div>
 </template>

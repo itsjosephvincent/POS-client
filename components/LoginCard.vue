@@ -35,7 +35,7 @@ const getError = computed(() => props.errorMessage)
             </div>
             <FormTextInput name="username" bg-class="bg-primaryBg" icon="user" placeholder="Username" type="text" :modelValue="usernameModel"
                 @update:modelValue="$event => (usernameModel = $event)" />
-            <PasswordInput name="password" icon="password" post-icon="eyeClosed" placeholder="Password" type="password"
+            <PasswordInput name="password" icon="password" post-icon="eyeClosed" placeholder="Password" type="password" :show-icon="true"
                 :modelValue="passwordModel" @update:modelValue="$event => (passwordModel = $event)" />
             <FormButton type="submit" :label="buttonLabel" :loading="isLoading" />
         </form>
