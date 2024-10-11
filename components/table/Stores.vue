@@ -154,12 +154,12 @@ function closeDeleteModal() {
             </template>
             <template #action-edit="{ action }">
                 <button class="p-1 rounded-full hover:bg-sky-500/30">
-                    <IconSvg icon="edit" color="secondaryColor" />
+                    <IconSvg icon="edit" color="secondaryColor" size="1.2em" />
                 </button>
             </template>
             <template #action-delete="{ action }">
                 <button class="p-1 rounded-full hover:bg-red-500/30">
-                    <IconSvg icon="delete" color="errorColor" />
+                    <IconSvg icon="delete" color="errorColor" size="1.2em" />
                 </button>
             </template>
         </DataTable>

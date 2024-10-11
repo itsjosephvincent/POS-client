@@ -13,6 +13,7 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@pinia/nuxt": "^0.5.4",
+    "d3": "^7.9.0",
     "nuxt": "^3.13.0",
     "nuxt-viewport": "^2.2.0",
     "pinia": "^2.2.2",

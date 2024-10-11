@@ -13,10 +13,56 @@ useHead({
 onMounted(() => {
     pageStore.setPage(pageTitle)
 })
+
+const data = [
+    {
+        name: 'A&W Fast Food',
+        data: [
+            { date: new Date(2025, 0, 1), value: 120000 },
+            { date: new Date(2025, 1, 1), value: 50000 },
+            { date: new Date(2025, 2, 1), value: 40000 },
+            { date: new Date(2025, 3, 1), value: 90000 },
+            { date: new Date(2025, 4, 1), value: 120000 },
+            { date: new Date(2025, 5, 1), value: 140000 },
+            { date: new Date(2025, 6, 1), value: 120000 },
+        ]
+    },
+    {
+        name: 'Happy Pet Shop',
+        data: [
+            { date: new Date(2025, 0, 1), value: 50000 },
+            { date: new Date(2025, 1, 1), value: 90000 },
+            { date: new Date(2025, 2, 1), value: 85000 },
+            { date: new Date(2025, 3, 1), value: 70000 },
+            { date: new Date(2025, 4, 1), value: 160000 },
+            { date: new Date(2025, 5, 1), value: 70000 },
+            { date: new Date(2025, 6, 1), value: 180000 },
+        ]
+    },
+    {
+        name: 'KC Convenience Store',
+        data: [
+            { date: new Date(2025, 0, 1), value: 40000 },
+            { date: new Date(2025, 1, 1), value: 50000 },
+            { date: new Date(2025, 2, 1), value: 80000 },
+            { date: new Date(2025, 3, 1), value: 90000 },
+            { date: new Date(2025, 4, 1), value: 70000 },
+            { date: new Date(2025, 5, 1), value: 50000 },
+            { date: new Date(2025, 6, 1), value: 60000 },
+        ]
+    },
+]
+
 </script>
 
 <template>
-    <div>
-        
+    <div class="w-full px-2 md:px-4">
+        <div class="w-full flex flex-wrap gap-4">
+            <ReportEarningsChartCard :data="data" />
+            <ReportInfoSummaryCard title="Sales Today" summary="9500.00" icon="cartAdd" />
+            <ReportInfoSummaryCard title="Total Earnings" summary="120,000.00" icon="sales" />
+            <ReportInfoSummaryCard title="Total Orders" summary="120" icon="orders" />
+            <ReportInfoSummaryCard title="Stores Open" summary="3" icon="warehouse" />
+        </div>
     </div>
 </template>

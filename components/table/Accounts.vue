@@ -2,6 +2,7 @@
 import { adminService } from '~/components/api/AdminService';
 
 const data = ref([])
+const isLoading = ref(false)
 const admins = computed(() => data.value)
 const rowsPerPage = ref(10)
 const totalPages = ref(0)
@@ -23,7 +24,9 @@ const dataTableColumns: Array<DataTableColumns> = [
 ]
 async function fetch(params: object|null = null) {
     try {
+        isLoading.value = true
         const response = await adminService.admins(params)
+        isLoading.value = false
         if (response && response.data) {
             data.value = response.data
             rowsPerPage.value = response.meta.per_page
@@ -35,6 +38,7 @@ async function fetch(params: object|null = null) {
         }
 
     } catch (error) {
+        isLoading.value = false
         console.error(error)
     }
 }
@@ -88,6 +92,20 @@ function filterData(value: string) {
     const params = { name: value, }
     fetch(params)
 }
+async function handleDelete() {
+    try {
+        const uuid: string = itemToDelete.value.uuid
+        closeDeleteModal()
+        await adminService.delete(uuid)
+        fetch()
+    } catch(error) {
+        console.error(error)
+    }
+}
+function closeDeleteModal() {
+    showDeleteModal.value = false
+    itemToDelete.value = {}
+}
 
 </script>
 
@@ -99,6 +117,7 @@ function filterData(value: string) {
                 <DataSearch class="self-end mr-4 lg:mr-0" placeholder="Find Account" @on-filter="filterData" />
             </div>
             <DataTable :columns="dataTableColumns" :data-source="admins" :actions="tableActions" :show-pagination="true"
+            :loading="isLoading"    
                 :current-page="getCurrentPage" :rows-per-page="getRowsPerPage" :total-pages="getTotalPages"
                 @previous-page="previousPageClick" @next-page="nextPageClick" @go-to-page="goToPage"
                 @sort-data="sortData" search-placeholder="Filter admin accounts...">
@@ -115,14 +134,22 @@ function filterData(value: string) {
                 </template>
                 <template #action-edit="{ action }">
                     <button class="p-1 rounded-full hover:bg-sky-500/30">
-                        <IconSvg icon="edit" color="secondaryColor" />
+                        <IconSvg icon="edit" color="secondaryColor" size="1.2em" />
                     </button>
                 </template>
                 <template #action-delete="{ action }">
                     <button class="p-1 rounded-full hover:bg-red-500/30">
-                        <IconSvg icon="delete" color="errorColor" />
+                        <IconSvg icon="delete" color="errorColor" size="1.2em" />
                     </button>
                 </template>
             </DataTable>
+            <Teleport to="body">
+                <ModalDelete :visible="showDeleteModal" @close-delete-modal="closeDeleteModal" @delete-confirmed="handleDelete" >
+                    <div class="flex items-center gap-4 my-4">
+                        <IconSvg icon="error" color="errorColor" size="2em" />
+                        <div class="text text-primaryText">Are you sure you want to delete <span class="font-bold">{{ itemToDelete.firstname }} {{ itemToDelete.lastname }}</span>?</div>
+                    </div>
+                </ModalDelete>
+            </Teleport>
         </div>
 </template>

@@ -13,6 +13,9 @@ class AdminService extends BaseAPIService {
     async update(params: object, uuid: string) {
         return await this.request(`/superadmin/admins/${uuid}?_method=PUT`, 'POST', params)
     }
+    async delete(uuid: string) {
+        return await this.request(`/superadmin/admins/${uuid}`, 'DELETE')
+    }
 }
 
 export const adminService = new AdminService()
