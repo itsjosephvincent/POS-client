@@ -79,7 +79,7 @@ const activeLabel = computed(() => isActiveModel.value ? 'Active' : 'Inactive')
 </script>
 
 <template>
-    <div class="w-full bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl p-6">
+    <div class="w-full max-w-lg my-6 bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl lg:p-6">
         <form @submit.prevent="onFormSubmit" class="w-full">
             <FormTextInput class="my-3" name="store" placeholder="Enter Cashier Name" label="Cashier Name"
                 :model-value="nameModel" @update:modelValue="$event => (nameModel = $event)" bg-class="bg-secondaryBg"

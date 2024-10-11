@@ -66,7 +66,7 @@ function goToPage(page: number) {
 
 <template>
     <div>
-        <div class="flex justify-start items-start w-full h-[calc(100vh-75px)] overflow-y-auto overflow-x-hidden p-4">
+        <div class="flex justify-start items-start w-full h-[calc(100vh-110px)] overflow-y-auto overflow-x-hidden p-4">
             <PurchaseList :data-source="productsData" :loading="isLoading" :show-pagination="true" :current-page="getCurrentPage"
             :rows-per-page="getRowsPerPage" :total-pages="getTotalPages" @previous-page="previousPageClick"
             @next-page="nextPageClick" @go-to-page="goToPage" />

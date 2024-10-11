@@ -14,7 +14,7 @@ function cardClick() {
 
 <template>
     <div @click="cardClick"
-        class="w-full h-44 overflow-y-hidden md:h-56 bg-secondaryBg rounded-xl border border-primaryBorder flex flex-col items-start justify-start">
+        class="w-full max-w-lg h-44 overflow-y-hidden md:h-56 bg-secondaryBg rounded-xl border border-primaryBorder flex flex-col items-start justify-start">
         <img v-if="props.productData.image" :src="props.productData.image" :alt="props.productData.name"
             class="w-full h-20 md:h-32 object-cover md:object-cover md:py-0 rounded-t-xl">
         <img v-else src="~/assets/img/noimg_medium.png" :alt="props.productData.name"

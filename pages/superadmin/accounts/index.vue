@@ -20,7 +20,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="w-full">
+    <div class="w-full px-6">
         <TableAccounts />
     </div>
 </template>

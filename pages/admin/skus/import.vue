@@ -22,7 +22,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="w-full max-w-[800px]">
+    <div class="w-full px-6">
         <FormBodyImportSku />
     </div>
 </template>

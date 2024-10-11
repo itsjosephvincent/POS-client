@@ -36,7 +36,7 @@ async function uploadFile() {
 </script>
 
 <template>
-    <div class="w-full bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl p-6">
+    <div class="w-full max-w-lg my-6 bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl lg:p-6">
         <div @click="fileInputClick"
             class="w-full h-[200px] flex flex-col items-center justify-center  border border-dashed border-tertiaryText rounded-xl">
             <IconSvg icon="csv" color="secondaryText" size="40px" />

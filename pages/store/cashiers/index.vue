@@ -22,7 +22,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="w-full flex flex-col items-center justify-center py-4 px-2 lg:mx-0">
+    <div class="w-full px-6">
         <TableCashiers />
     </div>
 </template>

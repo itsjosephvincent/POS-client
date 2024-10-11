@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="products-page" class="w-full">
+    <div id="products-page" class="w-full px-6">
         <TableProducts />
     </div>
 </template>

@@ -13,7 +13,7 @@ const billedItems = computed(() => billingStore.getItems)
 </script>
 
 <template>
-    <div class="w-full">
+    <div class="w-full h-[calc(100vh-304px)] overflow-y-auto">
         <div v-for="item in billedItems" class="px-4 py-2 flex justify-between items-center text-primaryText gap-2">
             <div class="flex justify-start items-center gap-2">
                 <img :src="item.image" :alt="item.name" class="w-11 h-11 rounded-xl object-cover">

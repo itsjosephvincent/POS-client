@@ -49,7 +49,7 @@ function cardClickHandler(row: object) {
 </script>
 
 <template>
-    <div class="w-full px-2 md:px-4">
+    <div class="w-full px-6">
         <LoadingClassificationListSkeleton v-if="isFetching" />
         <div v-else class="w-full flex flex-col items-start">
             <PrimaryButton class="mb-6" label="New Classification" icon="plus" @click="onAddNew" />

@@ -22,7 +22,7 @@ function initializePageData(product: object) {
 
 
 <template>
-    <div class="w-full">
+    <div class="w-full px-6">
         <ProductDisplayItem @product-fetch="initializePageData" />
     </div>
 </template>
