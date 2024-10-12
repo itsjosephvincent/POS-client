@@ -51,7 +51,7 @@ const getLoading = computed(() => loading.value)
 </script>
 
 <template>
-    <div class="w-full bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl p-6">
+    <div class="w-full max-w-lg my-6 bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl lg:p-6">
         <form @submit.prevent="onFormSubmit" class="w-full">
             <FormTextInput class="my-3" name="name" placeholder="Enter New Classification" label="Classification" :model-value="nameModel" @update:modelValue="$event => (nameModel = $event)"
                 bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :error="errorState.username"/>

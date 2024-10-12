@@ -18,7 +18,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="w-full lg:max-w-[600px] overflow-y-scroll">
+    <div class="w-full px-6">
         <FormBodyStore />
     </div>
 </template>

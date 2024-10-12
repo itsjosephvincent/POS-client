@@ -125,7 +125,7 @@ function closeDeleteModal() {
 </script>
 
 <template>
-    <div class="w-full flex flex-col items-center justify-center py-4">
+    <div class="w-full flex flex-col items-center justify-center py-4 px-2 lg:mx-0">
         <div class="w-full flex justify-start items-center gap-2 mb-4 ">
             <PrimaryButton label="New Cashier" icon="plus" @click="createButtonHandler" />
             <span class="grow"></span>

@@ -61,7 +61,7 @@ const getImage = computed(() => productData?.value?.image || '')
 
 
 <template>
-    <div class="w-full">
+    <div class="w-full px-6">
         <ProductCard :uuid="getUUID" :name="getName" :cost="getCost" :price="getPrice" :inventory="getInventory" :image="getImage" />
     </div>
 </template>

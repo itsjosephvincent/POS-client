@@ -39,7 +39,7 @@ const getShowDeleteModal = computed(() => !!showDeleteModal.value)
 </script>
 
 <template>
-    <div class="w-full lg:w-[500px] p-6 bg-secondaryBg lg:border lg:border-primaryBorder lg:rounded-xl flex flex-col md:flex md:flex-row justify-center items-center gap-4 cursor-pointer text-primaryColor">
+    <div class="w-full max-w-lg lg:w-[500px] p-6 bg-secondaryBg lg:border lg:border-primaryBorder lg:rounded-xl flex flex-col md:flex md:flex-row justify-center items-center gap-4 cursor-pointer text-primaryColor">
         <img v-if="props.image" :src="props.image" alt="product image" class="w-[200px] object-cover rounded-xl" >
         <img v-else src="~/assets/img/noimg_medium.png" alt="product image" class="w-[200px] object-cover rounded-xl" >
         <div class="w-full flex flex-col items-start grow">

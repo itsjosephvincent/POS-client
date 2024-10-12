@@ -125,7 +125,7 @@ const getSelectedProp = computed(() => {
 </script>
 
 <template>
-    <div class="w-full bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl lg:p-6">
+    <div class="w-full max-w-lg my-6 bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl lg:p-6">
         <LoadingProductSkeleton v-if="isFetching" />
         <div v-else class="w-full">
             <label for="file-upload" class="block cursor-pointer w-40 h-40 rounded-xl">
