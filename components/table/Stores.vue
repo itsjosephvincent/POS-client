@@ -88,9 +88,9 @@ function sortData(column: string, direction: string) {
 
 }
 function handleRowClick(row: object) {
-    // if (row && row.admin_id) {
-    //     navigateTo(`/${role}/stores/` + row.uuid)
-    // }
+    if (row && row.admin_id) {
+        navigateTo(`/${role}/stores/` + row.uuid)
+    }
 }
 const tableActions = [
     {

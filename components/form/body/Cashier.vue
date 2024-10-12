@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { CashierService } from '~/components/api/CashierService';
+import * as yup from 'yup'
 
 interface Cashier {
     name: string
@@ -14,83 +15,81 @@ const role = userStore.getRole.toLowerCase()
 const cashierService = new CashierService(role)
 
 const loading = ref(false)
-const errorState = reactive({})
 
-const nameModel = defineModel('name')
-const usernameModel = defineModel('username')
-const passwordModel = defineModel('password')
-const confirmPasswordModel = defineModel('confirmPassword')
-const isActiveModel = defineModel('isActive')
+// validation
+const { values, errors, meta, defineField, handleSubmit, resetForm } = useForm({
+    validationSchema: yup.object({
+        name: yup.string().required('Name field is required'),
+        username: yup.string().required('Username field is required'),
+        password: !props.editData ? yup.string().required('Password field is required') : yup.string(),
+        is_active: yup.boolean(),
+    }),
+})
+const [name] = defineField('name')
+const [username] = defineField('username')
+const [password] = defineField('password')
+const [is_active] = defineField('is_active')
 
 onMounted(() => {
-    nameModel.value = props.editData?.name || ''
-    usernameModel.value = props.editData?.username || ''
-    isActiveModel.value = props.editData ? props.editData.is_active : true
+    resetForm()
+    name.value = props.editData?.name || ''
+    username.value = props.editData?.username || ''
+    is_active.value = props.editData ? props.editData?.is_active : true
 })
 
-function validate() {
-    if (!usernameModel.value) {
-        errorState.username = "Username is required"
-    }
-
-    if (passwordModel.value !== confirmPasswordModel.value) {
-        return console.error("Password doesn't match")
-    }
-}
-async function onFormSubmit() {
+const onSubmit = handleSubmit(async () => {
     try {
-        validate()
         loading.value = true
         const params = {
-            name: nameModel.value,
-            username: usernameModel.value,
-            is_active: isActiveModel.value
+            name: name.value,
+            username: username.value,
+            is_active: is_active.value
         }
 
         // Optional password payload if editing
         if (props.isEdit) {
-            if (passwordModel.value) {
-                params.password = passwordModel.value
+            if (password.value) {
+                params.password = password.value
             }
         } else {
-            params.password = passwordModel.value
+            params.password = password.value
         }
 
         let response
         if (props.isEdit) {
-            response = await cashierService.update(params, props.editData?.uuid)
+            response = await cashierService.update(params, props.editData?.uuid || '')
         } else {
             response = await cashierService.create(params)
         }
+        loading.value = false
         if (response.data) {
             navigateTo(`/${role}/cashiers`)
         }
     } catch (error: any) {
+        loading.value = false
         console.log(error)
-
     }
-    loading.value = false
-}
+})
+
 const getLoading = computed(() => loading.value)
 const passwordLabel = computed(() => !props.isEdit ? 'Password' : 'Update Password')
 const passwordPlaceholder = computed(() => !props.isEdit ? 'Enter Cashier Password' : 'Update Cashier Password')
-const activeLabel = computed(() => isActiveModel.value ? 'Active' : 'Inactive')
+const activeLabel = computed(() => is_active.value ? 'Active' : 'Inactive')
 
 </script>
 
 <template>
     <div class="w-full max-w-lg my-6 bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl lg:p-6">
-        <form @submit.prevent="onFormSubmit" class="w-full">
+        <form @submit.prevent="onSubmit" class="w-full">
             <FormTextInput class="my-3" name="store" placeholder="Enter Cashier Name" label="Cashier Name"
-                :model-value="nameModel" @update:modelValue="$event => (nameModel = $event)" bg-class="bg-secondaryBg"
-                border-class="border border-primaryBorder" />
+                v-model="name" bg-class="bg-secondaryBg"
+                border-class="border border-primaryBorder" :error="errors.name" />
             <FormTextInput class="my-3" name="username" placeholder="Enter Cashier Username" label="Username"
-                :model-value="usernameModel" @update:modelValue="$event => (usernameModel = $event)"
-                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" />
+                v-model="username"
+                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :error="errors.username" />
             <FormPasswordInput name="password" :placeholder="passwordPlaceholder" :label="passwordLabel"
-                :model-value="passwordModel" bg-class="bg-white"
-                @update:modelValue="$event => (passwordModel = $event)" />
-            <FormSwitch v-if="isEdit" class="my-3" :label="activeLabel" :model-value="isActiveModel" @update:modelValue="$event => (isActiveModel = $event)" />
+                v-model="password" bg-class="bg-white" :error="errors.password" />
+            <FormSwitch v-if="isEdit" class="my-3" :label="activeLabel" v-model="is_active" :error="errors.is_active" />
 
             <PrimaryButton type="submit" class="w-full my-3" :label="!isEdit ? 'Create Cashier' : 'Update Cashier'"
                 :loading="getLoading" />

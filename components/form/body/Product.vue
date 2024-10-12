@@ -23,9 +23,9 @@ const categoryUuid = ref(null)
 const schema = yup.object({
     product: yup.string().required('Product is required'),
     classification: yup.string().required('Classification is required'),
-    cost: yup.number().positive('Cost must be a positive number').required('Cost is required').typeError('Cost must be a number'),
-    price: yup.number().positive('Price must be a positive number').required('Price is required').typeError('Price must be a number'),
-    inventory: yup.number().positive('Inventory must be a positive number').required('Inventory is required').typeError('Inventory must be a number'),
+    cost: yup.number().min(0).required('Cost is required').typeError('Cost must be a number'),
+    price: yup.number().min(0).required('Price is required').typeError('Price must be a number'),
+    inventory: yup.number().min(0).required('Inventory is required').typeError('Inventory must be a number'),
 })
 const { values, errors, meta, defineField, handleSubmit, resetForm } = useForm({
     validationSchema: schema,
