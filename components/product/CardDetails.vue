@@ -51,7 +51,7 @@ const getShowDeleteModal = computed(() => !!showDeleteModal.value)
                 <span class="pr-2 font-medium text-secondaryText">Price</span>{{ props.price }}
             </div>
             <div class="font-bold text-primaryText">
-                <span class="pr-2 font-medium text-secondaryText">Inventory Count</span>{{ props.inventory }}
+                <span class="pr-2 font-medium text-secondaryText">In stock</span>{{ props.inventory }}
             </div>
             <div class="w-full flex flex-col md:flex-row gap-2 mt-4">
                 <PrimaryButton @click="clickEdit" label="Edit" class="w-full h-[38px]"/>

@@ -23,12 +23,6 @@ interface DataTableColumns {
     label: string
     sortable?: boolean
 }
-interface StoreServiceParams {
-    admin_id?: number
-    page?: number
-    sortField?: string
-    sortOrder?: string
-}
 const dataTableColumns: Array<DataTableColumns> = [
     { key: 'store_name', label: 'Store', sortable: true },
     { key: 'branch', label: 'Branch', sortable: true },
@@ -41,7 +35,7 @@ function columnHeaderClass(column: string) {
 function columnClass(row: object, columnKey: string) {
     return columnKey === 'is_active' ? 'text-center' : ''
 }
-async function fetch(params: StoreServiceParams = {}) {
+async function fetch(params: object = {}) {
     try {
         isLoading.value = true
         params['admin_id'] = userStore.getUser.id
@@ -61,6 +55,10 @@ async function fetch(params: StoreServiceParams = {}) {
         isLoading.value = false
         console.error(error)
     }
+}
+function filterData(value: string) {
+    const params = { store_name: value }
+    fetch(params)
 }
 const getRowsPerPage = computed(() => rowsPerPage.value || 10)
 const getTotalPages = computed(() => totalPages.value)
@@ -130,7 +128,7 @@ function closeDeleteModal() {
     <div class="w-full flex flex-col items-center justify-center py-4 px-2 lg:mx-0">
         <div class="w-full flex justify-between items-center mb-4">
             <PrimaryButton label="New Store" icon="plus" @click="onCreateNew" />
-            <DataSearch class="self-end" placeholder="Find Store" />
+            <DataSearch class="self-end" placeholder="Find Store" @on-filter="filterData" />
         </div>
         <DataTable :loading="isLoading" :columns="dataTableColumns" :data-source="admins" :has-create-button="true"
         :column-class="columnClass"

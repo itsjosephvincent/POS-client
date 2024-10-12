@@ -96,9 +96,11 @@ const tableActions = [
         handler: deleteHandler,
     },
 ]
-
+function handleRowClick(row: object) {
+    navigateTo(`/${role}/cashiers/${row.uuid}`)
+}
 function createButtonHandler() {
-    navigateTo('/store/cashiers/new')
+    navigateTo(`/${role}/cashiers/new`)
 }
 function filterData(value: string) {
     const params = { name: value, }
@@ -132,8 +134,9 @@ function closeDeleteModal() {
         <DataTable :columns="dataTableColumns" :data-source="admins" :actions="tableActions" :show-pagination="true"
         :column-class="columnClass"
         :column-header-class="columnHeaderClass"
+        :loading="isLoading"
             :current-page="getCurrentPage" :rows-per-page="getRowsPerPage" :total-pages="getTotalPages"
-            @previous-page="previousPageClick" @next-page="nextPageClick" @go-to-page="goToPage" @sort-data="sortData"
+            @previous-page="previousPageClick" @next-page="nextPageClick" @go-to-page="goToPage" @sort-data="sortData" @row-click="handleRowClick"
             search-placeholder="Filter admin accounts...">
             <template #column-is_active="{ row }">
                 <span

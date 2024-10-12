@@ -148,7 +148,7 @@ function importButtonHandler() {
                 <PrimaryButton label="New SKU" icon="plus" @click="createButtonHandler" />
                 <PrimaryButton class="" icon="import" label="Import SKUs" @click="importButtonHandler" />
                 <span class="grow"></span>
-                <DataSearch class="self-end mr-4 lg:mr-0" placeholder="Find Products..." @on-filter="filterData" />
+                <DataSearch class="self-end mr-4 lg:mr-0" placeholder="Find Products" @on-filter="filterData" />
             </div>
             <DataList v-if="viewport.isLessThan('desktop')" :data-source="productsData"         :loading="isLoading"
                 :delete-handler="deleteHandler" :edit-handler="editHandler" :show-pagination="true" :current-page="getCurrentPage"
