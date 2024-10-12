@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { classificationService } from '~/components/api/ClassificationService'
 import { productService } from '~/components/api/ProductService'
+import * as yup from 'yup'
 
 const route = useRoute()
 
@@ -10,32 +11,44 @@ const props = defineProps<{
 }>()
 const imageUrl = ref(null)
 const selectedFile = ref(null)
-const errors = ref({})
+
 const categories = ref([])
 const errorMessage = ref(null)
 const isLoading = ref(false)
 const isFetching = ref(true)
-
-const productModel = defineModel('product')
-const classificationModel = defineModel('classification')
-const costModel = defineModel('cost')
-const priceModel = defineModel('price')
-const inventoryModel = defineModel('inventory')
 const categoryId = ref(null)
 const categoryUuid = ref(null)
 
+// validation
+const schema = yup.object({
+    product: yup.string().required('Product is required'),
+    classification: yup.string().required('Classification is required'),
+    cost: yup.number().positive('Cost must be a positive number').required('Cost is required').typeError('Cost must be a number'),
+    price: yup.number().positive('Price must be a positive number').required('Price is required').typeError('Price must be a number'),
+    inventory: yup.number().positive('Inventory must be a positive number').required('Inventory is required').typeError('Inventory must be a number'),
+})
+const { values, errors, meta, defineField, handleSubmit, resetForm } = useForm({
+    validationSchema: schema,
+})
+const [product] = defineField('product')
+const [classification] = defineField('classification')
+const [cost] = defineField('cost')
+const [price] = defineField('price')
+const [inventory] = defineField('inventory')
+
 onMounted(() => {
+    resetForm()
     fetchCategories()
     setEditData()
 })
 
 function setEditData() {
     if (!props.isEdit) return
-    productModel.value = props.editData?.name || ''
-    costModel.value = props.editData?.cost || ''
-    priceModel.value = props.editData?.price || ''
-    inventoryModel.value = props.editData?.inventory || ''
-    imageUrl.value = props.editData.image || ''
+    product.value = props?.editData?.name || ''
+    cost.value = props?.editData?.cost || ''
+    price.value = props?.editData?.price || ''
+    inventory.value = props?.editData?.inventory || ''
+    imageUrl.value = props?.editData?.image || ''
 }
 function handleFileChange(event: object) {
     const file = event.target.files[0]
@@ -46,13 +59,6 @@ function handleFileChange(event: object) {
             imageUrl.value = e.target.result
         }
         reader.readAsDataURL(file)
-    }
-}
-function onClassificationSelect(value: string) {
-    const selectedCategory = categories.value.find(d => value === d.uuid)
-    if (selectedCategory) {
-        categoryId.value = selectedCategory.id
-        categoryUuid.value = selectedCategory.uuid
     }
 }
 async function fetchCategories() {
@@ -68,7 +74,8 @@ async function fetchCategories() {
         isFetching.value = false
     }
 }
-async function handleSubmit() {
+
+const onSubmit = handleSubmit(async () => {
     try {
         errors.value = {}
         isLoading.value = true
@@ -77,12 +84,12 @@ async function handleSubmit() {
             console.error('undefined selected category')
         }
         formData.append('category_id', categoryId.value)
-        formData.append('category_uuid', categoryUuid.value)
-        formData.append('name', productModel.value)
-        formData.append('cost', costModel.value)
-        formData.append('price', priceModel.value)
-        formData.append('inventory', inventoryModel.value)
-        
+        formData.append('category_uuid', classification.value)
+        formData.append('name', product.value)
+        formData.append('cost', cost.value)
+        formData.append('price', price.value)
+        formData.append('inventory', inventory.value)
+
         if (selectedFile.value) {
             formData.append('image', selectedFile.value)
         }
@@ -100,19 +107,14 @@ async function handleSubmit() {
         console.error(error)
         isLoading.value = false
         errorMessage.value = error.getErrorMessage()
-        errors.value = error.errors
     }
-}
+})
 
-const getNameError = computed(() => errors.value?.name?.[0] || '')
-const getCostError = computed(() => errors.value?.cost?.[0] || '')
-const getPriceError = computed(() => errors.value?.price?.[0] || '')
-const getInventoryError = computed(() => errors.value?.inventory?.[0] || '')
 const getCategorySelect = computed(() => categories.value.map(d => ({
-        key: d.uuid,
-        value: d.uuid,
-        label: d.name,
-    })
+    key: d.uuid,
+    value: d.uuid,
+    label: d.name,
+})
 ))
 const getSelectedProp = computed(() => {
     if (!props.editData) return null
@@ -139,25 +141,22 @@ const getSelectedProp = computed(() => {
             <input id="file-upload" type="file" accept="image/*" @change="handleFileChange" class="hidden" />
 
             <FormTextInput class="my-3" name="name" placeholder="Enter Product Name" label="Product"
-                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :model-value="productModel"
-                @update:modelValue="$event => (productModel = $event)" :error="getNameError" />
+                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" v-model="product"
+                :error="errors.product" />
             <FormSelect :options="getCategorySelect" label="Classification" name="category"
-                placeholder="Select Classification" :model-value="classificationModel"
-                @update:modelValue="$event => (classificationModel = $event)"
-                @select-classification="onClassificationSelect"
-                :pre-selected-data="getSelectedProp" />
-            <FormTextInput class="my-3" type="number" name="cost" placeholder="Enter Cost of Goods"
-                label="Cost of Goods" bg-class="bg-secondaryBg" border-class="border border-primaryBorder"
-                :model-value="costModel" @update:modelValue="$event => (costModel = $event)" :error="getCostError" />
+                placeholder="Select Classification" v-model="classification" :error="errors.classification" :pre-selected-data="getSelectedProp" />
+            <FormTextInput class="my-3" type="number" name="cost" placeholder="Enter Cost of Goods" label="Cost of Goods"
+                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" v-model="cost"
+                :error="errors.cost" />
             <FormTextInput class="my-3" type="number" name="price" placeholder="Enter Suggested Retail Price"
-                label="SRP" bg-class="bg-secondaryBg" border-class="border border-primaryBorder"
-                :model-value="priceModel" @update:modelValue="$event => (priceModel = $event)" :error="getPriceError" />
+                label="SRP" bg-class="bg-secondaryBg" border-class="border border-primaryBorder" v-model="price"
+                :error="errors.price" />
             <FormTextInput class="my-3" type="number" name="inventory" placeholder="Enter Current Inventory Count"
                 label="Inventory Count" bg-class="bg-secondaryBg" border-class="border border-primaryBorder"
-                :model-value="inventoryModel" @update:modelValue="$event => (inventoryModel = $event)"
-                :error="getInventoryError" />
+                v-model="inventory" :error="errors.inventory" />
             <FormError v-if="errorMessage" :error="errorMessage" />
-            <PrimaryButton :loading="isLoading" @click="handleSubmit" class="w-full my-3" :label="!props.isEdit ? 'Save Product' : 'Update Product'" />
+            <PrimaryButton :loading="isLoading" @click="onSubmit" class="w-full my-3"
+                :label="!props.isEdit ? 'Save Product' : 'Update Product'"  />
         </div>
     </div>
 </template>

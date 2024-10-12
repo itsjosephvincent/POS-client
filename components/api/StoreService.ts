@@ -5,22 +5,34 @@ interface StoreServiceParams {
     sortField?: string
     sortOrder?: string
 }
-class StoreService extends BaseAPIService {
+export class StoreService extends BaseAPIService {
+    #role: string = ''
+
+    constructor(role: string) {
+        super()
+        this.#role = role
+    }
+
+    set role(role: string) {
+        this.#role = role
+    }
+    get role(): string {
+        return this.#role
+    }
+
     async stores(params: StoreServiceParams): Promise<any> {
-        return await this.request(`/admin/stores`, 'GET', params)
+        return await this.request(`/${this.role}/stores`, 'GET', params)
     }
     async store(id: string, params: object) {
-        return await this.request(`/admin/stores/${id}`, 'GET', params)
+        return await this.request(`/${this.role}/stores/${id}`, 'GET', params)
     }
     async create(params: object) {
-        return await this.request(`/admin/stores`, 'POST', params)
+        return await this.request(`/${this.role}/stores`, 'POST', params)
     }
     async update(params: object, uuid: string) {
-        return await this.request(`/admin/stores/${uuid}?_method=PUT`, 'POST', params)
+        return await this.request(`/${this.role}/stores/${uuid}?_method=PUT`, 'POST', params)
     }
     async delete(uuid: string) {
-        return await this.request(`/admin/stores/${uuid}?_method=PUT`, 'DELETE')
+        return await this.request(`/${this.role}/stores/${uuid}?_method=PUT`, 'DELETE')
     }
 }
-
-export const storeService = new StoreService()

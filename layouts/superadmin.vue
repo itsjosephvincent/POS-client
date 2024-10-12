@@ -3,6 +3,7 @@
 const sidebarMenus = [
     { id: 'dashboard', link: '/superadmin/dashboard', name: 'Dashboard', icon: 'home' },
     { id: 'accounts', link: '/superadmin/accounts', name: 'Accounts', icon: 'staff' },
+    { id: 'stores', link: '/superadmin/stores', name: 'Stores', icon: 'warehouse' },
 ]
 </script>
 

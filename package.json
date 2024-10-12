@@ -13,13 +13,15 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@pinia/nuxt": "^0.5.4",
+    "@vee-validate/nuxt": "^4.13.2",
     "d3": "^7.9.0",
     "nuxt": "^3.13.0",
     "nuxt-viewport": "^2.2.0",
     "pinia": "^2.2.2",
     "pinia-plugin-persistedstate": "^4.0.2",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",

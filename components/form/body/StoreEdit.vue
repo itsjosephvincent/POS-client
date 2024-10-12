@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { storeService } from '~/components/api/StoreService'
+import { StoreService } from '~/components/api/StoreService'
 
 const route = useRoute()
 const emit = defineEmits(['storeFetch'])
 const userStore = useUserStore()
+const role = userStore.getRole.toLowerCase()
 
 onMounted(() => {
     fetch()
@@ -18,6 +19,7 @@ async function fetch() {
         let params = {
             admin_id: userStore.getUser.id,
         }
+        const storeService = new StoreService(role)
         const response = await storeService.store(route.params.uuid, params)
         isFetching.value = false
         if (response && response.data) {

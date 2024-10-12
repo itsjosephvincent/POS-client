@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   ssr: false,
-  modules: ['@nuxtjs/google-fonts', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', 'nuxt-viewport'],
+  modules: ['@nuxtjs/google-fonts', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', 'nuxt-viewport', '@vee-validate/nuxt',],
   devServer: {
     host: '0.0.0.0',
   },

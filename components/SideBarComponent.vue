@@ -48,8 +48,10 @@ const getContainerCss = computed(() => {
                 <IconSvg :icon="toggleIcon" color="current" size="1.5em" />
             </button>
             <div
-                :class="['overflow-hidden transition-all duration-500 bg-secondaryBg h-screen lg:w-[200px] xl:w-[280px] lg:border-r lg:border-primaryBorder pt-24 flex flex-col items-start justify-between pb-6', containerDisplayCss]">
-                <div class="w-full min-w-[200px] lg:flex lg:flex-col lg:items-start">
+                :class="['overflow-hidden transition-all duration-500 bg-secondaryBg h-screen lg:w-[200px] xl:w-[280px] lg:border-r lg:border-primaryBorder flex flex-col items-start justify-between pb-6', containerDisplayCss]">
+                <div class="w-full min-w-[200px] lg:flex lg:flex-col lg:justify-start lg:items-start">
+                    <div class="font-lg text-xl text-primaryColor my-4 mx-14 lg:mx-4">Kahera POS</div>
+                    <div class="h-10"></div>
                     <NuxtLink class="w-full" v-for="item in props.menus" :to="item.link" :key="item.id"
                         @click="linkCick">
                         <div id="row"

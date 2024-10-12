@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { adminService } from '~/components/api/AdminService';
 
+const userStore = useUserStore()
+const role = userStore.getRole.toLowerCase()
 const data = ref([])
 const isLoading = ref(false)
 const admins = computed(() => data.value)
@@ -92,6 +94,9 @@ function filterData(value: string) {
     const params = { name: value, }
     fetch(params)
 }
+function handleRowClick(row: object) {
+    navigateTo(`/${role}/accounts/` + row.uuid)
+}
 async function handleDelete() {
     try {
         const uuid: string = itemToDelete.value.uuid
@@ -119,7 +124,7 @@ function closeDeleteModal() {
             <DataTable :columns="dataTableColumns" :data-source="admins" :actions="tableActions" :show-pagination="true"
             :loading="isLoading"    
                 :current-page="getCurrentPage" :rows-per-page="getRowsPerPage" :total-pages="getTotalPages"
-                @previous-page="previousPageClick" @next-page="nextPageClick" @go-to-page="goToPage"
+                @previous-page="previousPageClick" @next-page="nextPageClick" @go-to-page="goToPage" @row-click="handleRowClick"
                 @sort-data="sortData" search-placeholder="Filter admin accounts...">
                 <template #column-is_active="{ row }">
                     <span

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { storeService } from '~/components/api/StoreService';
+import { StoreService } from '~/components/api/StoreService'
+import * as yup from 'yup'
 
 interface StoreData {
     store_name: string
@@ -11,50 +12,56 @@ const props = defineProps<{
     editData?: StoreData
 }>()
 const userStore = useUserStore()
+const role = userStore.getRole.toLowerCase()
 
 const loading = ref(false)
-const errorState = reactive({})
 
-const storeModel = defineModel('store')
-const branchModel = defineModel('branch')
-const usernameModel = defineModel('username')
-const passwordModel = defineModel('password')
-const isActiveModel = defineModel('isActive')
+// validation
+const { values, errors, meta, defineField, handleSubmit, resetForm } = useForm({
+    validationSchema: yup.object({
+        store: yup.string().required('Store field is required'),
+        branch: yup.string().required('Branch field is required'),
+        username: yup.string().required('Username field is required'),
+        is_active: yup.boolean(),
+        password: !props.editData ? yup.string().required('Password field is required') : yup.string(),
+    }),
+})
+const [store] = defineField('store')
+const [branch] = defineField('branch')
+const [username] = defineField('username')
+const [is_active] = defineField('is_active')
+const [password] = defineField('password')
 
 onMounted(() => {
-    storeModel.value = props.editData?.store_name || ''
-    branchModel.value = props.editData?.branch || ''
-    usernameModel.value = props.editData?.username || ''
-    isActiveModel.value = props.editData ? props.editData.is_active : true
+    resetForm()
+    store.value = props.editData?.store_name || ''
+    branch.value = props.editData?.branch || ''
+    username.value = props.editData?.username || ''
+    is_active.value = props.editData ? props.editData.is_active : true
 })
 
-function validate() {
-    if (!usernameModel.value) {
-        errorState.username = "Username is required"
-    }
-}
-async function onFormSubmit() {
+const onFormSubmit = handleSubmit(async () => {
     try {
-        validate()
         loading.value = true
         const params = {
             admin_id: userStore.getUser.id,
-            store_name: storeModel.value,
-            branch: branchModel.value,
-            username: usernameModel.value,
-            is_active: isActiveModel.value
+            store_name: store.value,
+            branch: branch.value,
+            username: username.value,
+            is_active: is_active.value
         }
 
         // Optional password payload if editing
         if (props.isEdit) {
-            if (passwordModel.value) {
-                params.password = passwordModel.value
+            if (password.value) {
+                params.password = password.value
             }
         } else {
-            params.password = passwordModel.value
+            params.password = password.value
         }
 
         let response
+        const storeService = new StoreService(role)
         if (props.isEdit) {
             response = await storeService.update(params, props.editData?.uuid)
         } else {
@@ -68,29 +75,30 @@ async function onFormSubmit() {
 
     }
     loading.value = false
-}
+})
 const getLoading = computed(() => loading.value)
 const passwordLabel = computed(() => !props.isEdit ? 'Password' : 'Update Password')
 const passwordPlaceholder = computed(() => !props.isEdit ? 'Enter Store Password' : 'Update Store Password')
-const activeLabel = computed(() => isActiveModel.value ? 'Active' : 'Inactive')
+const activeLabel = computed(() => is_active.value ? 'Active' : 'Inactive')
 
 </script>
 
 <template>
     <div class="w-full max-w-lg my-6 bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl lg:p-6">
         <form @submit.prevent="onFormSubmit" class="w-full">
-            <FormTextInput class="my-3" name="store" placeholder="Enter Store Name" label="Store" :model-value="storeModel" @update:modelValue="$event => (storeModel = $event)"
-                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :error="errorState.username"/>
-            <FormTextInput class="my-3" name="branch" placeholder="Enter Branch Name" label="Branch" :model-value="branchModel" @update:modelValue="$event => (branchModel = $event)"
-                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" />
-            <FormTextInput class="my-3" name="username" placeholder="Enter Store Account Username" label="Username" :model-value="usernameModel" @update:modelValue="$event => (usernameModel = $event)"
-                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" />
-                <FormPasswordInput name="password" :placeholder="passwordPlaceholder" :label="passwordLabel"
-                :model-value="passwordModel" bg-class="bg-white"
-                @update:modelValue="$event => (passwordModel = $event)" />
-            <FormSwitch v-if="isEdit" class="my-3" :label="activeLabel" :model-value="isActiveModel" @update:modelValue="$event => (isActiveModel = $event)" />
+            <FormTextInput class="my-3" name="store" placeholder="Enter Store Name" label="Store" v-model="store" bg-class="bg-secondaryBg"
+                border-class="border border-primaryBorder" :error="errors.store" />
+            <FormTextInput class="my-3" name="branch" placeholder="Enter Branch Name" label="Branch"
+                v-model="branch" bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :error="errors.branch" />
+            <FormTextInput class="my-3" name="username" placeholder="Enter Store Account Username" label="Username"
+                v-model="username"
+                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" :error="errors.username" />
+            <FormPasswordInput name="password" :placeholder="passwordPlaceholder" :label="passwordLabel"
+                v-model="password" bg-class="bg-white" :error="errors.password"  />
+            <FormSwitch v-if="isEdit" class="my-3" :label="activeLabel" v-model="is_active" />
 
-            <PrimaryButton type="submit" class="w-full my-3" :label="!props.isEdit ? 'Create Store' : 'Update Store'" :loading="getLoading" />
+            <PrimaryButton type="submit" class="w-full my-3" :label="!props.isEdit ? 'Create Store' : 'Update Store'"
+                :loading="getLoading" />
         </form>
     </div>
 </template>

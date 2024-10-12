@@ -14,9 +14,6 @@ class BaseAPIService {
                     Authorization: 'Bearer ' + localStorage.getItem('_token'),
                 },
                 query: params,
-                // async onRequest({ request, options }) {
-                //     options.params = params
-                // },
             }
         } else {
             // POST, PUT, DELETE
@@ -34,6 +31,11 @@ class BaseAPIService {
         try {
             return await $fetch(url, config)
         } catch (error: any) {
+            if (!error.response) {
+                throw new APIError({
+                    message: "Network Error."
+                })  
+            }
             switch (error.response.status) {
                 case 400:
                 case 422:

@@ -5,7 +5,6 @@ import { adminService } from '../api/AdminService';
 const userStore = useUserStore()
 
 const role = userStore.getRole.toLowerCase()
-const storeService = new StoreService(role)
 const data = ref([])
 const admins = computed(() => data.value)
 const rowsPerPage = ref(10)
@@ -45,6 +44,7 @@ async function fetch(params: object = {}) {
     try {
         isLoading.value = true
         params['admin_id'] = props.adminId || userStore.getUser.id
+        const storeService = new StoreService(role)
         const response = await storeService.stores(params)
         isLoading.value = false
         if (response && response.data) {
@@ -97,7 +97,7 @@ const tableActions = [
         key: 'edit',
         label: 'Edit',
         handler: (row: object) => {
-            navigateTo(`/${role}/stores/${row.uuid}/edit`)
+            navigateTo(`/admin/stores/${row.uuid}/edit`)
         },
     },
     {
@@ -132,10 +132,6 @@ function closeDeleteModal() {
 
 <template>
     <div class="w-full flex flex-col items-center justify-center py-4 px-2 lg:mx-0">
-        <div class="w-full flex justify-between items-center mb-4">
-            <PrimaryButton label="New Store" icon="plus" @click="onCreateNew" />
-            <DataSearch class="self-end" placeholder="Find Store" @on-filter="filterData" />
-        </div>
         <DataTable :loading="isLoading" :columns="dataTableColumns" :data-source="admins" :has-create-button="true"
         :column-class="columnClass"
         :column-header-class="columnHeaderClass"
