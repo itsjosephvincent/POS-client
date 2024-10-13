@@ -19,6 +19,6 @@ onMounted(() => {
 
 <template>
     <div class="w-full px-6">
-        <TableStores />
+        <AdminStoresTable />
     </div>
 </template>

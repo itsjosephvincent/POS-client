@@ -21,6 +21,6 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="w-full px-6">
-        <TableAccounts />
+        <SuperadminAccountsTable />
     </div>
 </template>

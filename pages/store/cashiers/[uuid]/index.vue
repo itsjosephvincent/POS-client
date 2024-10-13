@@ -1,49 +1,45 @@
 <script setup lang="ts">
-import { CashierService } from '~/components/api/CashierService';
+import { cashierService } from '~/api/store/CashierService';
 
 definePageMeta({
     layout: 'store',
     middleware: ['store'],
-})
+});
 
-const userStore = useUserStore()
-const pageStore = usePageStore()
-const route = useRoute()
-const pageTitle = 'Cashiers'
-const role = userStore.getRole.toLowerCase()
+const userStore = useUserStore();
+const pageStore = usePageStore();
+const route = useRoute();
+const pageTitle = 'Cashiers';
+const role = userStore.getRole.toLowerCase();
 
 useHead({
     title: pageTitle,
-})
+});
 onMounted(() => {
-    pageStore.setPage(pageTitle)
-    initializePageData()
-})
+    pageStore.setPage(pageTitle);
+    initializePageData();
+});
 onBeforeUnmount(() => {
-    pageStore.setParams([])
-})
+    pageStore.setParams([]);
+});
 
 async function initializePageData() {
     try {
-        let params = {}
-        const cashierService = new CashierService(role)
-        const response = await cashierService.find(route.params.uuid, params)
+        let params = {};
+        const response = await cashierService.find(route.params.uuid, params);
         if (response && response.data) {
-            console.log(response)
-            const data = response.data
-            pageStore.setParams([data.name])
+            console.log(response);
+            const data = response.data;
+            pageStore.setParams([data.name]);
         } else {
-            throw 'Empty data.'
+            throw 'Empty data.';
         }
-
     } catch (error) {
-        console.error(error)
+        console.error(error);
     }
 }
 </script>
 
 <template>
-    <div>
-        
-    </div>
+    <div></div>
 </template>

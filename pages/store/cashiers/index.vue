@@ -1,28 +1,24 @@
 <script setup lang="ts">
-import { useUserStore } from '~/stores/user.js'
-
 definePageMeta({
     layout: 'store',
     middleware: ['store'],
-})
+});
 
-const pageStore = usePageStore()
-const pageTitle = 'Cashiers'
+const pageStore = usePageStore();
+const pageTitle = 'Cashiers';
 useHead({
     title: pageTitle,
-})
+});
 onMounted(() => {
-    pageStore.setPage(pageTitle)
-})
+    pageStore.setPage(pageTitle);
+});
 onBeforeUnmount(() => {
-    pageStore.setParams([])
-})
-
-
+    pageStore.setParams([]);
+});
 </script>
 
 <template>
     <div class="w-full px-6">
-        <TableCashiers />
+        <StoreCashiersTable />
     </div>
 </template>

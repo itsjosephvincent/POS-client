@@ -4,7 +4,6 @@ definePageMeta({
     layout: 'superadmin',
     middleware: ['superadmin'],
 })
-const userStore = useUserStore()
 const pageStore = usePageStore()
 const pageTitle = 'Accounts'
 useHead({
@@ -22,6 +21,6 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="w-full px-6">
-        <FormBodyAccount />
+        <SuperadminAccountsForm />
     </div>
 </template>

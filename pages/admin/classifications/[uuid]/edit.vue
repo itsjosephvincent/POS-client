@@ -2,27 +2,29 @@
 definePageMeta({
     layout: 'admin',
     middleware: ['admin'],
-})
+});
 
-const pageStore = usePageStore()
-const pageTitle = 'Classifications'
+const pageStore = usePageStore();
+const pageTitle = 'Classifications';
 useHead({
     title: pageTitle,
-})
+});
 onMounted(() => {
-    pageStore.setPage(pageTitle)
-})
+    pageStore.setPage(pageTitle);
+});
 onBeforeUnmount(() => {
-    pageStore.setParams([])
-})
+    pageStore.setParams([]);
+});
 
 function initializePageData(data: object) {
-    pageStore.setParams([data.name, 'Edit'])
+    pageStore.setParams([data.name, 'Edit']);
 }
 </script>
 
 <template>
     <div class="w-full px-6">
-        <FormBodyClassificationEdit @classification-fetch="initializePageData" />
+        <AdminClassificationsFormEdit
+            @classification-fetch="initializePageData"
+        />
     </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { authService } from '~/components/api/AuthService';
+import { authService } from '~/api/superadmin/AuthService'
 import { useUserStore } from '~/stores/user'
 
 definePageMeta({
@@ -21,7 +21,7 @@ async function login(username: string, password:string) {
             username,
             password,
         }
-        const response = await authService.superAdminLogin(params)
+        const response = await authService.login(params)
         if (response.data) {
             localStorage.setItem("_token", response.data.token)
             response.data.user.role = 'SuperAdmin'

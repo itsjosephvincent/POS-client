@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { StoreService } from '~/components/api/StoreService'
+import { storeService } from '~/api/admin/StoreService'
 
 definePageMeta({
     layout: 'admin',
@@ -7,7 +7,6 @@ definePageMeta({
 })
 const route = useRoute()
 const userStore = useUserStore()
-const role = userStore.getRole.toLowerCase()
 const pageStore = usePageStore()
 const pageTitle = 'Stores'
 useHead({
@@ -22,8 +21,7 @@ async function initializePageData() {
         let params = {
             admin_id: userStore.getUser.id,
         }
-        const storeService = new StoreService(role)
-        const response = await storeService.store(route.params.uuid, params)
+        const response = await storeService.store(route.params.uuid.toString(), params)
         if (response && response.data) {
             console.log(response)
             const data = response.data

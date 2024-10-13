@@ -16,9 +16,9 @@ onBeforeUnmount(() => {
     pageStore.setParams([])
 })
 </script>
-
+    
 <template>
     <div class="w-full px-6">
-
+        <SuperadminFormsStore />
     </div>
 </template>

@@ -20,6 +20,6 @@ function initializePageData(data: object) {
 
 <template>
     <div class="w-full px-6">
-        <FormBodyStoreEdit @store-fetch="initializePageData" />
+        <AdminStoresFormEdit @store-fetch="initializePageData" />
     </div>
 </template>

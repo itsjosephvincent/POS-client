@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { usePageStore } from '~/stores/page'
+import { usePageStore } from '~/stores/page';
 
-const pageTitle = 'Dashboard'
-const pageStore = usePageStore()
+const pageTitle = 'Dashboard';
+const pageStore = usePageStore();
 definePageMeta({
     layout: 'admin',
     middleware: ['admin'],
-})
+});
 useHead({
     title: pageTitle,
-})
+});
 onMounted(() => {
-    pageStore.setPage(pageTitle)
-})
+    pageStore.setPage(pageTitle);
+});
 
 const data = [
     {
@@ -25,7 +25,7 @@ const data = [
             { date: new Date(2025, 4, 1), value: 120000 },
             { date: new Date(2025, 5, 1), value: 140000 },
             { date: new Date(2025, 6, 1), value: 120000 },
-        ]
+        ],
     },
     {
         name: 'Happy Pet Shop',
@@ -37,7 +37,7 @@ const data = [
             { date: new Date(2025, 4, 1), value: 160000 },
             { date: new Date(2025, 5, 1), value: 70000 },
             { date: new Date(2025, 6, 1), value: 180000 },
-        ]
+        ],
     },
     {
         name: 'KC Convenience Store',
@@ -49,24 +49,38 @@ const data = [
             { date: new Date(2025, 4, 1), value: 70000 },
             { date: new Date(2025, 5, 1), value: 50000 },
             { date: new Date(2025, 6, 1), value: 60000 },
-        ]
+        ],
     },
-]
-
+];
 </script>
 
 <template>
     <div class="w-full px-2 md:px-4">
-        <ReportDatePicker />
+        <AdminDashboardDatePicker />
         <div class="w-full flex flex-wrap gap-4">
-            <ReportInfoSummaryCard title="Sales Today" summary="9500.00" icon="cartAdd" />
-            <ReportInfoSummaryCard title="Total Earnings" summary="120,000.00" icon="sales" />
-            <ReportInfoSummaryCard title="Total Orders" summary="120" icon="orders" />
-            <ReportInfoSummaryCard title="Stores Open" summary="3" icon="warehouse" />
-            <ReportPopularItems />
-            <ReportEarningsChartCard :data="data" />
-            <ReportCategoriesRevenueCard />
+            <AdminDashboardInfoSummaryCard
+                title="Sales Today"
+                summary="9500.00"
+                icon="cartAdd"
+            />
+            <AdminDashboardInfoSummaryCard
+                title="Total Earnings"
+                summary="120,000.00"
+                icon="sales"
+            />
+            <AdminDashboardInfoSummaryCard
+                title="Total Orders"
+                summary="120"
+                icon="orders"
+            />
+            <AdminDashboardInfoSummaryCard
+                title="Stores Open"
+                summary="3"
+                icon="warehouse"
+            />
+            <AdminDashboardPopularItems />
+            <AdminDashboardEarningsChartCard :data="data" />
+            <AdminDashboardCategoriesRevenueCard />
         </div>
     </div>
 </template>
-

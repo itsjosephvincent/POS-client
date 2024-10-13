@@ -1,10 +1,8 @@
 <script setup lang="ts">
+import type { DataTableColumns } from '~/common/types';
 
 const emit = defineEmits(['sortData', 'nextPage', 'previousPage', 'rowClick'])
-interface DataTableColumns {
-    key: string
-    label: string
-}
+
 interface DataTableActions {
     key: string
     label: string

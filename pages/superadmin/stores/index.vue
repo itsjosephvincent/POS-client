@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 definePageMeta({
     layout: 'superadmin',
     middleware: ['superadmin'],
@@ -9,18 +10,17 @@ const pageTitle = 'Stores'
 useHead({
     title: pageTitle,
 })
+
 onMounted(() => {
     pageStore.setPage(pageTitle)
 })
 onBeforeUnmount(() => {
     pageStore.setParams([])
 })
-
-
 </script>
 
 <template>
     <div class="w-full px-6">
-        <TableStores />
+        <SuperadminStoresTable />
     </div>
 </template>

@@ -23,6 +23,6 @@ function initializePageData(data: object) {
 
 <template>
     <div class="w-full px-6">
-        <FormBodyAccountEdit @account-fetch="initializePageData" />
+        <SuperadminAccountsFormEdit @account-fetch="initializePageData" />
     </div>
 </template>

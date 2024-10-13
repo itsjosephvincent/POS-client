@@ -19,6 +19,6 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="w-full px-6">
-        <FormBodyStore />
+        <SuperadminStoresForm />
     </div>
 </template>

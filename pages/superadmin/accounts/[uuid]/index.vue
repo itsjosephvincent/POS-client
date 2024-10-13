@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { adminService } from '~/components/api/AdminService';
+import { adminService } from '~/api/superadmin/AdminService';
 
 definePageMeta({
     layout: 'superadmin',
