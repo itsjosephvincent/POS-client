@@ -5,6 +5,10 @@ import { useUserStore } from '~/stores/user';
 definePageMeta({
     middleware: ['login'],
 });
+useHead({
+    title: 'Kahera | Cashier Login',
+});
+
 const userStore = useUserStore();
 const hasError = ref(false);
 const errorMessage = ref('');
