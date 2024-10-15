@@ -109,7 +109,7 @@ const tableActions = [
     },
 ];
 function onCreateNew() {
-    navigateTo('/superadmin/stores/new');
+    navigateTo(`/superadmin/accounts/${route.params.uuid}/stores/new`);
 }
 
 const showDeleteModal = ref(false);

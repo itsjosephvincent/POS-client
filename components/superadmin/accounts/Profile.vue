@@ -1,7 +1,15 @@
 <script setup lang="ts">
+import { adminService } from '~/api/superadmin/AdminService';
 import type { Admin } from '~/common/types';
 
 const route = useRoute();
+const {
+    deleteLoading,
+    showDeleteModal,
+    clickDelete,
+    closeDeleteModal,
+    handleDelete,
+} = useDeleteModal();
 
 const props = defineProps<{
     adminData: Admin;
@@ -13,6 +21,15 @@ const statusClass = computed(() =>
         ? 'bg-green-400/30 text-successColor px-2 py-1 rounded-lg text-sm text-center'
         : 'bg-orange-400/30 text-warningColor px-2 py-1 rounded-lg text-sm text-center',
 );
+
+async function onConfirmDelete() {
+    await handleDelete(adminService.delete(route.params.uuid.toString()));
+    navigateTo(`/superadmin/accounts`);
+}
+
+function clickEdit() {
+    navigateTo(`/superadmin/accounts/${route.params.uuid}/edit`);
+}
 </script>
 
 <template>
@@ -51,5 +68,37 @@ const statusClass = computed(() =>
                 ></span
             >
         </div>
+        <div class="w-full flex flex-col md:flex-row gap-2 mt-4">
+            <PrimaryButton
+                @click="clickEdit"
+                label="Edit"
+                class="w-full h-[38px]"
+            />
+            <PrimaryButton
+                :loading="deleteLoading"
+                @click="clickDelete"
+                label="Delete"
+                custom-class="bg-errorColor text-white"
+                class="w-full h-[38px]"
+            />
+        </div>
+        <Teleport to="body">
+            <DeleteModal
+                :visible="showDeleteModal"
+                @close-delete-modal="closeDeleteModal"
+                @delete-confirmed="onConfirmDelete"
+            >
+                <div class="flex items-center gap-4 my-4">
+                    <IconSvg icon="error" color="errorColor" />
+                    <div class="text text-primaryText">
+                        Are you sure you want to delete account
+                        <span class="font-bold"
+                            >{{ adminData.firstname }}
+                            {{ adminData.lastname }}</span
+                        >?
+                    </div>
+                </div>
+            </DeleteModal>
+        </Teleport>
     </div>
 </template>

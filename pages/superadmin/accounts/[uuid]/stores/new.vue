@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { adminService } from '~/api/superadmin/AdminService';
 import type { Admin } from '~/common/types';
 import useAdminFetch from '~/components/superadmin/composables/useAdminFetch';
 
@@ -7,22 +6,23 @@ definePageMeta({
     layout: 'superadmin',
     middleware: ['superadmin'],
 });
-
 const pageStore = usePageStore();
-const route = useRoute();
 const pageTitle = 'Accounts';
-
-const adminData: Ref<Admin | null> = ref(null);
-
 useHead({
     title: pageTitle,
 });
+
+const route = useRoute();
+
+const adminData: Ref<Admin | null> = ref(null);
+
 onMounted(async () => {
     try {
         pageStore.setPage(pageTitle);
         adminData.value = await useAdminFetch().fetch();
         pageStore.setParams([
             `${adminData.value.firstname} ${adminData.value.lastname}`,
+            'New Store',
         ]);
     } catch (error) {
         console.error(error);
@@ -31,13 +31,10 @@ onMounted(async () => {
 onBeforeUnmount(() => {
     pageStore.setParams([]);
 });
-
-const adminId = computed(() => adminData.value?.id);
-const storesCount = computed(() => adminData.value?.stores?.length || 0);
 </script>
 
 <template>
-    <div class="w-full px-6 py-4">
-        <SuperadminAccountsProfile v-if="adminData" :admin-data="adminData" />
+    <div class="w-full px-6">
+        <SuperadminStoresForm v-if="adminData" :admin-data="adminData" />
     </div>
 </template>

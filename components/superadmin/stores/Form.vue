@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import * as yup from 'yup';
 import { storeService } from '~/api/superadmin/StoreService';
-import type { Store, SuperAdmin } from '~/common/types';
+import type { Admin, Store, SuperAdmin } from '~/common/types';
 
+const route = useRoute();
 const props = defineProps<{
+    adminData: Admin;
     editData?: Store;
 }>();
 const userStore = useUserStore();
@@ -44,7 +46,8 @@ const onFormSubmit = handleSubmit(async () => {
         }
         loading.value = true;
         const params = {
-            admin_id: user.id,
+            admin_id: props.adminData.id,
+            admin_uuid: props.adminData.uuid,
             store_name: store.value,
             branch: branch.value,
             username: username.value,
@@ -67,7 +70,7 @@ const onFormSubmit = handleSubmit(async () => {
             response = await storeService.create(params);
         }
         if (response.data) {
-            navigateTo(`/admin/stores`);
+            navigateTo(`/superadmin/accounts/${route.params.uuid}/stores`);
         }
     } catch (error: any) {
         console.error(error);
