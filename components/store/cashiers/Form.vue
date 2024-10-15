@@ -66,7 +66,6 @@ const onSubmit = handleSubmit(async () => {
         }
     } catch (error: any) {
         loading.value = false;
-        console.log(error);
     }
 });
 

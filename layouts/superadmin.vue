@@ -14,12 +14,6 @@ const sidebarMenus: Array<SidebarMenu> = [
         name: 'Accounts',
         icon: 'staff',
     },
-    {
-        id: 'stores',
-        link: '/superadmin/stores',
-        name: 'Stores',
-        icon: 'warehouse',
-    },
 ];
 </script>
 

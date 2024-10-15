@@ -27,7 +27,6 @@ const getValues = (): Array<number> => {
 };
 
 onMounted(() => {
-    console.log(getDates());
     const tooltip = d3
         .select('body')
         .append('div')

@@ -17,7 +17,6 @@ async function fetch() {
         const response = await productService.find(route.params.uuid, params);
         isFetching.value = false;
         if (response && response.data) {
-            console.log(response.data);
             const data = response.data;
             productData.value = data;
             emit('productFetch', data);

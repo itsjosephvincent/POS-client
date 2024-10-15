@@ -32,7 +32,7 @@ async function login(username: string, password: string) {
             await navigateTo('/superadmin/dashboard');
         }
     } catch (error: any) {
-        console.log(error);
+        console.error(error);
         hasError.value = true;
         errorMessage.value = error.getErrorMessage();
     }

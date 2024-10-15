@@ -18,7 +18,6 @@ async function fetch() {
         const response = await cashierService.find(route.params.uuid, params);
         isFetching.value = false;
         if (response && response.data) {
-            console.log(response.data);
             const data = response.data;
             cashierData.value = data;
             emit('cashierFetch', data);

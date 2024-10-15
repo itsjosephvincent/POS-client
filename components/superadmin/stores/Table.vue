@@ -2,6 +2,7 @@
 import { storeService } from '~/api/superadmin/StoreService';
 import type { Store, DataTableColumns, SuperAdmin } from '~/common/types';
 
+const route = useRoute();
 const userStore = useUserStore();
 const user: SuperAdmin | null = userStore.getUser;
 
@@ -15,17 +16,21 @@ const filter = ref('');
 
 const isLoading = ref(false);
 
+const props = defineProps<{
+    adminId: number;
+}>();
+
 async function fetch() {
     try {
         const params = {
-            admin_id: user?.id,
+            admin_id: props.adminId,
             page: currentPage.value,
             sortField: sortField.value,
             sortOrder: sortOrder.value,
             name: filter.value, // filter store names
         };
         isLoading.value = true;
-        const response = await storeService.stores(params);
+        const response = await storeService.fetch(params);
         isLoading.value = false;
         if (response && response.data) {
             data.value = response.data;
@@ -81,7 +86,9 @@ function sortData(column: string, direction: string) {
 }
 function handleRowClick(row: Store) {
     if (row && row.admin_id) {
-        navigateTo(`/superadmin/stores/` + row.uuid);
+        navigateTo(
+            `/superadmin/accounts/${route.params.uuid}/stores/${row.uuid}`,
+        );
     }
 }
 const tableActions = [

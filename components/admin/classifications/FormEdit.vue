@@ -21,7 +21,6 @@ async function fetch() {
         );
         isFetching.value = false;
         if (response && response.data) {
-            console.log(response.data);
             const data = response.data;
             classificationData.value = data;
             emit('classificationFetch', data);

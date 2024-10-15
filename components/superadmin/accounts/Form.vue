@@ -1,104 +1,142 @@
 <script setup lang="ts">
+import * as yup from 'yup';
 import { adminService } from '~/api/superadmin/AdminService';
+import type { Admin } from '~/common/types';
 
-interface Account {
-    firstname: string
-    lastname: string
-    username: string
-}
 const props = defineProps<{
-    isEdit?: boolean
-    editData?: Account
-}>()
+    editData?: Admin | null;
+}>();
 
-const loading = ref(false)
-const errorState = reactive({})
+const loading = ref(false);
 
-const firstnameModel = defineModel('firstname')
-const lastnameModel = defineModel('lastname')
-const usernameModel = defineModel('username')
-const passwordModel = defineModel('password')
-const confirmPasswordModel = defineModel('confirmPassword')
-const isActiveModel = defineModel('isActive')
+// validation
+const { values, errors, meta, defineField, handleSubmit, resetForm } = useForm({
+    validationSchema: yup.object({
+        firstname: yup.string().required('Firstname field is required'),
+        lastname: yup.string().required('Lastname field is required'),
+        username: yup.string().required('Username field is required'),
+        password: !props.editData
+            ? yup.string().required('Password field is required')
+            : yup.string(),
+        is_active: yup.boolean(),
+    }),
+});
+const [firstname] = defineField('firstname');
+const [lastname] = defineField('lastname');
+const [username] = defineField('username');
+const [password] = defineField('password');
+const [is_active] = defineField('is_active');
 
-onMounted(() => {
-    firstnameModel.value = props.editData?.firstname || ''
-    lastnameModel.value = props.editData?.lastname || ''
-    usernameModel.value = props.editData?.username || ''
-    isActiveModel.value = props.editData ? props.editData.is_active : true
-})
+watch(
+    () => props.editData,
+    () => {
+        firstname.value = props.editData?.firstname || '';
+        lastname.value = props.editData?.lastname || '';
+        username.value = props.editData?.username || '';
+        is_active.value = props.editData ? props.editData.is_active : true;
+    },
+    { immediate: true },
+);
 
-function validate() {
-    if (!usernameModel.value) {
-        errorState.username = "Username is required"
-    }
-
-    if (passwordModel.value !== confirmPasswordModel.value) {
-        return console.error("Password doesn't match")
-    }
-}
-async function onFormSubmit() {
+const onFormSubmit = handleSubmit(async () => {
     try {
-        validate()
-        loading.value = true
+        loading.value = true;
         const params = {
-            firstname: firstnameModel.value,
-            lastname: lastnameModel.value,
-            username: usernameModel.value,
-            is_active: isActiveModel.value
-        }
+            firstname: firstname.value,
+            lastname: lastname.value,
+            username: username.value,
+            is_active: is_active.value,
+        };
 
         // Optional password payload if editing
-        if (props.isEdit) {
-            if (passwordModel.value) {
-                params.password = passwordModel.value
+        if (props.editData) {
+            if (password.value) {
+                params.password = password.value;
             }
         } else {
-            params.password = passwordModel.value
+            params.password = password.value;
         }
 
-        let response
-        if (props.isEdit) {
-            response = await adminService.update(params, props.editData?.uuid)
+        let response;
+        if (props.editData) {
+            response = await adminService.update(params, props.editData?.uuid);
         } else {
-            response = await adminService.create(params)
+            response = await adminService.create(params);
         }
         if (response.data) {
-            navigateTo(`/superadmin/accounts`)
+            navigateTo(`/superadmin/accounts`);
         }
     } catch (error: any) {
-        console.log(error)
-
+        console.error(error);
     }
-    loading.value = false
-}
-const getLoading = computed(() => loading.value)
-const passwordLabel = computed(() => !props.isEdit ? 'Password' : 'Update Password')
-const passwordPlaceholder = computed(() => !props.isEdit ? 'Enter Account Password' : 'Update Account Password')
-const activeLabel = computed(() => isActiveModel.value ? 'Active' : 'Inactive')
-
+    loading.value = false;
+});
+const getLoading = computed(() => loading.value);
+const passwordLabel = computed(() =>
+    !props.editData ? 'Password' : 'Update Password',
+);
+const passwordPlaceholder = computed(() =>
+    !props.editData ? 'Enter Account Password' : 'Update Account Password',
+);
+const activeLabel = computed(() => (is_active.value ? 'Active' : 'Inactive'));
 </script>
 
 <template>
-    <div class="w-full max-w-lg my-6 bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl lg:p-6">
+    <div
+        class="w-full max-w-lg my-6 bg-secondaryBg lg:border lg:border-primaryBorder rounded-xl lg:p-6"
+    >
         <form @submit.prevent="onFormSubmit" class="w-full">
-            <FormTextInput class="my-3" name="store" placeholder="Enter Firstname" label="Firstname"
-                :model-value="firstnameModel" @update:modelValue="$event => (firstnameModel = $event)"
-                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" />
-            <FormTextInput class="my-3" name="store" placeholder="Enter Lastname" label="Lastname"
-                :model-value="lastnameModel" @update:modelValue="$event => (lastnameModel = $event)"
-                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" />
-            <FormTextInput class="my-3" name="username" placeholder="Account Username" label="Username"
-                :model-value="usernameModel" @update:modelValue="$event => (usernameModel = $event)"
-                bg-class="bg-secondaryBg" border-class="border border-primaryBorder" />
-            <FormPasswordInput name="password" :placeholder="passwordPlaceholder" :label="passwordLabel"
-                :model-value="passwordModel" bg-class="bg-white"
-                @update:modelValue="$event => (passwordModel = $event)" />
-            <FormSwitch v-if="isEdit" class="my-3" :label="activeLabel" :model-value="isActiveModel"
-                @update:modelValue="$event => (isActiveModel = $event)" />
+            <FormTextInput
+                class="my-3"
+                name="firstname"
+                placeholder="Enter Firstname"
+                label="Firstname"
+                v-model="firstname"
+                bg-class="bg-secondaryBg"
+                border-class="border border-primaryBorder"
+                :error="errors.firstname"
+            />
+            <FormTextInput
+                class="my-3"
+                name="lastname"
+                placeholder="Enter Lastname"
+                label="Lastname"
+                v-model="lastname"
+                bg-class="bg-secondaryBg"
+                border-class="border border-primaryBorder"
+                :error="errors.lastname"
+            />
+            <FormTextInput
+                class="my-3"
+                name="username"
+                placeholder="Account Username"
+                label="Username"
+                v-model="username"
+                bg-class="bg-secondaryBg"
+                border-class="border border-primaryBorder"
+                :error="errors.username"
+            />
+            <FormPasswordInput
+                name="password"
+                :placeholder="passwordPlaceholder"
+                :label="passwordLabel"
+                v-model="password"
+                bg-class="bg-white"
+                :error="errors.password"
+            />
+            <FormSwitch
+                v-if="editData"
+                class="my-3"
+                :label="activeLabel"
+                v-model="is_active"
+            />
 
-            <PrimaryButton type="submit" class="w-full my-3" :label="!isEdit ? 'Create Account' : 'Update Account'"
-                :loading="getLoading" />
+            <PrimaryButton
+                type="submit"
+                class="w-full my-3"
+                :label="!editData ? 'Create Account' : 'Update Account'"
+                :loading="getLoading"
+            />
         </form>
     </div>
 </template>

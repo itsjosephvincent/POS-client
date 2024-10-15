@@ -20,8 +20,6 @@ function onDateChange() {
             'en-US',
             { month: 'short', day: 'numeric', year: 'numeric' },
         );
-        console.log(selectedDate.value);
-        console.log(formattedDate.value);
     }
 }
 const dateLabel = computed(() =>

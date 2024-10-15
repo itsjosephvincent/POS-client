@@ -1,28 +1,28 @@
 <script setup lang="ts">
+import useAdminFetch from '~/components/superadmin/composables/useAdminFetch';
+
 definePageMeta({
     layout: 'superadmin',
     middleware: ['superadmin'],
-})
+});
 
-const pageStore = usePageStore()
-const pageTitle = 'Accounts'
+const pageStore = usePageStore();
+const pageTitle = 'Accounts';
 useHead({
     title: pageTitle,
-})
-onMounted(() => {
-    pageStore.setPage(pageTitle)
-})
-onBeforeUnmount(() => {
-    pageStore.setParams([])
-})
+});
 
-function initializePageData(data: object) {
-    pageStore.setParams([`${data.firstname} ${data.lastname}`, 'Edit'])
-}
+const { adminData } = useAdminFetch();
+onMounted(() => {
+    pageStore.setPage(pageTitle);
+});
+onBeforeUnmount(() => {
+    pageStore.setParams([]);
+});
 </script>
 
 <template>
     <div class="w-full px-6">
-        <SuperadminAccountsFormEdit @account-fetch="initializePageData" />
+        <SuperadminAccountsFormEdit :admin-data="adminData" />
     </div>
 </template>

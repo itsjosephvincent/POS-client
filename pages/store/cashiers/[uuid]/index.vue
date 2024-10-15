@@ -28,7 +28,6 @@ async function initializePageData() {
         let params = {};
         const response = await cashierService.find(route.params.uuid, params);
         if (response && response.data) {
-            console.log(response);
             const data = response.data;
             pageStore.setParams([data.name]);
         } else {

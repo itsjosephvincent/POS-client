@@ -33,7 +33,7 @@ async function login(username: string, password: string) {
             await navigateTo('/cashier');
         }
     } catch (error: any) {
-        console.log(error);
+        console.error(error);
         hasError.value = true;
         errorMessage.value = error.getErrorMessage();
     }

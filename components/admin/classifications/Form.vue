@@ -34,11 +34,10 @@ async function onFormSubmit() {
             response = await categoryService.create(params);
         }
         if (response.data) {
-            console.log('saved store: ', response.data);
             navigateTo(`/admin/classifications`);
         }
     } catch (error: any) {
-        console.log(error);
+        console.error(error);
     }
     loading.value = false;
 }

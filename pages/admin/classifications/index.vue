@@ -33,7 +33,6 @@ async function fetch() {
         if (response.data) {
             classificationsData.value = response.data;
             classificationStore.setClassifications(response.data);
-            console.log(classificationsData.value);
         }
     } catch (error) {
         isFetching.value = false;

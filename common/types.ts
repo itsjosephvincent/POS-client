@@ -13,6 +13,8 @@ export interface Admin {
     role: string;
     username: string;
     uuid: string;
+    is_active: boolean;
+    stores?: Array<Store>;
 }
 
 export interface Store {

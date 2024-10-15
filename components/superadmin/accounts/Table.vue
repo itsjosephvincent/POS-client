@@ -34,7 +34,6 @@ async function fetch(params: object | null = null) {
             rowsPerPage.value = response.meta.per_page;
             totalPages.value = response.meta.last_page;
             currentPage.value = response.meta.current_page;
-            console.log(data.value);
         } else {
             throw 'Empty data.';
         }
