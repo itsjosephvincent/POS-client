@@ -22,6 +22,7 @@ onMounted(async () => {
         adminData.value = await useAdminFetch().fetch();
         pageStore.setParams([
             `${adminData.value.firstname} ${adminData.value.lastname}`,
+            'Stores',
             'New Store',
         ]);
     } catch (error) {

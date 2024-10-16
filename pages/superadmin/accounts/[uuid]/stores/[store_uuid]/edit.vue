@@ -7,7 +7,6 @@ definePageMeta({
     layout: 'superadmin',
     middleware: ['superadmin'],
 });
-
 const pageStore = usePageStore();
 const pageTitle = 'Accounts';
 const adminData: Ref<Admin | null> = ref(null);
@@ -26,6 +25,7 @@ onMounted(async () => {
         `${adminData.value.firstname} ${adminData.value.lastname}`,
         'Stores',
         `${storeData.value.store_name} ${storeData.value.branch}`,
+        'Edit Store',
     ]);
 });
 onBeforeUnmount(() => {
@@ -35,6 +35,9 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="w-full px-6">
-        <SuperadminStoresProfile :store-data="storeData" />
+        <SuperadminStoresFormEdit
+            :admin-data="adminData"
+            :store-data="storeData"
+        />
     </div>
 </template>

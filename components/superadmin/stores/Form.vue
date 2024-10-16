@@ -79,10 +79,10 @@ const onFormSubmit = handleSubmit(async () => {
 });
 const getLoading = computed(() => loading.value);
 const passwordLabel = computed(() =>
-    !props.isEdit ? 'Password' : 'Update Password',
+    !props.editData ? 'Password' : 'Update Password',
 );
 const passwordPlaceholder = computed(() =>
-    !props.isEdit ? 'Enter Store Password' : 'Update Store Password',
+    !props.editData ? 'Enter Store Password' : 'Update Store Password',
 );
 const activeLabel = computed(() => (is_active.value ? 'Active' : 'Inactive'));
 </script>
@@ -140,7 +140,7 @@ const activeLabel = computed(() => (is_active.value ? 'Active' : 'Inactive'));
             <PrimaryButton
                 type="submit"
                 class="w-full my-3"
-                :label="editData ? 'Create Store' : 'Update Store'"
+                :label="!editData ? 'Create Store' : 'Update Store'"
                 :loading="getLoading"
             />
         </form>

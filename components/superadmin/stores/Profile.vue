@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { adminService } from '~/api/superadmin/AdminService';
-import type { Admin } from '~/common/types';
+import type { Store } from '~/common/types';
+import { StoreService } from '~/api/superadmin/StoreService';
+import { storeService } from '~/api/admin/StoreService';
 
 const route = useRoute();
 const {
@@ -10,57 +11,50 @@ const {
     closeDeleteModal,
     handleDelete,
 } = useDeleteModal();
-
 const props = defineProps<{
-    adminData: Admin;
+    storeData: Store | null;
 }>();
 
-const infoRowClass = computed(() => 'flex justify-start items-center gap-3');
-const statusClass = computed(() =>
-    props.adminData.is_active
-        ? 'bg-green-400/30 text-successColor px-2 py-1 rounded-lg text-sm text-center'
-        : 'bg-orange-400/30 text-warningColor px-2 py-1 rounded-lg text-sm text-center',
-);
-
 async function onConfirmDelete() {
-    await handleDelete(adminService.delete(route.params.uuid.toString()));
-    navigateTo(`/superadmin/accounts`);
+    await handleDelete(storeService.delete(route.params.store_uuid.toString()));
+    navigateTo(`/superadmin/accounts/${route.params.uuid}/stores`);
 }
 
 function clickEdit() {
-    navigateTo(`/superadmin/accounts/${route.params.uuid}/edit`);
+    navigateTo(
+        `/superadmin/accounts/${route.params.uuid}/stores/${route.params.store_uuid}/edit`,
+    );
 }
+
+const infoRowClass = computed(() => 'flex justify-start items-center gap-3');
 </script>
 
 <template>
-    <ProfileCard>
+    <LoadingCardSkeleton v-if="!storeData" />
+    <ProfileCard v-else>
         <img
             src="/img/user.svg"
             alt=""
             class="rounded-full h-24 w-24 object-cover"
         />
         <div :class="[infoRowClass]">
-            <span class="font-light">Name: </span
-            ><span class="font-bold"
-                >{{ adminData.firstname }} {{ adminData.lastname }}</span
-            >
+            <span class="font-light">Store: </span
+            ><span class="font-bold">{{ storeData.store_name }}</span>
+        </div>
+        <div :class="[infoRowClass]">
+            <span class="font-light">Branch: </span
+            ><span class="font-bold">{{ storeData.branch }}</span>
         </div>
         <div :class="[infoRowClass]">
             <span class="font-light">Username: </span
-            ><span class="font-bold">{{ adminData.username }}</span>
+            ><span class="font-bold">{{ storeData.username }}</span>
         </div>
         <div :class="[infoRowClass]">
-            <span class="font-light">Status: </span
-            ><span :class="['font-bold', statusClass]">{{
-                adminData.is_active ? 'Active' : 'Inactive'
-            }}</span>
-        </div>
-        <div :class="[infoRowClass]">
-            <span class="font-light">Stores count: </span
-            ><span class="font-bold">{{ adminData?.stores?.length || 0 }}</span>
+            <span class="font-light">Cashiers: </span
+            ><span class="font-bold">1</span>
             <span
                 ><NuxtLink
-                    :to="`/superadmin/accounts/${route.params.uuid}/stores`"
+                    :to="`/superadmin/accounts/${route.params.uuid}/stores/${route.params.store_uuid}/cashiers`"
                     class="underline text-secondaryColor"
                     >view all</NuxtLink
                 ></span
@@ -91,8 +85,8 @@ function clickEdit() {
                     <div class="text text-primaryText">
                         Are you sure you want to delete account
                         <span class="font-bold"
-                            >{{ adminData.firstname }}
-                            {{ adminData.lastname }}</span
+                            >{{ storeData.store_name }}
+                            {{ storeData.branch }}</span
                         >?
                     </div>
                 </div>

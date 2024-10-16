@@ -96,7 +96,9 @@ const tableActions = [
         key: 'edit',
         label: 'Edit',
         handler: (row: Store) => {
-            navigateTo(`/superadmin/stores/${row.uuid}/edit`);
+            navigateTo(
+                `/superadmin/accounts/${route.params.uuid}/stores/${row.uuid}/edit`,
+            );
         },
     },
     {

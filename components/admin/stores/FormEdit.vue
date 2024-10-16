@@ -21,7 +21,7 @@ async function fetch() {
         let params = {
             admin_id: user.id,
         };
-        const response = await storeService.store(
+        const response = await storeService.find(
             route.params.uuid.toString(),
             params,
         );
