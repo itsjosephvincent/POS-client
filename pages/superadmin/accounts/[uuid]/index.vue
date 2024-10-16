@@ -38,6 +38,13 @@ const storesCount = computed(() => adminData.value?.stores?.length || 0);
 
 <template>
     <div class="w-full px-6 py-4">
-        <SuperadminAccountsProfile v-if="adminData" :admin-data="adminData" />
+        <SuperadminAccountsProfileNew
+            v-if="adminData"
+            :admin-data="adminData"
+        />
+        <div class="flex justify-start items-center gap-2 my-2">
+            <SuperadminAccountsStoresListSection />
+            <SuperadminAccountsCashiersListSection />
+        </div>
     </div>
 </template>
