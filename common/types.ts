@@ -53,6 +53,13 @@ export interface Product {
     inventory: number;
 }
 
+export interface Table {
+    id: number;
+    uuid: string;
+    store_id: number;
+    name: string;
+}
+
 /** Type for Data Table component columns */
 export interface DataTableColumns {
     key: string;

@@ -1,21 +1,24 @@
 <script setup lang="ts">
-const pageTitle = 'SKUs';
+const pageTitle = 'Tables';
 const pageStore = usePageStore();
 definePageMeta({
-    layout: 'admin',
-    middleware: ['admin'],
+    layout: 'store',
+    middleware: ['store'],
 });
 useHead({
     title: pageTitle,
 });
 onMounted(() => {
     pageStore.setPage(pageTitle);
+    pageStore.setParams(['New Table']);
+});
+onBeforeUnmount(() => {
     pageStore.setParams([]);
 });
 </script>
 
 <template>
-    <div id="products-page" class="w-full px-6">
-        <AdminProductsTable />
+    <div class="w-full px-6">
+        <StoreTablesForm />
     </div>
 </template>

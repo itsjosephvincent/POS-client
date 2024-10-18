@@ -8,6 +8,8 @@ import type {
 } from '~/common/types';
 
 const viewport = useViewport();
+const userStore = useUserStore();
+const user: Admin | null = userStore.getUser;
 
 const isLoading = ref(false);
 const productsData = ref([]);
@@ -57,6 +59,7 @@ async function fetch() {
     try {
         isLoading.value = true;
         const params = {
+            admin_id: user?.id,
             page: currentPage.value,
             sortField: sortField.value,
             sortOrder: sortOrder.value,

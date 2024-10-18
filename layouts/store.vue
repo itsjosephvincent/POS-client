@@ -14,6 +14,12 @@ const sidebarMenus: Array<SidebarMenu> = [
         name: 'Cashiers',
         icon: 'staff',
     },
+    {
+        id: 'tables',
+        link: '/store/tables',
+        name: 'Tables',
+        icon: 'table',
+    },
 ];
 </script>
 
