@@ -20,21 +20,26 @@ function handleClick() {
 }
 
 const selectedClass = computed(() =>
-    isSelected.value ? 'border-2 border-secondaryColor' : '',
+    isSelected.value ? 'bg-secondaryColorTransparent' : 'bg-white',
 );
 </script>
 
 <template>
     <div
         :class="[
-            'bg-white border border-primaryBorder rounded-xl flex justify-start items-center gap-2 p-3 my-2 mx-4 select-none cursor-pointer',
+            'rounded-xl flex justify-start items-center gap-2 p-3 my-2 mx-2 select-none cursor-pointer',
             selectedClass,
         ]"
         @click="handleClick"
     >
-        <IconSvg icon="store" size="3em" class="text-gray-700" />
-        <div class="font-bold">
-            {{ storeData.store_name }} {{ storeData.branch }}
+        <img src="/img/store.svg" alt="" class="h-12 w-12" />
+        <div class="flex flex-col items-start justify-center">
+            <div class="font-bold">
+                {{ storeData.store_name }}
+            </div>
+            <div class="font-normal">
+                {{ storeData.branch }}
+            </div>
         </div>
     </div>
 </template>

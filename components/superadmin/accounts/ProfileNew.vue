@@ -33,25 +33,25 @@ function clickEdit() {
 
 <template>
     <div
-        class="w-full overflow-y-hidden bg-secondaryBg rounded-xl border border-primaryBorder flex items-center justify-start gap-4 p-4 text-primaryText"
+        class="w-full bg-secondaryColorTransparent border-bottom border-primaryBorder flex items-center justify-start gap-4 p-4 text-secondaryColor"
     >
         <img
             src="/img/user.svg"
             alt=""
             class="rounded-full h-16 w-16 object-cover"
         />
-        <div class="grow h-full flex flex-col items-start justify-center">
-            <div class="font-bold text-primaryText px-1">
+        <div class="h-full flex flex-col items-start justify-center">
+            <div class="font-bold px-1">
                 {{ adminData.firstname }} {{ adminData.lastname }}
             </div>
-            <div class="font-normal text-sm text-primaryText px-1">
+            <div class="font-normal text-sm text-inherit px-1">
                 {{ adminData.username }}
             </div>
             <div :class="['font-bold', statusClass]">
                 {{ adminData.is_active ? 'Active' : 'Inactive' }}
             </div>
         </div>
-        <div class="flex flex-col gap-2 justify-center items-end">
+        <div class="hidden flex flex-col gap-2 justify-center items-end">
             <button
                 @click="clickEdit"
                 class="p-1 rounded-full bg-secondaryColor text-white"

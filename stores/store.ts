@@ -22,5 +22,5 @@ export const useStoreStore = defineStore(
 
         return { state, setStore, reset, getStore };
     },
-    { persist: false },
+    { persist: true },
 );
