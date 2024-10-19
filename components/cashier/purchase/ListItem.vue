@@ -96,8 +96,9 @@ async function updateRunningBill() {
         if (!response.data) throw 'Error no response.';
         console.log(response.data);
         runningBillsRefetch(table.id);
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
+        alert(error.getErrorMessage());
     }
 }
 async function runningBillsRefetch(tableId: any) {

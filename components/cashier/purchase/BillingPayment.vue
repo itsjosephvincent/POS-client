@@ -18,6 +18,9 @@ async function processTableOrder() {
         const response = await orderService.create(params);
         isLoading.value = false;
         if (!response.data) throw 'Error in creating order';
+        alert(
+            `Successfully processed Order number: ${response.data.order_number}`,
+        );
         updateBills();
     } catch (error) {
         console.error(error);
