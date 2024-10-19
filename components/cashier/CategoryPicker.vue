@@ -5,16 +5,20 @@ import type { Category } from '~/common/types';
 const emit = defineEmits(['category-select']);
 const categories: Ref<Array<Category> | null> = ref(null);
 const selected: Ref<string | null> = ref(null);
+const isFetching: Ref<boolean> = ref(true);
 
 onMounted(() => {
     fetch();
 });
 async function fetch() {
     try {
+        isFetching.value = true;
         const response = await categoryService.fetch();
+        isFetching.value = false;
         if (!response.data) throw 'Unable to fetch categories.';
         categories.value = response.data;
     } catch (error) {
+        isFetching.value = false;
         console.error(error);
     }
 }
@@ -38,7 +42,24 @@ const selectedClass = computed(
 
 <template>
     <div class="w-full mb-4 overflow-x-auto overflow-y-hidden">
-        <div class="w-[90%] flex justify-start items-center gap-2">
+        <div
+            v-if="isFetching"
+            class="w-full flex justify-start items-start flex-wrap gap-2"
+        >
+            <div
+                class="animate-pulse w-[112px] h-[112px] overflow-y-hidden bg-slate-200 rounded-xl flex flex-col items-start justify-start"
+            ></div>
+            <div
+                class="animate-pulse w-[112px] h-[112px] overflow-y-hidden bg-slate-200 rounded-xl flex flex-col items-start justify-start"
+            ></div>
+            <div
+                class="animate-pulse w-[112px] h-[112px] overflow-y-hidden bg-slate-200 rounded-xl flex flex-col items-start justify-start"
+            ></div>
+            <div
+                class="animate-pulse w-[112px] h-[112px] overflow-y-hidden bg-slate-200 rounded-xl flex flex-col items-start justify-start"
+            ></div>
+        </div>
+        <div v-else class="w-[90%] flex justify-start items-center gap-2">
             <div
                 @click="handleSelect(null)"
                 :class="[cardClass, !selected ? selectedClass : normalClass]"

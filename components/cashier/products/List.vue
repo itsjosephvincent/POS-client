@@ -2,7 +2,7 @@
 import type { Product } from '~/common/types';
 
 const props = defineProps<{
-    dataSource?: Array<Product>;
+    dataSource?: Array<Product> | null;
     loading?: boolean;
     showPagination?: boolean;
     rowsPerPage?: number;
@@ -11,7 +11,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(['sortData', 'nextPage', 'previousPage', 'rowClick']);
-const isEmpty = computed(() => !props.dataSource.length);
+const isEmpty = computed(() => !props?.dataSource?.length || false);
 </script>
 
 <template>

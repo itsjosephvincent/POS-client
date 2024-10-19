@@ -11,9 +11,11 @@ import {
 import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
 
 const userStore = useUserStore();
+const loadingStore = useLoadingStore();
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
 const user: Cashier | null = userStore.getUser;
+const isFetching: Ref<boolean> = ref(false);
 
 const tables: Ref<Array<Table> | null> = ref(null);
 const selectModel = defineModel();
@@ -41,23 +43,28 @@ watch(
 );
 async function fetch() {
     try {
+        isFetching.value = true;
         const params = {
             store_id: user?.store.id,
         };
         const response = await tableService.fetch(params);
+        isFetching.value = false;
         if (!response.data) throw 'Unable to fetch tables.';
         tables.value = response.data;
     } catch (error) {
+        isFetching.value = false;
         console.error(error);
     }
 }
 async function fetchRunningBill(tableId: any) {
     try {
+        loadingStore.setLoading(true);
         console.log('fetch running bills table: ', tableId);
         const params = {
             table_id: tableId,
         };
         const response = await useRunningBillFetch().fetch(params);
+        loadingStore.setLoading(false);
         if (!response)
             throw 'No data fetched for running bills table: ' + tableId;
         runningBills.value = response;
@@ -76,6 +83,7 @@ async function fetchRunningBill(tableId: any) {
         );
         runningBillStore.setProducts(runningBillProducts);
     } catch (error) {
+        loadingStore.setLoading(false);
         console.error(error);
     }
 }
@@ -92,8 +100,13 @@ const tableOptions = computed(() => {
 
 <template>
     <div class="p-2">
+        <div v-if="isFetching" class="">
+            <div
+                class="animate-pulse w-full h-[35px] my-4 bg-slate-200 rounded-xl"
+            ></div>
+        </div>
         <FormSelect
-            v-if="tables"
+            v-if="tables && !isFetching"
             :options="tableOptions"
             label="Table"
             placeholder="Select Table"

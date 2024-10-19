@@ -30,7 +30,7 @@ const {
     nextPageClick,
     goToPage,
 } = usePagination();
-const isLoading: Ref<boolean> = ref(false);
+const isLoading: Ref<boolean> = ref(true);
 const productsData: Ref<Array<Product> | null> = ref(null);
 
 onMounted(() => {
@@ -74,7 +74,6 @@ function categorySelect(uuid: string | null) {
         >
             <CashierCategoryPicker @category-select="categorySelect" />
             <CashierProductsList
-                v-if="productsData"
                 :data-source="productsData"
                 :loading="isLoading"
                 :show-pagination="true"

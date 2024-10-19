@@ -4,38 +4,46 @@ import useRunningBillFetch from '~/components/cashier/composables/useRunningBill
 
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
+const loadingStore = useLoadingStore();
 const isPaymentMethod = ref(false);
+const isLoading: Ref<boolean> = ref(false);
 
 async function processTableOrder() {
     try {
+        isLoading.value = true;
         if (!runningBillStore.getTable) throw 'No table data.';
         const params = {
             table_uuid: runningBillStore.getTable?.uuid,
         };
         const response = await orderService.create(params);
+        isLoading.value = false;
         if (!response.data) throw 'Error in creating order';
         updateBills();
     } catch (error) {
         console.error(error);
+        isLoading.value = false;
     }
 }
 async function updateBills() {
     try {
+        loadingStore.setLoading(true);
         if (!runningBillStore.getTable) throw 'No table data.';
         const params = {
             table_id: runningBillStore.getTable.id,
         };
         const response = await useRunningBillFetch().fetch(params);
+        loadingStore.setLoading(false);
         if (!response) throw 'No data fetched for running bills table';
         runningBillStore.setProducts(response);
     } catch (error) {
+        loadingStore.setLoading(false);
         console.error(error);
     }
 }
 </script>
 
 <template>
-    <div class="mx-2 xl:mx-6 mb-4 flex flex-col gap-4">
+    <div class="mx-2 xl:mx-2 mb-4 flex flex-col gap-4">
         <div v-if="isPaymentMethod" class="font-bold text-lg text-primaryText">
             Payment Method
         </div>
@@ -51,12 +59,12 @@ async function updateBills() {
                 <IconSvg icon="creditCard" />
             </div>
         </div>
-        <button
+        <PrimaryButton
+            label="Process Order"
+            :loading="isLoading"
+            class="bg-primaryColor"
             @click="processTableOrder"
-            type="button"
-            class="p-2 rounded-lg bg-primaryColor text-white font-bold text-lg"
-        >
-            Process Transaction
-        </button>
+            custom-class="bg-secondaryColor text-white w-full"
+        />
     </div>
 </template>

@@ -5,12 +5,15 @@ import {
     type Table,
 } from '~/common/types';
 import { runningBillService } from '~/api/cashier/RunningBillService';
+import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
 
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
+const loadingStore = useLoadingStore();
 const props = defineProps<{
     productData: BillingProduct;
 }>();
+const isLoading: Ref<boolean> = ref(false);
 
 const quantity: Ref<number> = ref(0);
 const isAdded = ref(false);
@@ -68,9 +71,11 @@ function decrement() {
     //     image: props.productData.image,
     // });
 }
-function addToTransaction() {
+async function addToTransaction() {
+    isLoading.value = true;
     if (transactionStore.getMode === TransactionMode.RunningBill) {
-        updateRunningBill();
+        await updateRunningBill();
+        isLoading.value = false;
     }
 }
 async function updateRunningBill() {
@@ -90,7 +95,38 @@ async function updateRunningBill() {
         const response = await runningBillService.create(params);
         if (!response.data) throw 'Error no response.';
         console.log(response.data);
+        runningBillsRefetch(table.id);
     } catch (error) {
+        console.error(error);
+    }
+}
+async function runningBillsRefetch(tableId: any) {
+    try {
+        loadingStore.setLoading(true);
+        console.log('fetch running bills table: ', tableId);
+        const params = {
+            table_id: tableId,
+        };
+        const response = await useRunningBillFetch().fetch(params);
+        loadingStore.setLoading(false);
+        if (!response)
+            throw 'No data fetched for running bills table: ' + tableId;
+        const runningBillProducts: Array<BillingProduct> = response.map(
+            (item: any) => {
+                return {
+                    id: item.product.id,
+                    uuid: item.product.uuid,
+                    name: item.product.name,
+                    cost: item.product.cost,
+                    price: item.product.price,
+                    quantity: item.quantity,
+                    image: item.product.image,
+                };
+            },
+        );
+        runningBillStore.setProducts(runningBillProducts);
+    } catch (error) {
+        loadingStore.setLoading(false);
         console.error(error);
     }
 }
@@ -167,6 +203,7 @@ const canOrder = computed((): boolean => {
                 class="w-full self-center"
                 :label="isAdded ? 'Update Order' : 'Add Order'"
                 :disabled="!canOrder"
+                :loading="isLoading"
             />
         </div>
     </div>
