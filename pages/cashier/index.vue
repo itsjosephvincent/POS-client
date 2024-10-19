@@ -1,55 +1,58 @@
 <script setup lang="ts">
-import { productService } from '~/api/admin/ProductService'; //@TODO Cashier endpoints
+import { productService } from '~/api/cashier/ProductService';
+import type { Cashier, Product } from '~/common/types';
+import type admin from '~/middleware/admin';
 
 definePageMeta({
     middleware: ['cashier'],
     layout: 'cashier',
 });
+const userStore = useUserStore();
+const user: Cashier | null = userStore.getUser;
 const pageStore = usePageStore();
 const pageTitle = 'Cashier';
 useHead({
     title: pageTitle,
 });
 
-const productsData = ref([]);
-const isLoading = ref(false);
-
-const rowsPerPage = ref(10);
-const totalPages = ref(0);
-const currentPage = ref(1);
-const sortField = ref('');
-const sortOrder = ref('ascend');
-const filter = ref('');
-
-const getRowsPerPage = computed(() => rowsPerPage.value || 10);
-const getTotalPages = computed(() => totalPages.value);
-const getCurrentPage = computed(() => currentPage.value);
+const {
+    rowsPerPage,
+    totalPages,
+    currentPage,
+    sortField,
+    sortOrder,
+    filter,
+    getRowsPerPage,
+    getTotalPages,
+    getCurrentPage,
+    filterData,
+    previousPageClick,
+    nextPageClick,
+    goToPage,
+} = usePagination();
+const isLoading: Ref<boolean> = ref(false);
+const productsData: Ref<Array<Product> | null> = ref(null);
 
 onMounted(() => {
     pageStore.setPage(pageTitle);
     fetch();
 });
 
-async function fetch() {
+async function fetch(category_uuid: string | null = null) {
     try {
         isLoading.value = true;
         const params = {
+            admin: user?.store.admin.uuid,
             page: currentPage.value,
             sortField: sortField.value,
             sortOrder: sortOrder.value,
             name: filter.value,
+            category: category_uuid,
         };
         const response = await productService.all(params);
         isLoading.value = false;
         if (response.data) {
-            productsData.value = response.data.map((d: object) => {
-                if (d.category) {
-                    d.category_uuid = d.category.uuid;
-                    d.category_name = d.category.name;
-                }
-                delete d.category;
-                return d;
-            });
+            productsData.value = response.data;
             rowsPerPage.value = response.meta.per_page;
             totalPages.value = response.meta.last_page;
             currentPage.value = response.meta.current_page;
@@ -59,40 +62,28 @@ async function fetch() {
         console.error(error);
     }
 }
-
-function filterData(value: string) {
-    filter.value = value;
-    fetch();
-}
-function previousPageClick() {
-    currentPage.value -= 1;
-    fetch();
-}
-function nextPageClick() {
-    currentPage.value += 1;
-    fetch();
-}
-function goToPage(page: number) {
-    currentPage.value = page;
-    fetch();
+function categorySelect(uuid: string | null) {
+    fetch(uuid);
 }
 </script>
 
 <template>
     <div>
         <div
-            class="flex justify-start items-start w-full h-[calc(100vh-110px)] overflow-y-auto overflow-x-hidden p-4"
+            class="flex flex-col justify-start items-start w-full h-[calc(100vh-110px)] py-4 lg:pl-4"
         >
+            <CashierCategoryPicker @category-select="categorySelect" />
             <CashierProductsList
+                v-if="productsData"
                 :data-source="productsData"
                 :loading="isLoading"
                 :show-pagination="true"
                 :current-page="getCurrentPage"
                 :rows-per-page="getRowsPerPage"
                 :total-pages="getTotalPages"
-                @previous-page="previousPageClick"
-                @next-page="nextPageClick"
-                @go-to-page="goToPage"
+                @previous-page="previousPageClick(fetch)"
+                @next-page="nextPageClick(fetch)"
+                @go-to-page="(page: number) => goToPage(page, fetch)"
             />
         </div>
     </div>

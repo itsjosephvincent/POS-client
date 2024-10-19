@@ -25,6 +25,7 @@ export interface Store {
     branch: string;
     username: string;
     is_active: boolean;
+    admin: Admin;
 }
 
 export interface Cashier {
@@ -33,6 +34,7 @@ export interface Cashier {
     role: string;
     username: string;
     uuid: string;
+    store: Store;
 }
 
 export interface Category {

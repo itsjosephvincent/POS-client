@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { Product } from '~/common/types';
+
 const props = defineProps<{
-    dataSource?: Array<object>;
+    dataSource?: Array<Product>;
     loading?: boolean;
     showPagination?: boolean;
     rowsPerPage?: number;
@@ -9,14 +11,15 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(['sortData', 'nextPage', 'previousPage', 'rowClick']);
+const isEmpty = computed(() => !props.dataSource.length);
 </script>
 
 <template>
-    <div class="w-full">
+    <div class="w-full h-[calc(100%-135px)] overflow-y-auto">
         <LoadingProductListSkeleton v-if="props.loading" />
         <div v-else class="w-full flex justify-center">
             <div
-                class="w-full md:max-w-[95%] flex flex-wrap justify-center md:justify-start items-start gap-4"
+                class="w-full flex flex-wrap justify-center md:justify-start items-start gap-4 mx-4"
             >
                 <CashierPurchaseListItem
                     v-for="item in props.dataSource"
@@ -27,7 +30,7 @@ const emit = defineEmits(['sortData', 'nextPage', 'previousPage', 'rowClick']);
         </div>
         <!-- Pagination Controls -->
         <div
-            v-if="props.showPagination && !props.loading"
+            v-if="props.showPagination && !props.loading && !isEmpty"
             class="w-full flex justify-center items-center mt-4 select-none"
         >
             <button
@@ -58,5 +61,6 @@ const emit = defineEmits(['sortData', 'nextPage', 'previousPage', 'rowClick']);
                 Next
             </button>
         </div>
+        <div v-if="isEmpty" class="my-6 mx-2">No items to show.</div>
     </div>
 </template>

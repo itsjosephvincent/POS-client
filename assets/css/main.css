@@ -47,6 +47,10 @@ body {
     background-color: transparent;
     width: 8px;
 }
+::-webkit-scrollbar:horizontal{
+    background-color: transparent;
+    height: 8px;
+}
 
 /* background of the scrollbar except button or resizer */
 ::-webkit-scrollbar-track {

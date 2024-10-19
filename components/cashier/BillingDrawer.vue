@@ -21,12 +21,12 @@ const getContainerCss = computed(() => {
 const getDrawerCss = computed(() => {
     if (viewport.isLessThan('desktop')) {
         if (openDrawer.value) {
-            return 'z-50 fixed bottom-0 left-0 h-screen w-screen transition-height duration-500 bg-secondaryBg';
+            return 'z-50 fixed bottom-0 left-0 h-screen w-screen duration-500 bg-secondaryBg';
         } else {
-            return 'z-50 fixed bottom-0 left-0 h-0 w-screen transition-height duration-500 bg-secondaryBg';
+            return 'z-50 fixed bottom-0 left-0 h-0 w-screen duration-500 bg-secondaryBg';
         }
     } else {
-        return 'z-50 lg:w-72 transition-height duration-500 h-screen flex flex-col bg-secondaryBg border-l border-primaryBorder';
+        return 'z-50 lg:w-72 duration-500 h-screen flex flex-col bg-secondaryBg border-l border-primaryBorder';
     }
 });
 const getButtonCss = computed(() => {
@@ -40,10 +40,26 @@ const getButtonCss = computed(() => {
 
 <template>
     <div :class="getContainerCss">
-        <Teleport
-            v-if="viewport.isLessThan('desktop') && !openDrawer"
-            to="body"
-        >
+        <div :class="['relative select-none', getDrawerCss]">
+            <IconSvg
+                @click="toggle"
+                v-if="viewport.isLessThan('desktop')"
+                icon="left"
+                size="1.5em"
+                class="cursor-pointer z-10 pt-6 pl-4"
+            />
+
+            <div class="w-full pt-2 px-2">
+                <CashierTableSelect />
+                <div class="font-bold text-lg text-primaryText mx-2 xl:mx-6">
+                    Billing Details
+                </div>
+            </div>
+            <CashierPurchaseBillingItems class="mt-2 grow" />
+            <CashierPurchaseBillingTotal class="" v-if="hasBilling" />
+            <CashierPurchaseBillingPayment class="" v-if="hasBilling" />
+        </div>
+        <Teleport v-if="viewport.isLessThan('tablet') && !openDrawer" to="body">
             <div
                 :class="[
                     'w-full flex justify-center px-2 fixed bottom-2 transition delay-[2000ms] ease-in-out',
@@ -57,22 +73,5 @@ const getButtonCss = computed(() => {
                 />
             </div>
         </Teleport>
-        <div :class="[getDrawerCss]">
-            <div class="w-full flex justify-start items-center gap-2 pt-2 px-2">
-                <IconSvg
-                    @click="openDrawer = false"
-                    v-if="viewport.isLessThan('desktop')"
-                    icon="left"
-                    size="1.5em"
-                    class="cursor-pointer"
-                />
-                <div class="font-bold text-lg text-primaryText mx-2 xl:mx-6">
-                    Billing Details
-                </div>
-            </div>
-            <CashierPurchaseBillingItems class="mt-10 grow" />
-            <CashierPurchaseBillingTotal class="" v-if="hasBilling" />
-            <CashierPurchaseBillingPayment class="" v-if="hasBilling" />
-        </div>
     </div>
 </template>

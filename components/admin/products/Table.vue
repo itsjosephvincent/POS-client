@@ -59,7 +59,7 @@ async function fetch() {
     try {
         isLoading.value = true;
         const params = {
-            admin_id: user?.id,
+            admin: user?.uuid,
             page: currentPage.value,
             sortField: sortField.value,
             sortOrder: sortOrder.value,
