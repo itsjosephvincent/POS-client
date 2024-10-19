@@ -1,18 +1,16 @@
 <script setup lang="ts">
-const billingStore = useBillingStore();
-onMounted(() => {});
-watch(
-    () => billingStore.getItems,
-    (items) => {},
-    { deep: true },
-);
+import type { BillingProduct } from '~/common/types';
 
-const billedItems = computed(() => billingStore.getItems);
+const transactionStore = useTransactionStore();
+const runningBillStore = useRunningBillStore();
+
+const billedItems = computed(() => runningBillStore.getProducts);
 </script>
 
 <template>
     <div class="w-full h-[calc(100vh-400px)] overflow-y-auto">
         <div
+            v-if="billedItems && billedItems.length"
             v-for="item in billedItems"
             class="px-4 py-2 flex justify-between items-center text-primaryText gap-2"
         >

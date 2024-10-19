@@ -68,7 +68,7 @@ const getButtonCss = computed(() => {
             >
                 <PrimaryButton
                     @click="toggle"
-                    label="Proceed New Order - P 200"
+                    label="Proceed New Order"
                     custom-class="bg-secondaryColor rounded-xl w-full text-white"
                 />
             </div>

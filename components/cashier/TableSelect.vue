@@ -1,15 +1,44 @@
 <script setup lang="ts">
 import { tableService } from '~/api/cashier/TableService';
-import type { Cashier, Table } from '~/common/types';
+import { runningBillService } from '~/api/cashier/RunningBillService';
+import {
+    TransactionMode,
+    type BillingProduct,
+    type Cashier,
+    type RunningBill,
+    type Table,
+} from '~/common/types';
+import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
 
 const userStore = useUserStore();
+const transactionStore = useTransactionStore();
+const runningBillStore = useRunningBillStore();
 const user: Cashier | null = userStore.getUser;
 
 const tables: Ref<Array<Table> | null> = ref(null);
+const selectModel = defineModel();
+const runningBills: Ref<Array<BillingProduct> | null> = ref(null);
 
 onMounted(() => {
     fetch();
+    if (transactionStore.getMode === TransactionMode.RunningBill) {
+        selectModel.value = runningBillStore.getTable;
+    }
 });
+watch(
+    () => selectModel.value,
+    (table_id: any) => {
+        if (!table_id || typeof parseInt(table_id, 10) !== 'number') return;
+        fetchRunningBill(table_id);
+        if (!tables.value) return;
+        const table = tables.value.find(
+            (item) => item.id === parseInt(table_id, 10),
+        );
+        if (!table) return;
+        transactionStore.setMode(TransactionMode.RunningBill); // Set TransactionStore
+        runningBillStore.setTable(table);
+    },
+);
 async function fetch() {
     try {
         const params = {
@@ -22,11 +51,39 @@ async function fetch() {
         console.error(error);
     }
 }
+async function fetchRunningBill(tableId: any) {
+    try {
+        console.log('fetch running bills table: ', tableId);
+        const params = {
+            table_id: tableId,
+        };
+        const response = await useRunningBillFetch().fetch(params);
+        if (!response)
+            throw 'No data fetched for running bills table: ' + tableId;
+        runningBills.value = response;
+        const runningBillProducts: Array<BillingProduct> = response.map(
+            (item: any) => {
+                return {
+                    id: item.product.id,
+                    uuid: item.product.uuid,
+                    name: item.product.name,
+                    cost: item.product.cost,
+                    price: item.product.price,
+                    quantity: item.quantity,
+                    image: item.product.image,
+                };
+            },
+        );
+        runningBillStore.setProducts(runningBillProducts);
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 const tableOptions = computed(() => {
     if (tables.value) {
         return tables.value.map((i: Table) => {
-            return { key: i.uuid, value: i.uuid, label: i.name };
+            return { key: i.id, value: i.id, label: i.name };
         });
     }
     return null;
@@ -42,6 +99,8 @@ const tableOptions = computed(() => {
             placeholder="Select Table"
             name="table"
             class="p-0"
+            v-model="selectModel"
+            :pre-selected-data="null"
         />
     </div>
 </template>

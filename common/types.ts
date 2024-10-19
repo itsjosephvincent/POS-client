@@ -55,6 +55,16 @@ export interface Product {
     inventory: number;
 }
 
+export interface BillingProduct {
+    id: number;
+    uuid: string;
+    name: string;
+    cost: number;
+    price: number;
+    quantity: number;
+    image: string;
+}
+
 export interface Table {
     id: number;
     uuid: string;
@@ -62,9 +72,29 @@ export interface Table {
     name: string;
 }
 
+export interface TableOption {
+    id: number;
+    name: string;
+}
+
+export interface RunningBill {
+    id: number;
+    uuid: string;
+    table_id: number;
+    product_id: number;
+    quantity: number;
+    price: number;
+    is_voided: boolean;
+}
+
 /** Type for Data Table component columns */
 export interface DataTableColumns {
     key: string;
     label: string;
     sortable?: boolean;
+}
+
+export enum TransactionMode {
+    RunningBill = 'RUNNING_BILL',
+    Cart = 'CART',
 }
