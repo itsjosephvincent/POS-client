@@ -95,23 +95,23 @@ async function updateRunningBill() {
         const response = await runningBillService.create(params);
         if (!response.data) throw 'Error no response.';
         console.log(response.data);
-        runningBillsRefetch(table.id);
+        runningBillsRefetch(table.uuid);
     } catch (error: any) {
         console.error(error);
         alert(error.getErrorMessage());
     }
 }
-async function runningBillsRefetch(tableId: any) {
+async function runningBillsRefetch(table_uuid: any) {
     try {
         loadingStore.setLoading(true);
-        console.log('fetch running bills table: ', tableId);
+        console.log('fetch running bills table: ', table_uuid);
         const params = {
-            table_id: tableId,
+            table: table_uuid,
         };
         const response = await useRunningBillFetch().fetch(params);
         loadingStore.setLoading(false);
         if (!response)
-            throw 'No data fetched for running bills table: ' + tableId;
+            throw 'No data fetched for running bills table: ' + table_uuid;
         const runningBillProducts: Array<BillingProduct> = response.map(
             (item: any) => {
                 return {

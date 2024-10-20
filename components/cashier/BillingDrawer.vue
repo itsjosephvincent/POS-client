@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { useBillingStore } from '~/stores/billing.js';
-
-const store = useBillingStore();
 const viewport = useViewport();
 
 const runningBillStore = useRunningBillStore();
@@ -11,7 +8,6 @@ function toggle() {
     openDrawer.value = !openDrawer.value;
 }
 
-const hasBilling = computed(() => store.getItems.length > 0);
 const getContainerCss = computed(() => {
     if (viewport.isLessThan('desktop')) {
         if (openDrawer.value) {
@@ -40,7 +36,7 @@ const getButtonCss = computed(() => {
 });
 
 const ordersLabel = computed(() =>
-    runningBillStore.getTable ? `${runningBillStore.getTable.name} ` : '',
+    runningBillStore.getTable ? `- ${runningBillStore.getTable.name} ` : '',
 );
 </script>
 
@@ -58,13 +54,13 @@ const ordersLabel = computed(() =>
             <div class="w-full pt-2 px-2">
                 <CashierTableSelect />
                 <div class="font-bold text-primaryText mx-2 xl:mx-4">
-                    <span class="font-normal">Orders - </span>
-                    <span>{{ ordersLabel }}</span>
+                    <span class="font-normal">Orders </span>
+                    <span> {{ ordersLabel }}</span>
                 </div>
             </div>
             <CashierPurchaseBillingItems class="mt-2 grow" />
-            <CashierPurchaseBillingTotal class="" v-if="hasBilling" />
-            <CashierPurchaseBillingPayment class="" v-if="hasBilling" />
+            <CashierPurchaseBillingTotal class="" />
+            <CashierPurchaseBillingPayment class="" />
         </div>
         <Teleport v-if="viewport.isLessThan('tablet') && !openDrawer" to="body">
             <div

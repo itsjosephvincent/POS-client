@@ -29,13 +29,11 @@ onMounted(() => {
 });
 watch(
     () => selectModel.value,
-    (table_id: any) => {
-        if (!table_id || typeof parseInt(table_id, 10) !== 'number') return;
-        fetchRunningBill(table_id);
+    (table_uuid: any) => {
+        if (!table_uuid) return;
+        fetchRunningBill(table_uuid);
         if (!tables.value) return;
-        const table = tables.value.find(
-            (item) => item.id === parseInt(table_id, 10),
-        );
+        const table = tables.value.find((item) => item.uuid === table_uuid);
         if (!table) return;
         transactionStore.setMode(TransactionMode.RunningBill); // Set TransactionStore
         runningBillStore.setTable(table);
@@ -56,17 +54,17 @@ async function fetch() {
         console.error(error);
     }
 }
-async function fetchRunningBill(tableId: any) {
+async function fetchRunningBill(table_uuid: any) {
     try {
         loadingStore.setLoading(true);
-        console.log('fetch running bills table: ', tableId);
+        console.log('fetch running bills table: ', table_uuid);
         const params = {
-            table_id: tableId,
+            table: table_uuid,
         };
         const response = await useRunningBillFetch().fetch(params);
         loadingStore.setLoading(false);
         if (!response)
-            throw 'No data fetched for running bills table: ' + tableId;
+            throw 'No data fetched for running bills table: ' + table_uuid;
         runningBills.value = response;
         const runningBillProducts: Array<BillingProduct> = response.map(
             (item: any) => {
@@ -91,7 +89,7 @@ async function fetchRunningBill(tableId: any) {
 const tableOptions = computed(() => {
     if (tables.value) {
         return tables.value.map((i: Table) => {
-            return { key: i.id, value: i.id, label: i.name };
+            return { key: i.uuid, value: i.uuid, label: i.name };
         });
     }
     return null;

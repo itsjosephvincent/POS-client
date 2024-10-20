@@ -32,7 +32,7 @@ async function updateBills() {
         loadingStore.setLoading(true);
         if (!runningBillStore.getTable) throw 'No table data.';
         const params = {
-            table_id: runningBillStore.getTable.id,
+            table: runningBillStore.getTable.uuid,
         };
         const response = await useRunningBillFetch().fetch(params);
         loadingStore.setLoading(false);
