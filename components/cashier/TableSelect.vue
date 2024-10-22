@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { tableService } from '~/api/cashier/TableService';
-import { runningBillService } from '~/api/cashier/RunningBillService';
 import {
     TransactionMode,
     type BillingProduct,
     type Cashier,
-    type RunningBill,
     type Table,
 } from '~/common/types';
 import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
 
+const emit = defineEmits(['tableSelect']);
 const userStore = useUserStore();
 const loadingStore = useLoadingStore();
 const transactionStore = useTransactionStore();
@@ -32,6 +31,7 @@ watch(
     (table_uuid: any) => {
         if (!table_uuid) return;
         fetchRunningBill(table_uuid);
+        emit('tableSelect', table_uuid);
         if (!tables.value) return;
         const table = tables.value.find((item) => item.uuid === table_uuid);
         if (!table) return;

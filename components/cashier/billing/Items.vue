@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import type { BillingProduct } from '~/common/types';
+import { TransactionMode } from '~/common/types';
 
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
 
-const billedItems = computed(() => runningBillStore.getProducts);
+const billedItems = computed(() =>
+    transactionStore.getMode === TransactionMode.Cart
+        ? []
+        : runningBillStore.getProducts,
+);
 </script>
 
 <template>

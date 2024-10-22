@@ -34,10 +34,6 @@ const getButtonCss = computed(() => {
         return 'opacity-100';
     }
 });
-
-const ordersLabel = computed(() =>
-    runningBillStore.getTable ? `- ${runningBillStore.getTable.name} ` : '',
-);
 </script>
 
 <template>
@@ -50,17 +46,11 @@ const ordersLabel = computed(() =>
                 size="1.5em"
                 class="cursor-pointer z-10 pt-6 pl-4"
             />
-
-            <div class="w-full pt-2 px-2">
-                <CashierTableSelect />
-                <div class="font-bold text-primaryText mx-2 xl:mx-4">
-                    <span class="font-normal">Orders </span>
-                    <span> {{ ordersLabel }}</span>
-                </div>
-            </div>
-            <CashierPurchaseBillingItems class="mt-2 grow" />
-            <CashierPurchaseBillingTotal class="" />
-            <CashierPurchaseBillingPayment class="" />
+            <CashierBillingTabs />
+            <CashierBillingTables />
+            <CashierBillingItems class="mt-2 grow" />
+            <CashierBillingTotal />
+            <CashierBillingPayment />
         </div>
         <Teleport v-if="viewport.isLessThan('tablet') && !openDrawer" to="body">
             <div

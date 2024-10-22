@@ -21,7 +21,7 @@ const isEmpty = computed(() => !props?.dataSource?.length || false);
             <div
                 class="w-full flex flex-wrap justify-center md:justify-start items-start gap-4 mx-4"
             >
-                <CashierPurchaseListItem
+                <CashierListItem
                     v-for="item in props.dataSource"
                     :key="item.id"
                     :product-data="item"

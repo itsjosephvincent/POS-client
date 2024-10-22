@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { productService } from '~/api/cashier/ProductService';
 import type { Cashier, Product } from '~/common/types';
-import type admin from '~/middleware/admin';
 
 definePageMeta({
     middleware: ['cashier'],
@@ -70,7 +69,7 @@ function categorySelect(uuid: string | null) {
 <template>
     <div>
         <div
-            class="flex flex-col justify-start items-start w-full h-[calc(100vh-110px)] py-4 lg:pl-4"
+            class="flex flex-col justify-start items-start w-full h-[calc(100vh-72px)] pt-4 lg:pl-4"
         >
             <CashierCategoryPicker @category-select="categorySelect" />
             <CashierProductsList
