@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { TransactionMode } from '~/common/types';
+
 const viewport = useViewport();
 
-const runningBillStore = useRunningBillStore();
+const transactionStore = useTransactionStore();
 
 const openDrawer = ref(false);
 function toggle() {
@@ -47,7 +49,9 @@ const getButtonCss = computed(() => {
                 class="cursor-pointer z-10 pt-6 pl-4"
             />
             <CashierBillingTabs />
-            <CashierBillingTables />
+            <CashierBillingTables
+                v-if="transactionStore.getMode === TransactionMode.RunningBill"
+            />
             <CashierBillingItems class="mt-2 grow" />
             <CashierBillingTotal />
             <CashierBillingPayment />

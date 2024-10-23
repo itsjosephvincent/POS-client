@@ -87,6 +87,16 @@ export interface RunningBill {
     is_voided: boolean;
 }
 
+export interface Cart {
+    id: number;
+    uuid: string;
+    table_id: number;
+    product_id: number;
+    quantity: number;
+    price: number;
+    is_voided: boolean;
+}
+
 /** Type for Data Table component columns */
 export interface DataTableColumns {
     key: string;

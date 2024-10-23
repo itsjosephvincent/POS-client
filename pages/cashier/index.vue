@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { productService } from '~/api/cashier/ProductService';
-import type { Cashier, Product } from '~/common/types';
+import type { BillingProduct, Cashier, Product } from '~/common/types';
 
 definePageMeta({
     middleware: ['cashier'],
@@ -30,7 +30,7 @@ const {
     goToPage,
 } = usePagination();
 const isLoading: Ref<boolean> = ref(true);
-const productsData: Ref<Array<Product> | null> = ref(null);
+const productsData: Ref<Array<BillingProduct> | null> = ref(null);
 
 onMounted(() => {
     pageStore.setPage(pageTitle);

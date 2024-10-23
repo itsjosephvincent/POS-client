@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { TransactionMode, Table } from '~/common/types';
+import { TransactionMode, Table } from '~/common/types';
 
 interface TransactionState {
     mode: TransactionMode | null;
@@ -8,7 +8,7 @@ export const useTransactionStore = defineStore(
     'transaction',
     () => {
         const state: TransactionState = reactive({
-            mode: null,
+            mode: TransactionMode.RunningBill,
         });
 
         function setMode(mode: TransactionMode, table: Table | null = null) {

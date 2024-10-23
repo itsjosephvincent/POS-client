@@ -6,9 +6,11 @@ import {
 } from '~/common/types';
 import { runningBillService } from '~/api/cashier/RunningBillService';
 import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
+import { cartService } from '~/api/cashier/CartService';
 
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
+const cartStore = useCartStore();
 const loadingStore = useLoadingStore();
 const props = defineProps<{
     productData: BillingProduct;
@@ -19,13 +21,29 @@ const quantity: Ref<number> = ref(0);
 const isAdded = ref(false);
 watch(
     () => runningBillStore.getProducts,
-    (value) => {
-        updateRunningBillItems();
+    () => {
+        if (transactionStore.getMode === TransactionMode.RunningBill)
+            checkAddedProducts();
     },
     { deep: true, immediate: true },
 );
-function updateRunningBillItems() {
-    const products: Array<BillingProduct> = runningBillStore.getProducts;
+watch(
+    () => cartStore.getProducts,
+    () => {
+        if (transactionStore.getMode === TransactionMode.Cart)
+            checkAddedProducts();
+    },
+    { deep: true, immediate: true },
+);
+
+/**
+ * Checks and updates the css of current Product Card if it was added in Cart/Running Bill
+ */
+function checkAddedProducts() {
+    const products: Array<BillingProduct> =
+        transactionStore.getMode === TransactionMode.Cart
+            ? cartStore.getProducts
+            : runningBillStore.getProducts;
     let item = products.find(
         (i: BillingProduct) => i.uuid === props.productData.uuid,
     );
@@ -39,43 +57,37 @@ function updateRunningBillItems() {
 }
 function increment() {
     quantity.value++;
-    // if (isAdded.value) {
-    //     transactionStore.removeProduct(props.productData.uuid);
-    // }
-    // transactionStore.addProduct({
-    //     id: props.productData.id,
-    //     uuid: props.productData.uuid,
-    //     name: props.productData.name,
-    //     cost: props.productData.cost,
-    //     price: props.productData.price,
-    //     quantity: quantity.value,
-    //     image: props.productData.image,
-    // });
 }
 function decrement() {
     quantity.value = quantity.value <= 0 ? 0 : quantity.value - 1;
-    // if (quantity.value <= 0) {
-    //     transactionStore.removeProduct(props.productData.uuid);
-    //     return;
-    // }
-    // if (isAdded.value) {
-    //     transactionStore.removeProduct(props.productData.uuid);
-    // }
-    // transactionStore.addProduct({
-    //     id: props.productData.id,
-    //     uuid: props.productData.uuid,
-    //     name: props.productData.name,
-    //     cost: props.productData.cost,
-    //     price: props.productData.price,
-    //     quantity: quantity.value,
-    //     image: props.productData.image,
-    // });
 }
 async function addToTransaction() {
     isLoading.value = true;
     if (transactionStore.getMode === TransactionMode.RunningBill) {
         await updateRunningBill();
         isLoading.value = false;
+    } else {
+        await updateCart();
+        isLoading.value = false;
+    }
+}
+async function updateCart() {
+    if (transactionStore.getMode !== TransactionMode.Cart) return;
+    try {
+        const product: BillingProduct = props.productData;
+        const params = {
+            product_uuid: product.uuid,
+            product_id: product.id,
+            quantity: quantity.value,
+            price: product.price,
+        };
+        const response = await cartService.create(params);
+        if (!response.data) throw 'Error no response.';
+        console.log(response.data);
+        cartRefetch();
+    } catch (error: any) {
+        console.error(error);
+        alert(error.getErrorMessage());
     }
 }
 async function updateRunningBill() {
@@ -99,6 +111,33 @@ async function updateRunningBill() {
     } catch (error: any) {
         console.error(error);
         alert(error.getErrorMessage());
+    }
+}
+async function cartRefetch() {
+    try {
+        loadingStore.setLoading(true);
+        console.log('fetch cart');
+        const params = {};
+        const response = await cartService.fetch(params);
+        loadingStore.setLoading(false);
+        if (!response.data) throw 'No data fetched for cart ';
+        const cartProducts: Array<BillingProduct> = response.data.map(
+            (item: any) => {
+                return {
+                    id: item.product.id,
+                    uuid: item.product.uuid,
+                    name: item.product.name,
+                    cost: item.product.cost,
+                    price: item.product.price,
+                    quantity: item.quantity,
+                    image: item.product.image,
+                };
+            },
+        );
+        cartStore.setProducts(cartProducts);
+    } catch (error) {
+        loadingStore.setLoading(false);
+        console.error(error);
     }
 }
 async function runningBillsRefetch(table_uuid: any) {
@@ -140,6 +179,8 @@ const getBorderClass = computed(() =>
 const canOrder = computed((): boolean => {
     if (transactionStore.getMode === TransactionMode.RunningBill) {
         return !!runningBillStore.getTable && quantity.value > 0;
+    } else if (transactionStore.getMode === TransactionMode.Cart) {
+        return quantity.value > 0;
     }
     return false;
 });

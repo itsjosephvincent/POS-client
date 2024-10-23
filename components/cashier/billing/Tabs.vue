@@ -1,18 +1,59 @@
 <script setup lang="ts">
-import { TransactionMode } from '~/common/types';
+import { cartService } from '~/api/cashier/CartService';
+import { TransactionMode, type BillingProduct } from '~/common/types';
 
 const transactionStore = useTransactionStore();
+const cartStore = useCartStore();
+const userStore = useUserStore();
+const loadingStore = useLoadingStore();
+
+function tabClick(mode: TransactionMode) {
+    transactionStore.setMode(mode);
+    if (mode === TransactionMode.Cart) {
+        cartFetch();
+    }
+}
+
+async function cartFetch() {
+    try {
+        loadingStore.setLoading(true);
+        console.log('fetch cart');
+        const params = {};
+        const response = await cartService.fetch(params);
+        loadingStore.setLoading(false);
+        if (!response.data) throw 'No data fetched for cart ';
+        const cartProducts: Array<BillingProduct> = response.data.map(
+            (item: any) => {
+                return {
+                    id: item.product.id,
+                    uuid: item.product.uuid,
+                    name: item.product.name,
+                    cost: item.product.cost,
+                    price: item.product.price,
+                    quantity: item.quantity,
+                    image: item.product.image,
+                };
+            },
+        );
+        cartStore.setProducts(cartProducts);
+    } catch (error) {
+        loadingStore.setLoading(false);
+        console.error(error);
+    }
+}
 
 const baseClass = computed(() => 'font-bold text-primaryText');
 const activeClass = computed(
-    () => 'p-2 font-bold text-secondaryColor border-b-2 border-secondaryColor',
+    () => 'font-bold text-secondaryColor border-b-2 border-secondaryColor',
 );
 </script>
 
 <template>
     <div class="w-full m-4 flex justify-start items-center gap-4">
         <div
+            @click="tabClick(TransactionMode.RunningBill)"
             :class="[
+                'p-2 cursor-pointer',
                 transactionStore.getMode === TransactionMode.RunningBill
                     ? activeClass
                     : baseClass,
@@ -21,7 +62,9 @@ const activeClass = computed(
             Dine In
         </div>
         <div
+            @click="tabClick(TransactionMode.Cart)"
             :class="[
+                'p-2 cursor-pointer',
                 transactionStore.getMode === TransactionMode.Cart
                     ? activeClass
                     : baseClass,

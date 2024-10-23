@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Product } from '~/common/types';
+import type { BillingProduct } from '~/common/types';
 
 const props = defineProps<{
-    dataSource?: Array<Product> | null;
+    dataSource?: Array<BillingProduct> | null;
     loading?: boolean;
     showPagination?: boolean;
     rowsPerPage?: number;
@@ -21,7 +21,7 @@ const isEmpty = computed(() => !props?.dataSource?.length || false);
             <div
                 class="w-full flex flex-wrap justify-center md:justify-start items-start gap-4 mx-4"
             >
-                <CashierListItem
+                <CashierProductCard
                     v-for="item in props.dataSource"
                     :key="item.id"
                     :product-data="item"
