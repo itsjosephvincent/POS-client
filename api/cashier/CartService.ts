@@ -18,15 +18,12 @@ export class CartService extends BaseAPIService {
     async create(params: object) {
         return await this.request(`/cashier/carts`, 'POST', params);
     }
-    async update(params: object, uuid: string) {
+    async void(params: object, uuid: string) {
         return await this.request(
             `/cashier/carts/${uuid}?_method=PUT`,
             'POST',
             params,
         );
-    }
-    async delete(uuid: string) {
-        return await this.request(`/cashier/carts/${uuid}`, 'DELETE');
     }
 }
 

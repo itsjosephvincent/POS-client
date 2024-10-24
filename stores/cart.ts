@@ -44,5 +44,5 @@ export const useCartStore = defineStore(
             getTotal,
         };
     },
-    { persist: false },
+    { persist: true },
 );

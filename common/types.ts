@@ -63,6 +63,7 @@ export interface BillingProduct {
     price: number;
     quantity: number;
     image: string;
+    is_voided: boolean;
 }
 
 export interface Table {

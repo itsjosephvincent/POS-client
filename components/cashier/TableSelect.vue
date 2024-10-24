@@ -49,6 +49,7 @@ async function fetch() {
         isFetching.value = false;
         if (!response.data) throw 'Unable to fetch tables.';
         tables.value = response.data;
+        runningBillStore.setTable(response.data[0]);
     } catch (error) {
         isFetching.value = false;
         console.error(error);
@@ -70,12 +71,13 @@ async function fetchRunningBill(table_uuid: any) {
             (item: any) => {
                 return {
                     id: item.product.id,
-                    uuid: item.product.uuid,
+                    uuid: item.uuid,
                     name: item.product.name,
                     cost: item.product.cost,
                     price: item.product.price,
                     quantity: item.quantity,
                     image: item.product.image,
+                    is_voided: item.is_voided,
                 };
             },
         );
@@ -85,7 +87,16 @@ async function fetchRunningBill(table_uuid: any) {
         console.error(error);
     }
 }
-
+interface SelectOption {
+    key: string;
+    value: string;
+    label: string;
+}
+const selectedTableOption = computed((): SelectOption | null => {
+    let i = runningBillStore.getTable;
+    if (!i) return null;
+    return { key: i.uuid, value: i.uuid, label: i.name };
+});
 const tableOptions = computed(() => {
     if (tables.value) {
         return tables.value.map((i: Table) => {
@@ -103,15 +114,13 @@ const tableOptions = computed(() => {
                 class="animate-pulse w-full h-[35px] my-4 bg-slate-200 rounded-xl"
             ></div>
         </div>
-        <FormSelect
+        <FormSelectNew
             v-if="tables && !isFetching"
-            :options="tableOptions"
-            label="Table"
-            placeholder="Select Table"
             name="table"
-            class="p-0"
+            placeholder="Select Table"
+            :options="tableOptions"
+            :pre-selected-data="selectedTableOption"
             v-model="selectModel"
-            :pre-selected-data="null"
         />
     </div>
 </template>

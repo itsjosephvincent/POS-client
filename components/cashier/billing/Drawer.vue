@@ -14,6 +14,8 @@ const getContainerCss = computed(() => {
     if (viewport.isLessThan('desktop')) {
         if (openDrawer.value) {
             return 'h-screen w-screen fixed bottom-0 left-0 bg-gray-700/70';
+        } else {
+            return 'h-0 w-screen fixed bottom-0 left-0 bg-gray-700/70';
         }
     }
     return '';
@@ -26,7 +28,7 @@ const getDrawerCss = computed(() => {
             return 'z-20 fixed bottom-0 left-0 h-0 w-screen duration-500 bg-secondaryBg';
         }
     } else {
-        return 'z-20 lg:w-72 duration-500 h-screen flex flex-col bg-secondaryBg border-l border-primaryBorder';
+        return 'z-20 lg:w-[400px] duration-500 h-screen flex flex-col bg-secondaryBg border-l border-primaryBorder';
     }
 });
 const getButtonCss = computed(() => {
@@ -56,7 +58,10 @@ const getButtonCss = computed(() => {
             <CashierBillingTotal />
             <CashierBillingPayment />
         </div>
-        <Teleport v-if="viewport.isLessThan('tablet') && !openDrawer" to="body">
+        <Teleport
+            v-if="viewport.isLessThan('desktop') && !openDrawer"
+            to="body"
+        >
             <div
                 :class="[
                     'w-full flex justify-center px-2 fixed bottom-2 transition delay-[2000ms] ease-in-out',

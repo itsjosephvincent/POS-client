@@ -26,12 +26,13 @@ async function cartFetch() {
             (item: any) => {
                 return {
                     id: item.product.id,
-                    uuid: item.product.uuid,
+                    uuid: item.uuid,
                     name: item.product.name,
                     cost: item.product.cost,
                     price: item.product.price,
                     quantity: item.quantity,
                     image: item.product.image,
+                    is_voided: item.is_voided,
                 };
             },
         );
@@ -49,7 +50,7 @@ const activeClass = computed(
 </script>
 
 <template>
-    <div class="w-full m-4 flex justify-start items-center gap-4">
+    <div class="w-full mx-2 mt-2 flex justify-start items-center gap-4">
         <div
             @click="tabClick(TransactionMode.RunningBill)"
             :class="[

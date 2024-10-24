@@ -1,20 +1,33 @@
 <script setup lang="ts">
 import { orderService } from '~/api/cashier/OrderService';
+import { TransactionMode } from '~/common/types';
 import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
 
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
+const cartStore = useCartStore();
 const loadingStore = useLoadingStore();
 const isPaymentMethod = ref(false);
 const isLoading: Ref<boolean> = ref(false);
 
+interface OrderRequestParams {
+    table_uuid?: string;
+    payment: number;
+}
+
 async function processTableOrder() {
     try {
         isLoading.value = true;
-        if (!runningBillStore.getTable) throw 'No table data.';
-        const params = {
-            table_uuid: runningBillStore.getTable?.uuid,
+        let params: OrderRequestParams = {
+            payment:
+                transactionStore.getMode === TransactionMode.RunningBill
+                    ? runningBillStore.getTotal
+                    : cartStore.getTotal,
         };
+        if (transactionStore.getMode === TransactionMode.RunningBill) {
+            if (!runningBillStore.getTable) throw 'No table data.';
+            params.table_uuid = runningBillStore.getTable?.uuid;
+        }
         const response = await orderService.create(params);
         isLoading.value = false;
         if (!response.data) throw 'Error in creating order';

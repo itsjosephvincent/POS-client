@@ -27,5 +27,5 @@ export const useTransactionStore = defineStore(
             getMode,
         };
     },
-    { persist: false },
+    { persist: true },
 );
