@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import { TransactionMode } from '~/common/types';
+import { orderService } from '~/api/cashier/OrderService';
+import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
 
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
 const cartStore = useCartStore();
+const loadingStore = useLoadingStore();
+const isPaymentMethod = ref(false);
+const isLoading: Ref<boolean> = ref(false);
 
+interface OrderRequestParams {
+    table_uuid?: string;
+    payment: number;
+}
 function processOrderClick() {
     transactionStore.setPayment(true);
 }
@@ -14,6 +23,47 @@ const total = computed(() =>
         ? runningBillStore.getTotal
         : cartStore.getTotal,
 );
+async function processTableOrder() {
+    try {
+        isLoading.value = true;
+        let params: OrderRequestParams = {
+            payment:
+                transactionStore.getMode === TransactionMode.RunningBill
+                    ? runningBillStore.getTotal
+                    : cartStore.getTotal,
+        };
+        if (transactionStore.getMode === TransactionMode.RunningBill) {
+            if (!runningBillStore.getTable) throw 'No table data.';
+            params.table_uuid = runningBillStore.getTable?.uuid;
+        }
+        const response = await orderService.create(params);
+        isLoading.value = false;
+        if (!response.data) throw 'Error in creating order';
+        alert(
+            `Successfully processed Order number: ${response.data.order_number}`,
+        );
+        updateBills();
+    } catch (error) {
+        console.error(error);
+        isLoading.value = false;
+    }
+}
+async function updateBills() {
+    try {
+        loadingStore.setLoading(true);
+        if (!runningBillStore.getTable) throw 'No table data.';
+        const params = {
+            table: runningBillStore.getTable.uuid,
+        };
+        const response = await useRunningBillFetch().fetch(params);
+        loadingStore.setLoading(false);
+        if (!response) throw 'No data fetched for running bills table';
+        runningBillStore.setProducts(response);
+    } catch (error) {
+        loadingStore.setLoading(false);
+        console.error(error);
+    }
+}
 </script>
 
 <template>
@@ -37,10 +87,11 @@ const total = computed(() =>
         </div>
         <div class="flex justify-center items-center">
             <PrimaryButton
-                @click="processOrderClick"
                 label="Process Order"
-                class="w-full bg-primaryColor"
-                custom-class="bg-secondaryColor text-white m-2"
+                :loading="isLoading"
+                class="bg-primaryColor"
+                @click="processTableOrder"
+                custom-class="bg-secondaryColor text-white w-full m-2"
             />
         </div>
     </div>
