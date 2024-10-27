@@ -1,5 +1,4 @@
 import { useUserStore } from '~/stores/user.js'
-import { authService } from '~/components/api/AuthService.js'
 
 export default defineNuxtRouteMiddleware(async (from, to) => {
     // skip middleware on server
@@ -23,7 +22,7 @@ export default defineNuxtRouteMiddleware(async (from, to) => {
             console.error(error)
             authService.revokeAccess()
             userStore.resetUser()
-           return navigateTo('/admin/login') 
+            return navigateTo('/admin/login')
         }
     }
 })
