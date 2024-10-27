@@ -16,7 +16,11 @@ async function logout() {
     localStorage.removeItem('_token');
     userStore.resetUser();
     pageStore.resetPageData();
-    await navigateTo(`/${role.toLowerCase()}/login`);
+    if (role === 'Admin') {
+        await navigateTo(`/`);
+    } else {
+        await navigateTo(`/${role.toLowerCase()}/login`);
+    }
 }
 function toggleOpen() {
     isOpen.value = !isOpen.value;
