@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { authService } from '~/api/admin/AuthService';
-
-navigateTo('/admin/login'); // redirect for now
+import { useUserStore } from '~/stores/user';
 
 definePageMeta({
     middleware: ['login'],
 });
+useHead({
+    title: 'Kahera | Admin Login',
+});
+
 const userStore = useUserStore();
 const hasError = ref(false);
 const errorMessage = ref('');
