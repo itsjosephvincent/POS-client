@@ -31,7 +31,7 @@ const isEmpty = computed(() => !props?.dataSource?.length || false);
         <!-- Pagination Controls -->
         <div
             v-if="props.showPagination && !props.loading && !isEmpty"
-            class="w-full flex justify-center items-center mt-4 select-none"
+            class="w-full flex justify-center items-center mt-4 mb-16 select-none"
         >
             <button
                 :disabled="props.currentPage === 1"

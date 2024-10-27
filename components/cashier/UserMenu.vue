@@ -31,7 +31,7 @@ const displayCss = computed(() =>
 </script>
 
 <template>
-    <div class="relative z-50 flex justify-center">
+    <div class="relative z-10 flex justify-center">
         <div class="px-4 flex items-center gap-4">
             <div class="hidden md:flex flex-col justify-center items-start">
                 <div class="text-xs text-secondaryText font-bold">

@@ -4,16 +4,19 @@ import { TransactionMode } from '~/common/types';
 const viewport = useViewport();
 
 const transactionStore = useTransactionStore();
+const runningBillStore = useRunningBillStore();
+const cartStore = useCartStore();
 
-const openDrawer = ref(false);
+const openDrawerMobile: Ref<boolean> = ref(false);
+
 function toggle() {
-    openDrawer.value = !openDrawer.value;
+    openDrawerMobile.value = !openDrawerMobile.value;
 }
 
 const getContainerCss = computed(() => {
     if (viewport.isLessThan('desktop')) {
-        if (openDrawer.value) {
-            return 'h-screen w-screen fixed bottom-0 left-0 bg-gray-700/70';
+        if (openDrawerMobile.value) {
+            return 'z-20 h-screen w-screen fixed bottom-0 left-0 bg-gray-700/70';
         } else {
             return 'h-0 w-screen fixed bottom-0 left-0 bg-gray-700/70';
         }
@@ -22,44 +25,55 @@ const getContainerCss = computed(() => {
 });
 const getDrawerCss = computed(() => {
     if (viewport.isLessThan('desktop')) {
-        if (openDrawer.value) {
-            return 'z-20 fixed bottom-0 left-0 h-screen w-screen duration-500 bg-secondaryBg';
-        } else {
-            return 'z-20 fixed bottom-0 left-0 h-0 w-screen duration-500 bg-secondaryBg';
-        }
+        return 'select-none z-20 fixed bottom-0 left-0 h-screen w-screen duration-500 bg-secondaryBg';
     } else {
-        return 'z-20 lg:w-[400px] duration-500 h-screen flex flex-col bg-secondaryBg border-l border-primaryBorder';
+        return 'z-20 w-[400px] h-screen flex flex-col bg-secondaryBg border-l border-primaryBorder';
     }
 });
 const getButtonCss = computed(() => {
-    if (openDrawer.value) {
+    if (openDrawerMobile.value) {
         return ' opacity-0';
     } else {
         return 'opacity-100';
+    }
+});
+const displayDrawer = computed(() => {
+    if (viewport.isLessThan('desktop')) {
+        return openDrawerMobile.value;
+    } else {
+        return true;
+    }
+});
+const buttonLabelMobile = computed(() => {
+    if (transactionStore.getMode === TransactionMode.RunningBill) {
+        let total = runningBillStore.getTotal;
+        return `${runningBillStore?.getTable?.name} - P${(total + total * 0.1).toFixed(2)}`;
+    } else {
+        let total = runningBillStore.getTotal;
+        return `Cart - P${(total + total * 0.1).toFixed(2)}`;
     }
 });
 </script>
 
 <template>
     <div :class="getContainerCss">
-        <div :class="['relative select-none', getDrawerCss]">
-            <IconSvg
-                @click="toggle"
-                v-if="viewport.isLessThan('desktop')"
-                icon="left"
-                size="1.5em"
-                class="cursor-pointer z-10 pt-6 pl-4"
-            />
-            <CashierBillingTabs />
-            <CashierBillingTables
-                v-if="transactionStore.getMode === TransactionMode.RunningBill"
-            />
-            <CashierBillingItems class="mt-2 grow" />
-            <CashierBillingTotal />
-            <CashierBillingPayment />
-        </div>
+        <Transition name="slide-up">
+            <div
+                v-show="displayDrawer"
+                :class="[
+                    getDrawerCss,
+                    'flex flex-col justify-start items-start',
+                ]"
+            >
+                <CashierBillingOrders
+                    v-show="!transactionStore.isPayment"
+                    @drawer-toggle="toggle"
+                />
+                <CashierBillingPayment v-show="transactionStore.isPayment" />
+            </div>
+        </Transition>
         <Teleport
-            v-if="viewport.isLessThan('desktop') && !openDrawer"
+            v-if="viewport.isLessThan('desktop') && !openDrawerMobile"
             to="body"
         >
             <div
@@ -70,10 +84,26 @@ const getButtonCss = computed(() => {
             >
                 <PrimaryButton
                     @click="toggle"
-                    label="Proceed New Order"
+                    :label="buttonLabelMobile"
                     custom-class="bg-secondaryColor rounded-xl w-full text-white"
                 />
             </div>
         </Teleport>
     </div>
 </template>
+<style scoped>
+.slide-up-enter-active,
+.slide-up-leave-active {
+    transition: transform 0.5s ease;
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+    transform: translateY(100%);
+}
+
+.slide-up-enter-to,
+.slide-up-leave-from {
+    transform: translateY(0);
+}
+</style>

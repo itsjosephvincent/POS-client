@@ -59,28 +59,13 @@ async function updateBills() {
 </script>
 
 <template>
-    <div class="mx-2 xl:mx-2 mb-4 flex flex-col gap-4">
-        <div v-if="isPaymentMethod" class="font-bold text-lg text-primaryText">
-            Payment Method
-        </div>
-        <div v-if="isPaymentMethod" class="flex gap-6 justify-start">
-            <div
-                class="p-4 rounded-xl bg-slate-200 cursor-pointer hover:bg-slate-400"
-            >
-                <IconSvg icon="cash" />
-            </div>
-            <div
-                class="p-4 rounded-xl bg-slate-200 cursor-pointer hover:bg-slate-400"
-            >
-                <IconSvg icon="creditCard" />
-            </div>
-        </div>
-        <PrimaryButton
-            label="Process Order"
-            :loading="isLoading"
-            class="bg-primaryColor"
-            @click="processTableOrder"
-            custom-class="bg-secondaryColor text-white w-full"
+    <div class="w-full h-full flex flex-col justify-start items-start">
+        <IconSvg
+            @click="transactionStore.setPayment(false)"
+            icon="left"
+            size="1.5em"
+            class="cursor-pointer z-10 pt-6 pl-4"
         />
+        <h1>Payment</h1>
     </div>
 </template>

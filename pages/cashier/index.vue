@@ -69,7 +69,7 @@ function categorySelect(uuid: string | null) {
 <template>
     <div>
         <div
-            class="flex flex-col justify-start items-start w-full h-[calc(100vh-72px)] pt-4 lg:pl-4"
+            class="flex flex-col justify-start items-start lg:w-[calc(100vw-400px)] h-[calc(100vh-72px)] pt-4"
         >
             <CashierCategoryPicker @category-select="categorySelect" />
             <CashierProductsList

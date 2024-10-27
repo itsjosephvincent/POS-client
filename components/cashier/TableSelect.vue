@@ -49,7 +49,8 @@ async function fetch() {
         isFetching.value = false;
         if (!response.data) throw 'Unable to fetch tables.';
         tables.value = response.data;
-        runningBillStore.setTable(response.data[0]);
+        if (!runningBillStore.getTable)
+            runningBillStore.setTable(response.data[0]);
     } catch (error) {
         isFetching.value = false;
         console.error(error);

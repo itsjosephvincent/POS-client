@@ -54,7 +54,7 @@ const billedItems = computed(() =>
 </script>
 
 <template>
-    <div class="w-full h-[calc(100vh-400px)] overflow-y-auto">
+    <div class="w-full min-h-[calc(100vh-416px)] overflow-y-auto">
         <div
             v-if="billedItems && billedItems.length"
             v-for="item in billedItems"

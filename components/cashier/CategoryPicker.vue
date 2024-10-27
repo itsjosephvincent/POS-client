@@ -41,7 +41,9 @@ const selectedClass = computed(
 </script>
 
 <template>
-    <div class="w-full mb-4 overflow-x-auto overflow-y-hidden">
+    <div
+        class="w-screen min-h-fit mb-4 pb-1 overflow-x-auto overflow-y-hidden flex justify-start items-center"
+    >
         <div
             v-if="isFetching"
             class="w-full flex justify-start items-start flex-wrap gap-2"
@@ -59,7 +61,7 @@ const selectedClass = computed(
                 class="animate-pulse w-[112px] h-[112px] overflow-y-hidden bg-slate-200 rounded-xl flex flex-col items-start justify-start"
             ></div>
         </div>
-        <div v-else class="w-[90%] flex justify-start items-center gap-2">
+        <div v-else class="flex justify-start items-center gap-2 mx-4">
             <div
                 @click="handleSelect(null)"
                 :class="[cardClass, !selected ? selectedClass : normalClass]"

@@ -61,7 +61,7 @@ const labelText = computed(() =>
         </button>
         <div
             v-if="isOpen"
-            class="w-full absolute top-[47px] left-0 bg-white py-2 px-1 border border-primaryBorder rounded-md text-primaryText"
+            class="w-full absolute z-50 top-[47px] left-0 bg-white py-2 px-1 border border-primaryBorder rounded-md text-primaryText"
         >
             <div
                 v-for="item in options"
