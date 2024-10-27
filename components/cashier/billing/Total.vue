@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TransactionMode } from '~/common/types';
+import { TransactionMode, type BillingProduct } from '~/common/types';
 import { orderService } from '~/api/cashier/OrderService';
 import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
 import { cartService } from '~/api/cashier/CartService';
@@ -56,15 +56,72 @@ async function updateBills() {
         const params = {
             table: runningBillStore.getTable.uuid,
         };
-        let response;
         if (transactionStore.getMode === TransactionMode.RunningBill) {
-            response = await useRunningBillFetch().fetch(params);
+            await runningBillsRefetch(runningBillStore.getTable.uuid);
         } else {
-            response = await cartService.fetch({});
+            await cartRefetch();
         }
         loadingStore.setLoading(false);
-        if (!response) throw 'No data fetched for running bills table';
-        runningBillStore.setProducts(response);
+    } catch (error) {
+        loadingStore.setLoading(false);
+        console.error(error);
+    }
+}
+
+async function cartRefetch() {
+    try {
+        loadingStore.setLoading(true);
+        console.log('fetch cart');
+        const params = {};
+        const response = await cartService.fetch(params);
+        loadingStore.setLoading(false);
+        if (!response.data) throw 'No data fetched for cart ';
+        const cartProducts: Array<BillingProduct> = response.data.map(
+            (item: any) => {
+                return {
+                    id: item.product.id,
+                    uuid: item.uuid,
+                    name: item.product.name,
+                    cost: item.product.cost,
+                    price: item.product.price,
+                    quantity: item.quantity,
+                    image: item.product.image,
+                    is_voided: item.is_voided,
+                };
+            },
+        );
+        cartStore.setProducts(cartProducts);
+    } catch (error) {
+        loadingStore.setLoading(false);
+        console.error(error);
+    }
+}
+async function runningBillsRefetch(table_uuid: any) {
+    try {
+        loadingStore.setLoading(true);
+        console.log('fetch running bills table: ', table_uuid);
+        const params = {
+            table: table_uuid,
+        };
+        const response = await useRunningBillFetch().fetch(params);
+        loadingStore.setLoading(false);
+        if (!response)
+            throw 'No data fetched for running bills table: ' + table_uuid;
+        const runningBillProducts: Array<BillingProduct> = response.map(
+            (item: any) => {
+                return {
+                    id: item.product.id,
+                    uuid: item.uuid,
+                    name: item.product.name,
+                    cost: item.product.cost,
+                    price: item.product.price,
+                    quantity: item.quantity,
+                    image: item.product.image,
+                    is_voided: item.is_voided,
+                };
+            },
+        );
+        runningBillStore.setProducts(runningBillProducts);
     } catch (error) {
         loadingStore.setLoading(false);
         console.error(error);

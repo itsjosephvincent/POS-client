@@ -68,7 +68,6 @@ async function fetchRunningBill(table_uuid: any) {
         if (!response)
             throw 'No data fetched for running bills table: ' + table_uuid;
         runningBills.value = response;
-        debugger;
         const runningBillProducts: Array<BillingProduct> = response.map(
             (item: any) => {
                 return {
