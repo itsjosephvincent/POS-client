@@ -28,10 +28,9 @@ export const useCartStore = defineStore(
 
         const getProducts = computed(() => state.products);
         const getTotal = computed(() =>
-            state.products.reduce(
-                (total, item) => total + item.price * item.quantity,
-                0,
-            ),
+            state.products
+                .filter((i) => !i.is_voided)
+                .reduce((total, item) => total + item.price * item.quantity, 0),
         );
 
         return {

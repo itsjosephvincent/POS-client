@@ -17,6 +17,7 @@ const props = defineProps<{
             <div class="flex justify-start items-center gap-2">
                 <PrimaryButton
                     @click="$emit('deleteConfirmed')"
+                    @keyup.enter="$emit('deleteConfirmed')"
                     label="Void Item"
                     custom-class="bg-errorColor text-white px-3"
                 />

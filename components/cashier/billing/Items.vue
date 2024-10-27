@@ -2,11 +2,13 @@
 import * as yup from 'yup';
 import { cartService } from '~/api/cashier/CartService';
 import { runningBillService } from '~/api/cashier/RunningBillService';
+import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
 import { TransactionMode, type BillingProduct } from '~/common/types';
 
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
 const cartStore = useCartStore();
+const loadingStore = useLoadingStore();
 const {
     deleteLoading,
     showDeleteModal,
@@ -30,6 +32,8 @@ function handleVoidClick(item: BillingProduct) {
 }
 async function onVoidItem() {
     try {
+        closeDeleteModal();
+        loadingStore.setLoading(true);
         if (!itemToVoid.value) throw 'No item to void.';
         const uuid: string = itemToVoid.value.uuid;
         const params = {
@@ -39,9 +43,77 @@ async function onVoidItem() {
             transactionStore.getMode === TransactionMode.RunningBill
                 ? await runningBillService.void(params, uuid)
                 : await cartService.void(params, uuid);
+        if (transactionStore.getMode === TransactionMode.RunningBill) {
+            await runningBillService.void(params, uuid);
+            await runningBillsRefetch(runningBillStore.getTable?.uuid);
+        } else {
+            await cartService.void(params, uuid);
+            await cartRefetch();
+        }
+        loadingStore.setLoading(false);
         if (!response.data) throw 'Error on void process.';
-        closeDeleteModal();
     } catch (error) {
+        loadingStore.setLoading(false);
+        console.error(error);
+    }
+}
+
+async function cartRefetch() {
+    try {
+        loadingStore.setLoading(true);
+        console.log('fetch cart');
+        const params = {};
+        const response = await cartService.fetch(params);
+        loadingStore.setLoading(false);
+        if (!response.data) throw 'No data fetched for cart ';
+        const cartProducts: Array<BillingProduct> = response.data.map(
+            (item: any) => {
+                return {
+                    id: item.product.id,
+                    uuid: item.uuid,
+                    name: item.product.name,
+                    cost: item.product.cost,
+                    price: item.product.price,
+                    quantity: item.quantity,
+                    image: item.product.image,
+                    is_voided: item.is_voided,
+                };
+            },
+        );
+        cartStore.setProducts(cartProducts);
+    } catch (error) {
+        loadingStore.setLoading(false);
+        console.error(error);
+    }
+}
+async function runningBillsRefetch(table_uuid: any) {
+    try {
+        loadingStore.setLoading(true);
+        console.log('fetch running bills table: ', table_uuid);
+        const params = {
+            table: table_uuid,
+        };
+        const response = await useRunningBillFetch().fetch(params);
+        loadingStore.setLoading(false);
+        if (!response)
+            throw 'No data fetched for running bills table: ' + table_uuid;
+        const runningBillProducts: Array<BillingProduct> = response.map(
+            (item: any) => {
+                return {
+                    id: item.product.id,
+                    uuid: item.uuid,
+                    name: item.product.name,
+                    cost: item.product.cost,
+                    price: item.product.price,
+                    quantity: item.quantity,
+                    image: item.product.image,
+                    is_voided: item.is_voided,
+                };
+            },
+        );
+        runningBillStore.setProducts(runningBillProducts);
+    } catch (error) {
+        loadingStore.setLoading(false);
         console.error(error);
     }
 }

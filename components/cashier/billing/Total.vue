@@ -2,6 +2,7 @@
 import { TransactionMode } from '~/common/types';
 import { orderService } from '~/api/cashier/OrderService';
 import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
+import { cartService } from '~/api/cashier/CartService';
 
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
@@ -55,7 +56,12 @@ async function updateBills() {
         const params = {
             table: runningBillStore.getTable.uuid,
         };
-        const response = await useRunningBillFetch().fetch(params);
+        let response;
+        if (transactionStore.getMode === TransactionMode.RunningBill) {
+            response = await useRunningBillFetch().fetch(params);
+        } else {
+            response = await cartService.fetch({});
+        }
         loadingStore.setLoading(false);
         if (!response) throw 'No data fetched for running bills table';
         runningBillStore.setProducts(response);

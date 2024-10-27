@@ -125,12 +125,13 @@ async function cartRefetch() {
             (item: any) => {
                 return {
                     id: item.product.id,
-                    uuid: item.product.uuid,
+                    uuid: item.uuid,
                     name: item.product.name,
                     cost: item.product.cost,
                     price: item.product.price,
                     quantity: item.quantity,
                     image: item.product.image,
+                    is_voided: item.is_voided,
                 };
             },
         );
@@ -155,12 +156,13 @@ async function runningBillsRefetch(table_uuid: any) {
             (item: any) => {
                 return {
                     id: item.product.id,
-                    uuid: item.product.uuid,
+                    uuid: item.uuid,
                     name: item.product.name,
                     cost: item.product.cost,
                     price: item.product.price,
                     quantity: item.quantity,
                     image: item.product.image,
+                    is_voided: item.is_voided,
                 };
             },
         );
