@@ -3,9 +3,14 @@ import { TransactionMode } from '~/common/types';
 
 const viewport = useViewport();
 
+const emit = defineEmits(['orderSuccess', 'drawerToggle']);
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
 const cartStore = useCartStore();
+
+function successOrder(uuid: string) {
+    emit('orderSuccess', uuid);
+}
 </script>
 
 <template>
@@ -22,6 +27,6 @@ const cartStore = useCartStore();
             v-if="transactionStore.getMode === TransactionMode.RunningBill"
         />
         <CashierBillingItems class="mt-2 grow" />
-        <CashierBillingTotal />
+        <CashierBillingTotal @order-success="successOrder" />
     </div>
 </template>

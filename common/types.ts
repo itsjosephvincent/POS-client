@@ -98,6 +98,26 @@ export interface Cart {
     is_voided: boolean;
 }
 
+export interface Order {
+    id: number;
+    cashier_id: number;
+    uuid: string;
+    order_number: string;
+    cashier: Cashier;
+    orderDetails: OrderDetail;
+    created_at: string;
+}
+
+export interface OrderDetail {
+    id: number;
+    order_id: number;
+    product_id: number;
+    uuid: string;
+    price: number;
+    quantity: number;
+    product: Product;
+}
+
 /** Type for Data Table component columns */
 export interface DataTableColumns {
     key: string;
@@ -108,4 +128,9 @@ export interface DataTableColumns {
 export enum TransactionMode {
     RunningBill = 'RUNNING_BILL',
     Cart = 'CART',
+}
+
+export enum DrawerPage {
+    Orders = 'ORDERS',
+    History = 'HISTORY',
 }

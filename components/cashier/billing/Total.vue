@@ -4,8 +4,10 @@ import { orderService } from '~/api/cashier/OrderService';
 import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
 import { cartService } from '~/api/cashier/CartService';
 
+const emit = defineEmits(['orderSuccess']);
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
+const drawerPageStore = useDrawerPageStore();
 const cartStore = useCartStore();
 const loadingStore = useLoadingStore();
 const isPaymentMethod = ref(false);
@@ -40,9 +42,11 @@ async function processTableOrder() {
         const response = await orderService.create(params);
         isLoading.value = false;
         if (!response.data) throw 'Error in creating order';
-        alert(
-            `Successfully processed Order number: ${response.data.order_number}`,
-        );
+        // alert(
+        //     `Successfully processed Order number: ${response.data.order_number}`,
+        // );
+        emit('orderSuccess', response.data.uuid);
+
         updateBills();
     } catch (error) {
         console.error(error);

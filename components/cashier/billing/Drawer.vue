@@ -1,16 +1,24 @@
 <script setup lang="ts">
-import { TransactionMode } from '~/common/types';
+import { TransactionMode, DrawerPage } from '~/common/types';
 
 const viewport = useViewport();
 
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
+const drawerPageStore = useDrawerPageStore();
 const cartStore = useCartStore();
 
 const openDrawerMobile: Ref<boolean> = ref(false);
+const orderUuid: Ref<string | null> = ref(null);
 
 function toggle() {
     openDrawerMobile.value = !openDrawerMobile.value;
+}
+function onSuccessOrder(uuid: string) {
+    orderUuid.value = uuid;
+}
+function clearOrder() {
+    orderUuid.value = null;
 }
 
 const getContainerCss = computed(() => {
@@ -66,10 +74,18 @@ const buttonLabelMobile = computed(() => {
                 ]"
             >
                 <CashierBillingOrders
-                    v-show="!transactionStore.isPayment"
+                    v-show="
+                        drawerPageStore.getPage === DrawerPage.Orders &&
+                        !orderUuid
+                    "
                     @drawer-toggle="toggle"
+                    @order-success="onSuccessOrder"
                 />
-                <CashierBillingPayment v-show="transactionStore.isPayment" />
+                <CashierBillingPayment
+                    v-if="orderUuid"
+                    :order-uuid="orderUuid"
+                    @clear-order="clearOrder"
+                />
             </div>
         </Transition>
         <Teleport

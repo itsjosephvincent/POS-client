@@ -1,71 +1,116 @@
 <script setup lang="ts">
 import { orderService } from '~/api/cashier/OrderService';
-import { TransactionMode } from '~/common/types';
-import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
+import { DrawerPage, type Order, type OrderDetail } from '~/common/types';
 
-const transactionStore = useTransactionStore();
-const runningBillStore = useRunningBillStore();
-const cartStore = useCartStore();
-const loadingStore = useLoadingStore();
-const isPaymentMethod = ref(false);
-const isLoading: Ref<boolean> = ref(false);
+const emit = defineEmits(['clearOrder']);
+const drawerPageStore = useDrawerPageStore();
 
-interface OrderRequestParams {
-    table_uuid?: string;
-    payment: number;
-}
+const props = defineProps<{
+    orderUuid: string;
+}>();
 
-async function processTableOrder() {
+const order: Ref<Order | null> = ref(null);
+const orderDetails: Ref<Array<OrderDetail> | null> = ref(null);
+
+onMounted(() => {
+    fetch();
+});
+
+async function fetch() {
     try {
-        isLoading.value = true;
-        let params: OrderRequestParams = {
-            payment:
-                transactionStore.getMode === TransactionMode.RunningBill
-                    ? runningBillStore.getTotal
-                    : cartStore.getTotal,
-        };
-        if (transactionStore.getMode === TransactionMode.RunningBill) {
-            if (!runningBillStore.getTable) throw 'No table data.';
-            params.table_uuid = runningBillStore.getTable?.uuid;
-        }
-        const response = await orderService.create(params);
-        isLoading.value = false;
-        if (!response.data) throw 'Error in creating order';
-        alert(
-            `Successfully processed Order number: ${response.data.order_number}`,
-        );
-        updateBills();
+        const params = {};
+        const response = await orderService.find(props.orderUuid, params);
+        if (!response.data) throw 'Error fetching order';
+        order.value = response.data;
+        orderDetails.value = response.data.orderDetails;
     } catch (error) {
-        console.error(error);
-        isLoading.value = false;
-    }
-}
-async function updateBills() {
-    try {
-        loadingStore.setLoading(true);
-        if (!runningBillStore.getTable) throw 'No table data.';
-        const params = {
-            table: runningBillStore.getTable.uuid,
-        };
-        const response = await useRunningBillFetch().fetch(params);
-        loadingStore.setLoading(false);
-        if (!response) throw 'No data fetched for running bills table';
-        runningBillStore.setProducts(response);
-    } catch (error) {
-        loadingStore.setLoading(false);
         console.error(error);
     }
 }
+function onNewOrderClick() {
+    drawerPageStore.setPage(DrawerPage.Orders);
+    emit('clearOrder');
+}
+const getDateString = computed(() => {
+    let date = new Date(order.value?.created_at || '');
+    return new Intl.DateTimeFormat('en-US', {
+        dateStyle: 'full',
+        timeStyle: 'long',
+    }).format(date);
+});
+const getTotal = computed(() => {
+    if (!orderDetails.value) return '0.00';
+    return orderDetails.value.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0,
+    );
+});
 </script>
 
 <template>
-    <div class="w-full h-full flex flex-col justify-start items-start">
-        <IconSvg
-            @click="transactionStore.setPayment(false)"
-            icon="left"
-            size="1.5em"
-            class="cursor-pointer z-10 pt-6 pl-4"
-        />
-        <h1>Payment</h1>
+    <div class="w-full h-full my-4">
+        <div
+            v-if="order"
+            class="w-full h-full flex flex-col justify-start items-center"
+        >
+            <IconSvg icon="success" size="5em" color="successColor" />
+            <div class="text-lg font-bold text-successColor">
+                Order Successful!
+            </div>
+            <div
+                class="w-full h-full px-4 py-4 flex flex-col justify-start items-center"
+            >
+                <div class="py-1 text-sm text-primaryText text-wrap">
+                    {{ getDateString }}
+                </div>
+                <div class="mb-4 py-1 text-sm text-primaryText text-wrap">
+                    Order No. {{ order.order_number }}
+                </div>
+                <!--ITEMS-->
+                <div
+                    class="w-full flex flex-col justify-start items-center grow"
+                >
+                    <div
+                        v-for="item in orderDetails"
+                        :key="item.id"
+                        class="w-full flex justify-between items-center"
+                    >
+                        <div class="py-1 text-sm text-secondaryText text-wrap">
+                            {{ item.product.name }} x{{ item.quantity }}
+                        </div>
+                        <div class="py-1 text-sm text-secondaryText text-wrap">
+                            P{{
+                                parseFloat(
+                                    (item.quantity * item.price).toString(),
+                                ).toFixed(2)
+                            }}
+                        </div>
+                    </div>
+                    <div class="w-full flex justify-between items-center">
+                        <div class="py-1 text-sm text-primaryText text-wrap">
+                            Total
+                        </div>
+                        <div class="py-1 text-sm text-primaryText text-wrap">
+                            P{{ parseFloat(getTotal.toString()).toFixed(2) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full flex justify-start items-center gap-1 mt-4">
+                    <PrimaryButton
+                        label="Print Receipt"
+                        icon="printer"
+                        class="w-full"
+                    />
+                    <PrimaryButton
+                        @click="onNewOrderClick"
+                        label="New Order"
+                        icon="plus"
+                        class="w-full"
+                        custom-class="bg-successColor text-white"
+                    />
+                </div>
+            </div>
+        </div>
     </div>
 </template>
