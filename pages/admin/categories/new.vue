@@ -1,30 +1,24 @@
 <script setup lang="ts">
+const pageTitle = 'Categories';
+const pageStore = usePageStore();
 definePageMeta({
     layout: 'admin',
     middleware: ['admin'],
 });
-
-const pageStore = usePageStore();
-const pageTitle = 'Classifications';
 useHead({
     title: pageTitle,
 });
 onMounted(() => {
     pageStore.setPage(pageTitle);
+    pageStore.setParams(['New Category']);
 });
 onBeforeUnmount(() => {
     pageStore.setParams([]);
 });
-
-function initializePageData(data: object) {
-    pageStore.setParams([data.name, 'Edit']);
-}
 </script>
 
 <template>
     <div class="w-full px-6">
-        <AdminClassificationsFormEdit
-            @classification-fetch="initializePageData"
-        />
+        <AdminCategoriesForm />
     </div>
 </template>

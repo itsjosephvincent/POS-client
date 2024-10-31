@@ -83,7 +83,7 @@ onMounted(() => {
     <div
         class="bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText"
     >
-        <div class="text-lg">Earnings by Classification</div>
+        <div class="text-lg">Earnings by Category</div>
         <div ref="chart" class=""></div>
         <div class="flex justify-end items-center my-1">
             <div

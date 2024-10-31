@@ -5,8 +5,8 @@ definePageMeta({
 });
 const route = useRoute();
 const pageStore = usePageStore();
-const classificationStore = useClassificationStore();
-const pageTitle = 'Classifications';
+const categoryStore = useCategoryStore();
+const pageTitle = 'Categories';
 useHead({
     title: pageTitle,
 });
@@ -15,18 +15,18 @@ onMounted(() => {
 });
 function initializePageData() {
     pageStore.setPage(pageTitle);
-    let classifications = classificationStore.getClassifications;
-    let current = classifications.find(
-        (classification) => classification.uuid === route.params.uuid,
+    let categories = categoryStore.getCategories;
+    let current = categories.find(
+        (category) => category.uuid === route.params.uuid,
     );
     if (!current) {
-        return navigateTo('/admin/classifications');
+        return navigateTo('/admin/categories');
     }
-    classificationStore.setCurrent(current);
+    categoryStore.setCurrent(current);
     pageStore.setParams([current.name]);
 }
 const getCurrentCategoryUuid = computed(
-    () => classificationStore.getCurrent?.uuid || '',
+    () => categoryStore.getCurrent?.uuid || '',
 );
 </script>
 

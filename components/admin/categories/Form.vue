@@ -34,7 +34,7 @@ async function onFormSubmit() {
             response = await categoryService.create(params);
         }
         if (response.data) {
-            navigateTo(`/admin/classifications`);
+            navigateTo(`/admin/categories`);
         }
     } catch (error: any) {
         console.error(error);
@@ -52,8 +52,8 @@ const getLoading = computed(() => loading.value);
             <FormTextInput
                 class="my-3"
                 name="name"
-                placeholder="Enter New Classification"
-                label="Classification"
+                placeholder="Enter New Category"
+                label="Category"
                 :model-value="nameModel"
                 @update:modelValue="($event) => (nameModel = $event)"
                 bg-class="bg-secondaryBg"
@@ -63,11 +63,7 @@ const getLoading = computed(() => loading.value);
             <PrimaryButton
                 type="submit"
                 class="w-full my-3"
-                :label="
-                    !props.isEdit
-                        ? 'Create Classification'
-                        : 'Update Classification'
-                "
+                :label="!props.isEdit ? 'Create Category' : 'Update Category'"
                 :loading="getLoading"
             />
         </form>

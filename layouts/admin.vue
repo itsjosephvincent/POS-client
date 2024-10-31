@@ -11,9 +11,9 @@ const sidebarMenus: Array<SidebarMenu> = [
     { id: 'stores', link: '/admin/stores', name: 'Stores', icon: 'warehouse' },
     { id: 'skus', link: '/admin/skus', name: 'SKUs', icon: 'orders' },
     {
-        id: 'classifications',
-        link: '/admin/classifications',
-        name: 'Classifications',
+        id: 'categories',
+        link: '/admin/categories',
+        name: 'Categories',
         icon: 'categories',
     },
 ];

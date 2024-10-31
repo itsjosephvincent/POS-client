@@ -10,7 +10,7 @@ const props = defineProps<{
     isEdit?: boolean;
     editData?: Product;
 }>();
-const imageUrl = ref(null);
+const imageUrl: any = ref(null);
 const selectedFile = ref(null);
 
 const categories = ref([]);
@@ -23,7 +23,7 @@ const categoryUuid = ref(null);
 // validation
 const schema = yup.object({
     product: yup.string().required('Product is required'),
-    classification: yup.string().required('Classification is required'),
+    category: yup.string().required('Category is required'),
     cost: yup
         .number()
         .min(0)
@@ -44,7 +44,7 @@ const { values, errors, meta, defineField, handleSubmit, resetForm } = useForm({
     validationSchema: schema,
 });
 const [product] = defineField('product');
-const [classification] = defineField('classification');
+const [category] = defineField('category');
 const [cost] = defineField('cost');
 const [price] = defineField('price');
 const [inventory] = defineField('inventory');
@@ -63,13 +63,15 @@ function setEditData() {
     inventory.value = props?.editData?.inventory || '';
     imageUrl.value = props?.editData?.image || '';
 }
-function handleFileChange(event: object) {
+function handleFileChange(event: any) {
+    if (!event || !event.target || !event.target.files.length)
+        return console.error('No file');
     const file = event.target.files[0];
     if (file) {
         selectedFile.value = file;
         const reader = new FileReader();
         reader.onload = (e) => {
-            imageUrl.value = e.target.result;
+            imageUrl.value = e?.target?.result || null;
         };
         reader.readAsDataURL(file);
     }
@@ -95,7 +97,7 @@ const onSubmit = handleSubmit(async () => {
         if (!categoryId.value || !categoryUuid.value) {
             console.error('undefined selected category');
         }
-        formData.append('category_uuid', classification.value);
+        formData.append('category_uuid', category.value);
         formData.append('name', product.value);
         formData.append('cost', cost.value);
         formData.append('price', price.value);
@@ -125,7 +127,7 @@ const onSubmit = handleSubmit(async () => {
 });
 
 const getCategorySelect = computed(() =>
-    categories.value.map((d) => ({
+    categories.value.map((d: Category) => ({
         key: d.uuid,
         value: d.uuid,
         label: d.name,
@@ -184,11 +186,11 @@ const getSelectedProp = computed(() => {
             />
             <FormSelect
                 :options="getCategorySelect"
-                label="Classification"
+                label="Category"
                 name="category"
-                placeholder="Select Classification"
-                v-model="classification"
-                :error="errors.classification"
+                placeholder="Select Category"
+                v-model="category"
+                :error="errors.category"
                 :pre-selected-data="getSelectedProp"
             />
             <FormTextInput

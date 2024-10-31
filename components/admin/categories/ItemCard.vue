@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { categoryService } from '~/api/admin/CategoryService';
+import type { Category } from '~/common/types';
 
 const props = defineProps<{
-    classificationData: object;
+    categoryData: Category;
 }>();
 
-const emit = defineEmits(['fetchClassifications']);
+const emit = defineEmits(['fetchCategories']);
 const showDeleteModal = ref(false);
 const itemToDelete = ref({});
 
 function editHandler(uuid: string) {
-    navigateTo(`/admin/classifications/${props.classificationData.uuid}/edit`);
+    navigateTo(`/admin/categories/${props.categoryData.uuid}/edit`);
 }
 function deleteHandler(uuid: string) {
     showDeleteModal.value = true;
@@ -18,10 +19,10 @@ function deleteHandler(uuid: string) {
 }
 async function handleDelete() {
     try {
-        const uuid: string = props.classificationData.uuid;
+        const uuid: string = props.categoryData.uuid;
         closeDeleteModal();
         await categoryService.delete(uuid);
-        emit('fetchClassifications');
+        emit('fetchCategories');
     } catch (error) {
         console.error(error);
     }
@@ -39,18 +40,18 @@ function closeDeleteModal() {
         ]"
     >
         <IconSvg v-if="props.icon" :icon="props.icon" size="2em" />
-        <div class="font-bold select-none">{{ classificationData.name }}</div>
+        <div class="font-bold select-none">{{ categoryData.name }}</div>
         <div
             class="absolute top-2 right-2 flex items-center justify-center gap-2"
         >
             <button
-                @click.stop="editHandler(classificationData.uuid)"
+                @click.stop="editHandler(categoryData.uuid)"
                 class="hidden group-hover:block p-1 rounded-full hover:bg-secondaryColorTransparent text-secondaryColor"
             >
                 <IconSvg icon="edit" color="secondaryColor" size="1em" />
             </button>
             <button
-                @click.stop="deleteHandler(classificationData.uuid)"
+                @click.stop="deleteHandler(categoryData.uuid)"
                 class="hidden group-hover:block p-1 rounded-full hover:bg-red-400/20 text-errorColor"
             >
                 <IconSvg icon="delete" color="errorColor" size="1em" />
@@ -66,9 +67,7 @@ function closeDeleteModal() {
                     <IconSvg icon="error" color="errorColor" size="2em" />
                     <div class="text text-primaryText">
                         Are you sure you want to delete
-                        <span class="font-bold">{{
-                            classificationData?.name
-                        }}</span
+                        <span class="font-bold">{{ categoryData?.name }}</span
                         >?
                     </div>
                 </div>

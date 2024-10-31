@@ -53,6 +53,7 @@ export interface Product {
     cost: number;
     price: number;
     inventory: number;
+    category: Category;
 }
 
 export interface BillingProduct {

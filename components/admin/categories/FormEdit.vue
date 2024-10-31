@@ -2,14 +2,14 @@
 import { categoryService } from '~/api/admin/CategoryService';
 
 const route = useRoute();
-const emit = defineEmits(['classificationFetch']);
+const emit = defineEmits(['categoryFetch']);
 const userStore = useUserStore();
 
 onMounted(() => {
     fetch();
 });
 
-const classificationData = ref(null);
+const categoryData = ref(null);
 const isFetching = ref(true);
 
 async function fetch() {
@@ -22,8 +22,8 @@ async function fetch() {
         isFetching.value = false;
         if (response && response.data) {
             const data = response.data;
-            classificationData.value = data;
-            emit('classificationFetch', data);
+            categoryData.value = data;
+            emit('categoryFetch', data);
         } else {
             throw 'Empty data.';
         }
@@ -42,10 +42,6 @@ async function fetch() {
         >
             <LoadingProductSkeleton />
         </div>
-        <AdminClassificationsForm
-            v-else
-            :is-edit="true"
-            :edit-data="classificationData"
-        />
+        <AdminCategoriesForm v-else :is-edit="true" :edit-data="categoryData" />
     </div>
 </template>

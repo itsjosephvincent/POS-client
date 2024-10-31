@@ -2,10 +2,10 @@
 import { usePageStore } from '~/stores/page';
 import { categoryService } from '~/api/admin/CategoryService';
 
-const pageTitle = 'Classifications';
-const classificationStore = useClassificationStore();
+const pageTitle = 'Categories';
+const categoryStore = useCategoryStore();
 const pageStore = usePageStore();
-const classificationsData = ref([]);
+const categoriesData = ref([]);
 definePageMeta({
     layout: 'admin',
     middleware: ['admin'],
@@ -31,8 +31,8 @@ async function fetch() {
         const response = await categoryService.fetch();
         isFetching.value = false;
         if (response.data) {
-            classificationsData.value = response.data;
-            classificationStore.setClassifications(response.data);
+            categoriesData.value = response.data;
+            categoryStore.setCategories(response.data);
         }
     } catch (error) {
         isFetching.value = false;
@@ -40,28 +40,26 @@ async function fetch() {
     }
 }
 function onAddNew() {
-    navigateTo('/admin/classifications/new');
+    navigateTo('/admin/categories/new');
 }
-function cardClickHandler(row: object) {
-    // navigateTo('/admin/classifications/' + row.uuid)
-}
+function cardClickHandler(row: object) {}
 </script>
 
 <template>
     <div class="w-full px-6">
-        <LoadingClassificationListSkeleton v-if="isFetching" />
+        <LoadingCategoryListSkeleton v-if="isFetching" />
         <div v-else class="w-full flex flex-col items-start">
             <PrimaryButton
                 class="mb-6"
-                label="New Classification"
+                label="New Category"
                 icon="plus"
                 @click="onAddNew"
             />
             <div class="w-full flex items-center justify-start flex-wrap gap-4">
-                <AdminClassificationsItemCard
-                    v-for="item in classificationsData"
-                    :classification-data="item"
-                    @fetch-classifications="fetch"
+                <AdminCategoriesItemCard
+                    v-for="item in categoriesData"
+                    :category-data="item"
+                    @fetch-categories="fetch"
                 />
             </div>
         </div>

@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { categoryService } from '~/api/admin/CategoryService'; // @TODO Cashier endpoints
+import { categoryService } from '~/api/cashier/CategoryService';
 
-const store = useCategoryStore();
-function selectCategory(category: string) {
-    store.setSelected(category);
-}
+// const store = useCategoryStore();
+// function selectCategory(category: string) {
+//     store.setCurrent(category);
+// }
 
-const classificationsData = ref([]);
-onMounted(() => {
-    fetch();
-});
+// const classificationsData = ref([]);
+// onMounted(() => {
+//     fetch();
+// });
 
-async function fetch() {
-    try {
-        const response = await categoryService.fetch();
-        if (response.data) {
-            classificationsData.value = response.data;
-        }
-    } catch (error) {
-        console.error(error);
-    }
-}
+// async function fetch() {
+//     try {
+//         const response = await categoryService.fetch();
+//         if (response.data) {
+//             classificationsData.value = response.data;
+//         }
+//     } catch (error) {
+//         console.error(error);
+//     }
+// }
 </script>
 
 <template>
