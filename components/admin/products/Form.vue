@@ -94,9 +94,9 @@ const onSubmit = handleSubmit(async () => {
     try {
         isLoading.value = true;
         const formData = new FormData();
-        if (!categoryId.value || !categoryUuid.value) {
-            console.error('undefined selected category');
-        }
+        // if (!categoryId.value || !categoryUuid.value) {
+        //     console.error('undefined selected category');
+        // }
         formData.append('category_uuid', category.value);
         formData.append('name', product.value);
         formData.append('cost', cost.value);
@@ -234,5 +234,7 @@ const getSelectedProp = computed(() => {
                 :label="!props.isEdit ? 'Save Product' : 'Update Product'"
             />
         </div>
+        <pre>{{ values }}</pre>
+        <pre>{{ errors }}</pre>
     </div>
 </template>

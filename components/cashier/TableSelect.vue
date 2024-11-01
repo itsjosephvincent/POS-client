@@ -115,7 +115,7 @@ const tableOptions = computed(() => {
                 class="animate-pulse w-full h-[35px] my-4 bg-slate-200 rounded-xl"
             ></div>
         </div>
-        <FormSelectNew
+        <FormSelect
             v-if="tables && !isFetching"
             name="table"
             placeholder="Select Table"

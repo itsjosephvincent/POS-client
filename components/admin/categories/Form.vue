@@ -1,31 +1,40 @@
 <script setup lang="ts">
+import * as yup from 'yup';
 import { categoryService } from '~/api/admin/CategoryService';
-import type { Category } from '~/common/types';
+import type { Admin, Category } from '~/common/types';
 
 const props = defineProps<{
-    isEdit?: boolean;
     editData?: Category;
 }>();
 const userStore = useUserStore();
 
 const loading = ref(false);
-const errorState = reactive({});
 
-const nameModel = defineModel('name');
+// validation
+const schema = yup.object({
+    name: yup.string().required('Category is required'),
+});
+const { values, errors, meta, defineField, handleSubmit, resetForm } = useForm({
+    validationSchema: schema,
+});
+const [name] = defineField('name');
 
 onMounted(() => {
-    nameModel.value = props.editData?.name || '';
+    resetForm();
+    name.value = props.editData?.name || '';
 });
 
-async function onFormSubmit() {
+const onFormSubmit = handleSubmit(async () => {
     try {
+        const adminUser: any = userStore.getUser;
+        if (!adminUser) throw 'No account';
         loading.value = true;
         const params = {
-            admin_id: userStore?.getUser?.id,
-            name: nameModel.value,
+            admin_id: adminUser.id || null,
+            name: name.value,
         };
         let response;
-        if (props.isEdit) {
+        if (props.editData) {
             response = await categoryService.update(
                 params,
                 props.editData?.uuid,
@@ -40,7 +49,8 @@ async function onFormSubmit() {
         console.error(error);
     }
     loading.value = false;
-}
+});
+
 const getLoading = computed(() => loading.value);
 </script>
 
@@ -54,16 +64,15 @@ const getLoading = computed(() => loading.value);
                 name="name"
                 placeholder="Enter New Category"
                 label="Category"
-                :model-value="nameModel"
-                @update:modelValue="($event) => (nameModel = $event)"
                 bg-class="bg-secondaryBg"
                 border-class="border border-primaryBorder"
-                :error="errorState.username"
+                v-model="name"
+                :error="errors.name"
             />
             <PrimaryButton
                 type="submit"
                 class="w-full my-3"
-                :label="!props.isEdit ? 'Create Category' : 'Update Category'"
+                :label="!editData ? 'Create Category' : 'Update Category'"
                 :loading="getLoading"
             />
         </form>

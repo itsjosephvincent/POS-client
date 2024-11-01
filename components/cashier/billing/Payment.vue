@@ -39,7 +39,7 @@ const getDateString = computed(() => {
     }).format(date);
 });
 const getTotal = computed(() => {
-    if (!orderDetails.value) return '0.00';
+    if (!orderDetails.value) return 0.0;
     return orderDetails.value.reduce(
         (total, item) => total + item.price * item.quantity,
         0,
@@ -88,10 +88,30 @@ const getTotal = computed(() => {
                     </div>
                     <div class="w-full flex justify-between items-center">
                         <div class="py-1 text-sm text-primaryText text-wrap">
-                            Total
+                            Subtotal
                         </div>
                         <div class="py-1 text-sm text-primaryText text-wrap">
                             P{{ parseFloat(getTotal.toString()).toFixed(2) }}
+                        </div>
+                    </div>
+                    <div class="w-full flex justify-between items-center">
+                        <div class="py-1 text-sm text-secondaryText text-wrap">
+                            Tax(10%)
+                        </div>
+                        <div class="py-1 text-sm text-secondaryText text-wrap">
+                            P{{ (getTotal * 0.1).toFixed(2) }}
+                        </div>
+                    </div>
+                    <div class="w-full flex justify-between items-center">
+                        <div class="py-1 text-sm text-primaryText text-wrap">
+                            Total
+                        </div>
+                        <div class="py-1 text-sm text-primaryText text-wrap">
+                            P{{
+                                parseFloat(
+                                    (getTotal + getTotal * 0.1).toString(),
+                                ).toFixed(2)
+                            }}
                         </div>
                     </div>
                 </div>

@@ -31,7 +31,7 @@ async function uploadFile() {
         formData.append('file', file.value);
         const response = await productService.import(formData);
         isLoading.value = false;
-        alert('Successfully Imported');
+        navigateTo('/admin/skus');
     } catch (error: any) {
         isLoading.value = false;
         errorMessage.value = error.getErrorMessage();
