@@ -52,6 +52,11 @@ const displayDrawer = computed(() => {
         return true;
     }
 });
+const hasOrder = computed(() => {
+    return transactionStore.getMode === TransactionMode.RunningBill
+        ? !!runningBillStore.getProducts
+        : !!cartStore.getProducts.length;
+});
 const buttonLabelMobile = computed(() => {
     if (transactionStore.getMode === TransactionMode.RunningBill) {
         let total = runningBillStore.getTotal;

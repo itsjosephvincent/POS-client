@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { productService } from '~/api/cashier/ProductService';
 import type { BillingProduct, Cashier, Product } from '~/common/types';
+import useProductFilter from '~/components/cashier/composables/useProductFilter';
 
 definePageMeta({
     middleware: ['cashier'],
@@ -31,21 +32,30 @@ const {
 } = usePagination();
 const isLoading: Ref<boolean> = ref(true);
 const productsData: Ref<Array<BillingProduct> | null> = ref(null);
+const { productFilter } = useProductFilter();
 
 onMounted(() => {
     pageStore.setPage(pageTitle);
     fetch();
 });
 
+watch(
+    () => productFilter.value,
+    () => {
+        fetch();
+    },
+);
+
 async function fetch(category_uuid: string | null = null) {
     try {
         isLoading.value = true;
+        console.log('ProductFilter', productFilter.value);
         const params = {
             admin: user?.store.admin.uuid,
             page: currentPage.value,
             sortField: sortField.value,
             sortOrder: sortOrder.value,
-            name: filter.value,
+            name: productFilter.value,
             category: category_uuid,
         };
         const response = await productService.all(params);

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { cartService } from '~/api/cashier/CartService';
-import { TransactionMode, type BillingProduct } from '~/common/types';
+import {
+    DrawerPage,
+    TransactionMode,
+    type BillingProduct,
+} from '~/common/types';
 
 const transactionStore = useTransactionStore();
 const cartStore = useCartStore();

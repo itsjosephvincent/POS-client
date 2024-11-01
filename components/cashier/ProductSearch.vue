@@ -1,30 +1,36 @@
 <script setup lang="ts">
-const emit = defineEmits(['onFilter']);
+import useProductFilter from '~/components/cashier/composables/useProductFilter';
+
 const searchInputModel = defineModel();
+const { productFilter } = useProductFilter();
 
 function filter() {
-    emit('onFilter', searchInputModel.value);
+    productFilter.value = searchInputModel.value;
 }
 </script>
 
 <template>
-    <div
-        class="w-[250px] md:w-[300px] lg:w-[400px] h-10 bg-secondaryBg rounded-xl border border-primaryBorder flex items-center px-4"
-    >
-        <input
-            v-model="searchInputModel"
-            type="text"
-            name="search"
-            id="search"
-            placeholder="Search Menu"
-            class="w-3/4 border-0 grow outline-0 text-secondaryText bg-secondaryBg text-xs"
-        />
-        <IconSvg
-            @click="filter"
-            class="cursor-pointer"
-            icon="search"
-            color="secondaryText"
-            size="1.5em"
-        />
+    <div class="">
+        <form
+            @submit.prevent="filter"
+            class="w-[250px] md:w-[300px] lg:w-[400px] h-10 bg-secondaryBg rounded-xl border border-primaryBorder flex items-center px-4"
+        >
+            <input
+                v-model="searchInputModel"
+                type="text"
+                name="search"
+                id="search"
+                placeholder="Search Menu"
+                class="w-3/4 border-0 grow outline-0 text-secondaryText bg-secondaryBg text-xs"
+            />
+            <button type="submit">
+                <IconSvg
+                    class="cursor-pointer"
+                    icon="search"
+                    color="secondaryText"
+                    size="1.5em"
+                />
+            </button>
+        </form>
     </div>
 </template>
