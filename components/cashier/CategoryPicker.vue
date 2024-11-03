@@ -42,7 +42,7 @@ const selectedClass = computed(
 
 <template>
     <div
-        class="w-screen min-h-fit mb-4 pb-1 overflow-x-auto overflow-y-hidden flex justify-start items-center"
+        class="container w-screen min-h-fit mb-4 pb-1 overflow-x-auto overflow-y-hidden flex justify-start items-center"
     >
         <div
             v-if="isFetching"
@@ -83,3 +83,10 @@ const selectedClass = computed(
         </div>
     </div>
 </template>
+
+<style lang="css" scoped>
+.container::-webkit-scrollbar {
+    width: 0;
+    display: none;
+}
+</style>

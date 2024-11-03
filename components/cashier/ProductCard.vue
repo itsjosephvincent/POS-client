@@ -191,7 +191,7 @@ const canOrder = computed((): boolean => {
 <template>
     <div
         :class="[
-            'w-[90%] h-fit max-w-80 lg:max-w-64 sm:w-[40%] md:w-[30%] lg:w-[30%] overflow-y-hidden bg-secondaryBg rounded-xl flex flex-col items-start justify-start',
+            'w-[100%] h-fit lg:max-w-64 sm:w-[40%] md:w-[30%] lg:w-[30%] overflow-y-hidden bg-secondaryBg rounded-xl flex flex-col items-start justify-start',
             getBorderClass,
         ]"
     >

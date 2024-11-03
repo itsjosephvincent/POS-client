@@ -19,7 +19,7 @@ const isEmpty = computed(() => !props?.dataSource?.length || false);
         <LoadingProductListSkeleton v-if="props.loading" />
         <div v-else class="w-full flex justify-center">
             <div
-                class="w-full flex flex-wrap justify-center md:justify-start items-start gap-4 mx-4"
+                class="w-full flex flex-wrap justify-center md:justify-start items-start gap-4 mx-1"
             >
                 <CashierProductCard
                     v-for="item in props.dataSource"

@@ -8,6 +8,7 @@ const props = defineProps<{
     loading?: boolean;
     disabled?: boolean;
     customClass?: string;
+    small?: boolean;
 }>();
 const getLabel = computed(() => props.label);
 const getClass = computed(
@@ -36,10 +37,7 @@ const roundedClass = computed(() => {
             :icon="props.icon"
             :color="props.iconColor || 'white'"
         />
-        <span
-            v-if="!loading && !(props.icon && viewport.isLessThan('desktop'))"
-            >{{ getLabel }}</span
-        >
+        <span v-if="!loading">{{ getLabel }}</span>
         <IconSvg v-if="loading" icon="loading" color="white" size="2em" />
     </button>
 </template>

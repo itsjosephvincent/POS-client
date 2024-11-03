@@ -102,6 +102,9 @@ const getTotal = computed(() => {
                             P{{ (getTotal * 0.1).toFixed(2) }}
                         </div>
                     </div>
+                    <div
+                        class="w-full m-2 border-b-2 border-dashed border-tertiaryText mt-4"
+                    ></div>
                     <div class="w-full flex justify-between items-center">
                         <div class="py-1 text-sm text-primaryText text-wrap">
                             Total

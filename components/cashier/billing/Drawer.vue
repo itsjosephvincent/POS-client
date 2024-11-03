@@ -19,6 +19,7 @@ function onSuccessOrder(uuid: string) {
 }
 function clearOrder() {
     orderUuid.value = null;
+    openDrawerMobile.value = false;
 }
 
 const getContainerCss = computed(() => {
