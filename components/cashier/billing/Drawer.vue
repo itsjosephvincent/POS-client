@@ -63,8 +63,8 @@ const buttonLabelMobile = computed(() => {
         let total = runningBillStore.getTotal;
         return `${runningBillStore?.getTable?.name} - P${(total + total * 0.1).toFixed(2)}`;
     } else {
-        let total = runningBillStore.getTotal;
-        return `Cart - P${(total + total * 0.1).toFixed(2)}`;
+        let total = cartStore.getTotal;
+        return `Cart - P ${(total + total * 0.1).toFixed(2)}`;
     }
 });
 </script>

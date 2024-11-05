@@ -21,6 +21,7 @@ export interface Store {
     id: number;
     uuid: string;
     admin_id: number;
+    role: string;
     store_name: string;
     branch: string;
     username: string;
@@ -124,6 +125,13 @@ export interface DataTableColumns {
     key: string;
     label: string;
     sortable?: boolean;
+}
+
+export enum Roles {
+    SuperAdmin = 'SuperAdmin',
+    Admin = 'Admin',
+    Store = 'Store',
+    Cashier = 'Cashier',
 }
 
 export enum TransactionMode {

@@ -27,6 +27,7 @@ function successOrder(uuid: string) {
             v-if="transactionStore.getMode === TransactionMode.RunningBill"
         />
         <CashierBillingItems class="mt-2 grow" />
+        <CashierBillingOptions v-if="false" />
         <CashierBillingTotal @order-success="successOrder" />
     </div>
 </template>

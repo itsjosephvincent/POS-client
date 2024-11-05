@@ -1,20 +1,20 @@
-import BaseAPIService from '../BaseAPIService'
+import BaseAPIService from '../BaseAPIService';
 
 class AuthService extends BaseAPIService {
-    private static instance: AuthService
+    private static instance: AuthService;
 
     public static getInstance(): AuthService {
         if (!AuthService.instance) {
-            AuthService.instance = new AuthService()
+            AuthService.instance = new AuthService();
         }
-        return AuthService.instance
+        return AuthService.instance;
     }
 
-    async login(params: object|null): Promise<any> {
-        return await this.request(`/superadmin/auth/login`, 'POST', params)
+    async login(params: object | null): Promise<any> {
+        return await this.request(`/superadmin/auth/login`, 'POST', params);
     }
     async logout(): Promise<any> {
-        return await this.request(`/superadmin/logout`, 'POST')
+        return await this.request(`/superadmin/auth/logout`, 'POST');
     }
 }
-export const authService = AuthService.getInstance()
+export const authService = AuthService.getInstance();

@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { Roles } from '~/common/types';
 import type { SidebarMenu } from './sidebar/types';
+import { authService as superAdminAuthService } from '~/api/superadmin/AuthService';
+import { authService as adminAuthService } from '~/api/admin/AuthService';
+import { authService as storeAuthService } from '~/api/store/AuthService';
+import { authService as cashierAuthService } from '~/api/cashier/AuthService';
 
 const viewport = useViewport();
 const pageStore = usePageStore();
@@ -9,17 +14,41 @@ const props = defineProps<{
     menus: Array<SidebarMenu>;
 }>();
 
-const isOpen = ref(false);
+const isOpen: Ref<boolean> = ref(false);
 
 async function logout() {
-    const role = userStore.getRole;
-    localStorage.removeItem('_token');
-    userStore.resetUser();
-    pageStore.resetPageData();
-    if (role === 'Admin') {
-        await navigateTo(`/`);
-    } else {
-        await navigateTo(`/${role.toLowerCase()}/login`);
+    try {
+        const role = userStore.getRole;
+        let service;
+        switch (role) {
+            case Roles.SuperAdmin:
+                service = superAdminAuthService;
+                break;
+            case Roles.Admin:
+                service = adminAuthService;
+                break;
+            case Roles.Store:
+                service = storeAuthService;
+                break;
+            case Roles.Cashier:
+                service = cashierAuthService;
+                break;
+            default:
+                service = null;
+                break;
+        }
+        if (!service) throw 'Undefined role.';
+        await service.logout();
+        localStorage.removeItem('_token');
+        userStore.resetUser();
+        pageStore.resetPageData();
+        if (role === 'Admin') {
+            await navigateTo(`/`);
+        } else {
+            await navigateTo(`/${role.toLowerCase()}/login`);
+        }
+    } catch (error) {
+        console.error(error);
     }
 }
 function toggleOpen() {

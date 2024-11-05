@@ -1,16 +1,21 @@
 <script setup lang="ts">
+import { authService } from '~/api/cashier/AuthService';
 const userStore = useUserStore();
 const pageStore = usePageStore();
-const user = userStore.getUser;
+const user: any = userStore.getUser;
 
 const showPopup = ref(false);
-const popupRef = ref(null);
+const popupRef: Ref<any> = ref(null);
 async function logout() {
-    const role = userStore.getRole;
-    localStorage.removeItem('_token');
-    userStore.resetUser();
-    pageStore.resetPageData();
-    await navigateTo(`/${role.toLowerCase()}/login`);
+    try {
+        await authService.logout();
+        localStorage.removeItem('_token');
+        userStore.resetUser();
+        pageStore.resetPageData();
+        await navigateTo(`/cashier/login`);
+    } catch (error) {
+        console.error(error);
+    }
 }
 function handleClickOutside(event: any) {
     if (popupRef.value && !popupRef.value.contains(event.target)) {
