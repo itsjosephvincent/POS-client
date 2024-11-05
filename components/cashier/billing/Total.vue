@@ -56,11 +56,9 @@ async function processTableOrder() {
 async function updateBills() {
     try {
         loadingStore.setLoading(true);
-        if (!runningBillStore.getTable) throw 'No table data.';
-        const params = {
-            table: runningBillStore.getTable.uuid,
-        };
+
         if (transactionStore.getMode === TransactionMode.RunningBill) {
+            if (!runningBillStore.getTable) throw 'No table data.';
             await runningBillsRefetch(runningBillStore.getTable.uuid);
         } else {
             await cartRefetch();

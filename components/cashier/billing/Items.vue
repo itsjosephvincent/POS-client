@@ -3,10 +3,15 @@ import * as yup from 'yup';
 import { cartService } from '~/api/cashier/CartService';
 import { runningBillService } from '~/api/cashier/RunningBillService';
 import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
-import { TransactionMode, type BillingProduct } from '~/common/types';
+import {
+    DrawerPage,
+    TransactionMode,
+    type BillingProduct,
+} from '~/common/types';
 
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
+const drawerPageStore = useDrawerPageStore();
 const cartStore = useCartStore();
 const loadingStore = useLoadingStore();
 const {
@@ -39,19 +44,16 @@ async function onVoidItem() {
         const params = {
             password: password.value,
         };
-        const response =
-            transactionStore.getMode === TransactionMode.RunningBill
-                ? await runningBillService.void(params, uuid)
-                : await cartService.void(params, uuid);
         if (transactionStore.getMode === TransactionMode.RunningBill) {
             await runningBillService.void(params, uuid);
-            await runningBillsRefetch(runningBillStore.getTable?.uuid);
+            runningBillStore.voidProduct(uuid);
+            // await runningBillsRefetch(runningBillStore.getTable?.uuid);
         } else {
             await cartService.void(params, uuid);
-            await cartRefetch();
+            cartStore.voidProduct(uuid);
+            // await cartRefetch();
         }
         loadingStore.setLoading(false);
-        if (!response.data) throw 'Error on void process.';
     } catch (error) {
         loadingStore.setLoading(false);
         console.error(error);
@@ -118,6 +120,18 @@ async function runningBillsRefetch(table_uuid: any) {
     }
 }
 
+onMounted(() => {
+    cartRefetch();
+});
+watch(
+    () => drawerPageStore.getPage,
+    (value) => {
+        if (value === DrawerPage.Orders) {
+            cartRefetch();
+        }
+    },
+);
+
 const billedItems = computed(() =>
     transactionStore.getMode === TransactionMode.Cart
         ? cartStore.getProducts
@@ -162,8 +176,9 @@ const billedItems = computed(() =>
             </button>
         </div>
         <Teleport to="body">
-            <CashierBillingVoidModal
+            <DeleteModal
                 :visible="showDeleteModal"
+                delete-label="Void Item"
                 @close-delete-modal="closeDeleteModal"
                 @delete-confirmed="onVoidItem"
             >
@@ -186,7 +201,7 @@ const billedItems = computed(() =>
                         :error="errors.password"
                     />
                 </div>
-            </CashierBillingVoidModal>
+            </DeleteModal>
         </Teleport>
     </div>
 </template>

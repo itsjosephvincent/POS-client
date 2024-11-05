@@ -25,6 +25,12 @@ export const useCartStore = defineStore(
                 (item) => item.uuid !== uuid,
             );
         }
+        function voidProduct(uuid: string) {
+            const item = state.products.find((item) => item.uuid === uuid);
+            if (item) {
+                item.is_voided = true;
+            }
+        }
 
         const getProducts = computed(() => state.products);
         const getTotal = computed(() =>
@@ -39,6 +45,7 @@ export const useCartStore = defineStore(
             addProduct,
             setProducts,
             removeProduct,
+            voidProduct,
             getProducts,
             getTotal,
         };

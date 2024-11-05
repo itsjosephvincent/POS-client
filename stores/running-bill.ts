@@ -31,6 +31,12 @@ export const useRunningBillStore = defineStore(
                 (item) => item.uuid !== uuid,
             );
         }
+        function voidProduct(uuid: string) {
+            const item = state.products.find((item) => item.uuid === uuid);
+            if (item) {
+                item.is_voided = true;
+            }
+        }
 
         const getTable = computed(() => state.table);
         const getProducts = computed(() => state.products);
@@ -47,6 +53,7 @@ export const useRunningBillStore = defineStore(
             addProduct,
             setProducts,
             removeProduct,
+            voidProduct,
             getTable,
             getProducts,
             getTotal,
