@@ -138,17 +138,11 @@ async function runningBillsRefetch(table_uuid: any) {
             <div class="">P{{ total.toFixed(2) }}</div>
         </div>
         <div
-            class="m-2 flex justify-between font-bold text-sm text-tertiaryText"
-        >
-            <div class="">Tax (10%)</div>
-            <div class="">P{{ (total * 0.1).toFixed(2) }}</div>
-        </div>
-        <div
             class="m-2 border-b-2 border-dashed border-tertiaryText mt-4"
         ></div>
         <div class="mx-2 m-4 flex justify-between font-bold text-primaryText">
             <div class="">Total</div>
-            <div class="">P{{ (total + total * 0.1).toFixed(2) }}</div>
+            <div class="">P{{ total.toFixed(2) }}</div>
         </div>
         <div class="flex justify-center items-center">
             <PrimaryButton

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type { Product } from '~/common/types';
-import { usePageStore } from '~/stores/page';
+import type { Order } from '~/common/types';
 
-const pageTitle = 'SKUs';
+const pageTitle = 'Orders';
 const pageStore = usePageStore();
 
 definePageMeta({
@@ -15,13 +14,13 @@ useHead({
 onMounted(() => {
     pageStore.setPage(pageTitle);
 });
-function initializePageData(product: Product) {
-    pageStore.setParams([product.name]);
+function initializePageData(order: Order) {
+    pageStore.setParams([order.order_number]);
 }
 </script>
 
 <template>
     <div class="w-full px-6">
-        <AdminProductsDisplay @product-fetch="initializePageData" />
+        <AdminOrdersDisplay @order-fetch="initializePageData" />
     </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const pageTitle = 'Stores';
+const pageTitle = 'Orders';
 const pageStore = usePageStore();
 definePageMeta({
     layout: 'admin',
@@ -10,15 +10,12 @@ useHead({
 });
 onMounted(() => {
     pageStore.setPage(pageTitle);
-    pageStore.setParams(['New Store']);
-});
-onBeforeUnmount(() => {
     pageStore.setParams([]);
 });
 </script>
 
 <template>
-    <div class="w-full px-6">
-        <AdminStoresForm />
+    <div id="products-page" class="w-full px-6">
+        <AdminOrdersTable />
     </div>
 </template>

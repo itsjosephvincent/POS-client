@@ -9,13 +9,14 @@ const sidebarMenus: Array<SidebarMenu> = [
         icon: 'home',
     },
     { id: 'stores', link: '/admin/stores', name: 'Stores', icon: 'warehouse' },
-    { id: 'skus', link: '/admin/skus', name: 'SKUs', icon: 'orders' },
+    { id: 'skus', link: '/admin/skus', name: 'SKUs', icon: 'products' },
     {
         id: 'categories',
         link: '/admin/categories',
         name: 'Categories',
         icon: 'categories',
     },
+    { id: 'orders', link: '/admin/orders', name: 'Orders', icon: 'orders' },
 ];
 </script>
 

@@ -94,14 +94,6 @@ const getTotal = computed(() => {
                             P{{ parseFloat(getTotal.toString()).toFixed(2) }}
                         </div>
                     </div>
-                    <div class="w-full flex justify-between items-center">
-                        <div class="py-1 text-sm text-secondaryText text-wrap">
-                            Tax(10%)
-                        </div>
-                        <div class="py-1 text-sm text-secondaryText text-wrap">
-                            P{{ (getTotal * 0.1).toFixed(2) }}
-                        </div>
-                    </div>
                     <div
                         class="w-full m-2 border-b-2 border-dashed border-tertiaryText mt-4"
                     ></div>
@@ -110,11 +102,7 @@ const getTotal = computed(() => {
                             Total
                         </div>
                         <div class="py-1 text-sm text-primaryText text-wrap">
-                            P{{
-                                parseFloat(
-                                    (getTotal + getTotal * 0.1).toString(),
-                                ).toFixed(2)
-                            }}
+                            P{{ parseFloat(getTotal.toString()).toFixed(2) }}
                         </div>
                     </div>
                 </div>

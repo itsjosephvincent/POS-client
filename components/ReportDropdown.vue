@@ -28,6 +28,7 @@ function itemSelect(item: SelectOption) {
     select.value = item.value;
     isOpen.value = false;
     emit('update:modelValue', selectedOption.value.value);
+    console.log(selectedOption.value.value);
 }
 onMounted(() => {
     document.addEventListener('click', handleClickOutside);
@@ -48,15 +49,15 @@ const errorClass = computed(() =>
 </script>
 
 <template>
-    <div class="w-full relative" ref="boxRef">
+    <div class="w-56 h-10 relative" ref="boxRef">
         <button
             @click="toggle"
             :class="[
-                'w-full h-[46px] px-4 rounded-xl flex justify-between items-center',
+                'w-full h-10 bg-white px-4 rounded-xl flex justify-between items-center',
                 isOpen
                     ? 'border-2 border-secondaryColor'
                     : 'border border-primaryBorder',
-                !selectedOption ? 'text-secondaryText' : 'text-primaryText',
+                'text-primaryText',
                 errorClass,
             ]"
         >
