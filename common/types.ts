@@ -106,7 +106,7 @@ export interface Order {
     uuid: string;
     order_number: string;
     cashier: Cashier;
-    orderDetails: OrderDetail;
+    orderDetails: Array<OrderDetail>;
     created_at: string;
 }
 
