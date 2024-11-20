@@ -108,11 +108,11 @@ const getTotal = computed(() => {
                 </div>
 
                 <div class="w-full flex justify-start items-center gap-1 mt-4">
-                    <PrimaryButton
+                    <!-- <PrimaryButton
                         label="Print Receipt"
                         icon="printer"
                         class="w-full"
-                    />
+                    /> -->
                     <PrimaryButton
                         @click="onNewOrderClick"
                         label="New Order"

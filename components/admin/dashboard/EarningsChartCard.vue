@@ -130,7 +130,7 @@ function draw() {
     <div
         class="bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText"
     >
-        <div class="text-lg">Revenue</div>
+        <div class="text-lg">Sold by Store</div>
         <div ref="chart" class="h-fit"></div>
         <div class="flex justify-center items-center my-1">
             <div
