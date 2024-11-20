@@ -234,7 +234,5 @@ const getSelectedProp = computed(() => {
                 :label="!props.isEdit ? 'Save Product' : 'Update Product'"
             />
         </div>
-        <pre>{{ values }}</pre>
-        <pre>{{ errors }}</pre>
     </div>
 </template>

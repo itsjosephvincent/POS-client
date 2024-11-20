@@ -1,32 +1,53 @@
 <script setup lang="ts">
 import * as d3 from 'd3';
+import { reportService } from '~/api/admin/ReportService';
 
-const props = defineProps<{
-    data: Array<object>;
-}>();
 const chart = ref(null);
 
 // Line chart settings
-const width = 300;
-const height = 120;
+const width = 200;
+const height = 100;
 const margin = { top: 20, right: 30, bottom: 30, left: 50 };
-const colors = ['#0fa3b1', '#a7c957', '#f07167'];
-const getDates = (): Array<Date> => {
-    let dates: Array<Date> = [];
-    props.data.forEach((item) => {
-        dates.push(...item.data.map((d) => d.date));
-    });
-    return dates;
-};
-const getValues = (): Array<number> => {
-    let values: Array<number> = [];
-    props.data.forEach((item) => {
-        values.push(...item.data.map((d) => d.value));
-    });
-    return values;
-};
+const color = d3.scaleOrdinal(d3.schemeTableau10);
+
+const props = defineProps<{
+    date: string | null;
+}>();
+const itemsData = ref([]);
+
+async function fetch() {
+    try {
+        let params: any = {};
+        if (props.date) {
+            params.date = props.date;
+        }
+        const response = await reportService.store(params);
+        if (response && response.data) {
+            itemsData.value = response.data;
+            draw();
+        } else {
+            throw 'Empty data.';
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 onMounted(() => {
+    fetch();
+});
+watch(
+    () => props.date,
+    () => {
+        fetch();
+    },
+    { immediate: true },
+);
+
+function draw() {
+    // Clear previous chart
+    d3.select(chart.value).select('svg').remove();
+
     const tooltip = d3
         .select('body')
         .append('div')
@@ -39,6 +60,7 @@ onMounted(() => {
         .style('font-size', '12px')
         .style('pointer-events', 'none');
 
+    // Create SVG
     const svg = d3
         .select(chart.value)
         .append('svg')
@@ -47,67 +69,61 @@ onMounted(() => {
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
+    // Scales
     const x = d3
-        .scaleTime()
-        .domain(d3.extent(getDates(), (d: any) => d))
-        .range([0, width]);
+        .scaleBand()
+        .domain(
+            itemsData.value.map((d: any) => {
+                return d.store_name;
+            }),
+        )
+        .range([0, width])
+        .padding(0.2);
 
     const y = d3
         .scaleLinear()
-        .domain([0, d3.max(getValues(), (d: any) => d)])
+        .domain([0, d3.max(itemsData.value, (d: any) => parseFloat(d.sold))])
         .range([height, 0]);
 
+    // Axes
     svg.append('g')
-        .attr('transform', `translate(0, ${height})`)
-        .call(d3.axisBottom(x).tickFormat(d3.timeFormat('%b')));
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x));
+    // .selectAll('text')
+    // .attr('transform', 'rotate(-40)')
+    // .style('text-anchor', 'end')
+    // .style('font-size', '8px');
 
     svg.append('g').call(d3.axisLeft(y).ticks(5));
 
-    const line = d3
-        .line()
-        .x((d: any) => x(d.date))
-        .y((d: any) => y(d.value))
-        .curve(d3.curveMonotoneX);
-
-    const drawLines = (
-        item: object,
-        strokeColor: string,
-        fillColor: string,
-    ) => {
-        svg.append('path')
-            .datum(item.data)
-            .attr('fill', 'none')
-            .attr('stroke', strokeColor)
-            .attr('stroke-width', 2)
-            .attr('d', line);
-
-        svg.selectAll('dot')
-            .data(item.data)
-            .enter()
-            .append('circle')
-            .attr('cx', (d: any) => x(d.date))
-            .attr('cy', (d: any) => y(d.value))
-            .attr('r', 4)
-            .attr('fill', fillColor)
-            .on('mouseover', (event: any, d: any) => {
-                tooltip
-                    .style('visibility', 'visible')
-                    .text(`${item.name} Revenue: ${d.value}`);
-            })
-            .on('mousemove', (event: any) => {
-                tooltip
-                    .style('top', `${event.pageY - 10}px`)
-                    .style('left', `${event.pageX + 10}px`);
-            })
-            .on('mouseout', () => {
-                tooltip.style('visibility', 'hidden');
-            });
-    };
-
-    props.data.forEach((item, index) => {
-        drawLines(item, colors[index], colors[index]);
-    });
-});
+    // Bars
+    svg.selectAll('.bar')
+        .data(itemsData.value)
+        .enter()
+        .append('rect')
+        .attr('class', 'bar')
+        .attr('x', (d: any) => x(d.store_name))
+        .attr('y', (d: any) => y(parseFloat(d.sold)))
+        .attr('value', (d: any) => parseFloat(d.sold))
+        .attr('width', x.bandwidth())
+        .attr('height', (d: any) => {
+            return height - y(parseFloat(d.sold));
+        })
+        .attr('fill', (d: any) => color(d.store_name))
+        .on('mouseover', (event: any, d: any) => {
+            tooltip
+                .style('visibility', 'visible')
+                .text(`${d.store_name}: ${d.sold}`);
+        })
+        .on('mousemove', (event: any) => {
+            tooltip
+                .style('top', `${event.pageY - 10}px`)
+                .style('left', `${event.pageX + 10}px`);
+        })
+        .on('mouseout', () => {
+            tooltip.style('visibility', 'hidden');
+        });
+}
 </script>
 
 <template>
@@ -115,17 +131,17 @@ onMounted(() => {
         class="bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText"
     >
         <div class="text-lg">Revenue</div>
-        <div ref="chart" class=""></div>
-        <div class="flex justify-end items-center my-1">
+        <div ref="chart" class="h-fit"></div>
+        <div class="flex justify-center items-center my-1">
             <div
-                v-for="(item, index) in data"
+                v-for="(item, index) in itemsData"
                 class="flex justify-start items-center gap-1 mx-2"
             >
                 <span
                     :class="['p-2 rounded-md border border-primaryBorder']"
-                    :style="`background: ${colors[index]}`"
+                    :style="`background: ${color(item.store_name)}`"
                 ></span>
-                <span class="text text-xs">{{ item.name }}</span>
+                <span class="text text-xs">{{ item.store_name }}</span>
             </div>
         </div>
     </div>

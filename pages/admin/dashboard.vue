@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { usePageStore } from '~/stores/page';
+import { reportService } from '~/api/admin/ReportService';
+import { storeService } from '~/api/admin/StoreService';
+import type { Store, Admin } from '~/common/types';
 
 const pageTitle = 'Dashboard';
 const pageStore = usePageStore();
@@ -10,77 +13,140 @@ definePageMeta({
 useHead({
     title: pageTitle,
 });
+
+const userStore = useUserStore();
+const user: Admin | null = userStore.getUser;
+
+interface SummaryReport {
+    total_payments: string;
+    total_cost: string;
+    total_earnings: string;
+    date: string;
+}
+
+const storesData: Ref<Array<Store> | null> = ref(null);
+const selectedStore = ref(null);
+
+const selectedDate: Ref<string | null> = ref(null);
+const summaryData: Ref<SummaryReport | null> = ref(null);
+
+const isLoading = ref(false);
+
+async function summaryReportFetch() {
+    try {
+        let params: any = {};
+        if (selectedDate.value) {
+            params.date = selectedDate.value;
+        }
+        if (selectedStore.value && selectedStore.value != 'all') {
+            params.store = selectedStore.value;
+        }
+        const response = await reportService.summary(params);
+        if (response && response.data) {
+            summaryData.value = response.data;
+        } else {
+            throw 'Empty data.';
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+async function storesFetch() {
+    try {
+        const params = {
+            admin_id: user?.id,
+        };
+        const response = await storeService.stores(params);
+        isLoading.value = false;
+        if (response && response.data) {
+            storesData.value = response.data;
+        } else {
+            throw 'Empty data.';
+        }
+    } catch (error) {
+        isLoading.value = false;
+        console.error(error);
+    }
+}
+
 onMounted(() => {
     pageStore.setPage(pageTitle);
+    summaryReportFetch();
+    storesFetch();
 });
 
-const data = [
-    {
-        name: 'A&W Fast Food',
-        data: [
-            { date: new Date(2025, 0, 1), value: 120000 },
-            { date: new Date(2025, 1, 1), value: 50000 },
-            { date: new Date(2025, 2, 1), value: 40000 },
-            { date: new Date(2025, 3, 1), value: 90000 },
-            { date: new Date(2025, 4, 1), value: 120000 },
-            { date: new Date(2025, 5, 1), value: 140000 },
-            { date: new Date(2025, 6, 1), value: 120000 },
-        ],
-    },
-    {
-        name: 'Happy Pet Shop',
-        data: [
-            { date: new Date(2025, 0, 1), value: 50000 },
-            { date: new Date(2025, 1, 1), value: 90000 },
-            { date: new Date(2025, 2, 1), value: 85000 },
-            { date: new Date(2025, 3, 1), value: 70000 },
-            { date: new Date(2025, 4, 1), value: 160000 },
-            { date: new Date(2025, 5, 1), value: 70000 },
-            { date: new Date(2025, 6, 1), value: 180000 },
-        ],
-    },
-    {
-        name: 'KC Convenience Store',
-        data: [
-            { date: new Date(2025, 0, 1), value: 40000 },
-            { date: new Date(2025, 1, 1), value: 50000 },
-            { date: new Date(2025, 2, 1), value: 80000 },
-            { date: new Date(2025, 3, 1), value: 90000 },
-            { date: new Date(2025, 4, 1), value: 70000 },
-            { date: new Date(2025, 5, 1), value: 50000 },
-            { date: new Date(2025, 6, 1), value: 60000 },
-        ],
-    },
-];
+watch(selectedStore, () => {
+    summaryReportFetch();
+});
+
+function onDateChanged(date: string) {
+    selectedDate.value = date;
+    summaryReportFetch();
+}
+
+const getTotalSales = computed(() =>
+    summaryData.value ? summaryData.value.total_payments : '0.00',
+);
+const getTotalEarnings = computed(() =>
+    summaryData.value ? summaryData.value.total_earnings : '0.00',
+);
+const getStoresSelect = computed(() => {
+    if (!storesData.value) return null;
+    let stores: any = [
+        {
+            key: 'all',
+            value: 'all',
+            label: 'All Stores',
+        },
+    ];
+    stores = [
+        ...stores,
+        ...storesData.value.map((d: Store) => ({
+            key: d.uuid,
+            value: d.uuid,
+            label: `${d.store_name} ${d.branch}`,
+        })),
+    ];
+    return stores;
+});
 </script>
 
 <template>
-    <div class="w-full px-2 md:px-4">
-        <AdminDashboardDatePicker />
-        <div class="w-full flex flex-wrap gap-4">
+    <div class="w-full px-2 md:px-4 pb-10">
+        <div class="w-full flex justify-start gap-2 items-center mb-4">
+            <ReportDropdown
+                v-if="storesData"
+                :options="getStoresSelect"
+                label="Store"
+                name="store"
+                placeholder="Select Store"
+                v-model="selectedStore"
+                :pre-selected-data="getStoresSelect[0]"
+            />
+            <AdminOrdersDatePicker @date-changed="onDateChanged" />
+        </div>
+        <div class="w-full flex flex-wrap gap-4 mb-4">
             <AdminDashboardInfoSummaryCard
-                title="Sales Today"
-                summary="9500.00"
+                title="Total Sales"
+                :summary="getTotalSales"
                 icon="cartAdd"
             />
             <AdminDashboardInfoSummaryCard
                 title="Total Earnings"
-                summary="120,000.00"
+                :summary="getTotalEarnings"
                 icon="sales"
             />
-            <AdminDashboardInfoSummaryCard
-                title="Total Orders"
-                summary="120"
-                icon="orders"
+        </div>
+        <div class="w-full flex flex-wrap gap-4 mb-4">
+            <AdminDashboardEarningsChartCard :date="selectedDate" />
+            <AdminDashboardCategoriesRevenueCard
+                :date="selectedDate"
+                :store="selectedStore"
             />
-            <AdminDashboardInfoSummaryCard
-                title="Stores Open"
-                summary="3"
-                icon="warehouse"
+            <AdminDashboardPopularItems
+                :date="selectedDate"
+                :store="selectedStore"
             />
-            <AdminDashboardPopularItems />
-            <AdminDashboardEarningsChartCard :data="data" />
-            <AdminDashboardCategoriesRevenueCard />
         </div>
     </div>
 </template>

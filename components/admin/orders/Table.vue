@@ -30,7 +30,7 @@ async function fetch() {
             sortOrder: sortOrder.value,
             name: filter.value, // filter store names
         };
-        if (selectedStore.value) {
+        if (selectedStore.value && selectedStore.value != 'all') {
             params.store = selectedStore.value;
         }
         if (selectedDate.value) {
@@ -72,10 +72,10 @@ async function storesFetch() {
 
 const dataTableColumns: Array<DataTableColumns> = [
     { key: 'order_number', label: 'Order', sortable: true },
-    { key: 'store', label: 'Store', sortable: true },
+    { key: 'store_name', label: 'Store', sortable: true },
     { key: 'cashier_name', label: 'Cashier', sortable: true },
     { key: 'payment', label: 'Payment', sortable: true },
-    { key: 'datetime', label: 'Date', sortable: true },
+    { key: 'created_at', label: 'Date', sortable: true },
 ];
 
 onMounted(() => {
@@ -84,7 +84,6 @@ onMounted(() => {
 });
 
 watch(selectedStore, () => {
-    console.log(selectedStore.value);
     fetch();
 });
 
@@ -148,11 +147,22 @@ const getTotalPages = computed(() => totalPages.value);
 const getCurrentPage = computed(() => currentPage.value);
 const getStoresSelect = computed(() => {
     if (!storesData.value) return null;
-    return storesData.value.map((d: Store) => ({
-        key: d.uuid,
-        value: d.uuid,
-        label: `${d.store_name} ${d.branch}`,
-    }));
+    let stores: any = [
+        {
+            key: 'all',
+            value: 'all',
+            label: 'All Stores',
+        },
+    ];
+    stores = [
+        ...stores,
+        ...storesData.value.map((d: Store) => ({
+            key: d.uuid,
+            value: d.uuid,
+            label: `${d.store_name} ${d.branch}`,
+        })),
+    ];
+    return stores;
 });
 </script>
 
@@ -160,16 +170,20 @@ const getStoresSelect = computed(() => {
     <div
         class="w-full flex flex-col items-center justify-center py-4 px-2 lg:mx-0"
     >
-        <div class="w-full flex justify-start gap-2 items-center mb-4">
-            <DatePicker @date-changed="onDateChanged" />
-            <ReportDropdown
-                v-if="storesData"
-                :options="getStoresSelect"
-                label="Store"
-                name="store"
-                placeholder="Select Store"
-                v-model="selectedStore"
-            />
+        <div class="w-full flex justify-between items-center mb-4">
+            <div class="w-full flex justify-between gap-2 items-center">
+                <ReportDropdown
+                    v-if="storesData"
+                    :options="getStoresSelect"
+                    label="Store"
+                    name="store"
+                    placeholder="Select Store"
+                    v-model="selectedStore"
+                    :pre-selected-data="getStoresSelect[0]"
+                />
+                <AdminOrdersDatePicker @date-changed="onDateChanged" />
+            </div>
+            <!-- <AdminOrdersTableFilter /> -->
         </div>
         <DataTable
             :loading="isLoading"
@@ -189,10 +203,10 @@ const getStoresSelect = computed(() => {
             @row-click="handleRowClick"
             search-placeholder="Filter Orders"
         >
-            <template #column-store="{ row }">
+            <template #column-store_name="{ row }">
                 <span>{{ row.store_name }} {{ row.branch }}</span>
             </template>
-            <template #column-datetime="{ row }">
+            <template #column-created_at="{ row }">
                 <span class="block text-right">{{
                     formatDateTime(row.created_at)
                 }}</span>

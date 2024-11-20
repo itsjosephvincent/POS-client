@@ -1,23 +1,67 @@
 <script setup lang="ts">
 import * as d3 from 'd3';
+import { reportService } from '~/api/admin/ReportService';
 
 const chart = ref(null);
-const data = [
-    { label: 'Beverages', value: 40000 },
-    { label: 'Coffee', value: 70000 },
-    { label: 'Pasta', value: 50000 },
-    { label: 'Meals', value: 90000 },
-];
 
-const width = 300;
-const height = 170;
+const width = 200;
+const height = 130;
 const margin = { top: 20, right: 20, bottom: 20, left: 20 };
 const radius =
     Math.min(width, height) / 2 - Math.max(...Object.values(margin)) / 2;
 
 const color = d3.scaleOrdinal(d3.schemeTableau10);
 
+const props = defineProps<{
+    date: string | null;
+    store: string | null;
+}>();
+const itemsData = ref([]);
+
+async function fetch() {
+    try {
+        let params: any = {};
+        if (props.date) {
+            params.date = props.date;
+        }
+        if (props.store && props.store != 'all') {
+            params.store = props.store;
+        }
+        const response = await reportService.category(params);
+        if (response && response.data) {
+            itemsData.value = response.data.map((i) => {
+                return { label: i.name, value: parseFloat(i.earnings) };
+            });
+            draw();
+        } else {
+            throw 'Empty data.';
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+watch(
+    () => props.date,
+    () => {
+        fetch();
+    },
+    { immediate: true },
+);
+watch(
+    () => props.store,
+    () => {
+        fetch();
+    },
+);
+
 onMounted(() => {
+    fetch();
+});
+
+function draw() {
+    d3.select(chart.value).selectAll('*').remove();
+
     const tooltip = d3
         .select('body')
         .append('div')
@@ -54,7 +98,7 @@ onMounted(() => {
     // Generate the donut chart slices
     const arcs = svg
         .selectAll('arc')
-        .data(pie(data))
+        .data(pie(itemsData.value))
         .enter()
         .append('g')
         .attr('class', 'arc');
@@ -76,7 +120,7 @@ onMounted(() => {
         .on('mouseout', () => {
             tooltip.style('visibility', 'hidden');
         });
-});
+}
 </script>
 
 <template>
@@ -85,9 +129,9 @@ onMounted(() => {
     >
         <div class="text-lg">Earnings by Category</div>
         <div ref="chart" class=""></div>
-        <div class="flex justify-end items-center my-1">
+        <div class="flex justify-center items-center my-1">
             <div
-                v-for="(item, index) in data"
+                v-for="(item, index) in itemsData"
                 class="flex justify-start items-center gap-1 mx-2"
             >
                 <span

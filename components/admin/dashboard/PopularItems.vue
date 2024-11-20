@@ -1,31 +1,65 @@
 <script setup lang="ts">
+import { reportService } from '~/api/admin/ReportService';
+
 interface DataTableColumns {
     key: string;
     label: string;
     sortable: boolean;
 }
+
+const props = defineProps<{
+    date: string | null;
+    store: string | null;
+}>();
+const itemsData = ref([]);
+
+async function fetch() {
+    try {
+        let params: any = {};
+        if (props.date) {
+            params.date = props.date;
+        }
+        if (props.store && props.store != 'all') {
+            params.store = props.store;
+        }
+        const response = await reportService.popular(params);
+        if (response && response.data) {
+            itemsData.value = response.data;
+        } else {
+            throw 'Empty data.';
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+watch(
+    () => props.date,
+    () => {
+        fetch();
+    },
+    { immediate: true },
+);
+watch(
+    () => props.store,
+    () => {
+        fetch();
+    },
+);
+
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'name', label: 'Name', sortable: true },
+    { key: 'product_name', label: 'Name', sortable: true },
     { key: 'cost', label: 'Cost', sortable: true },
     { key: 'price', label: 'Price', sortable: true },
-    { key: 'sold', label: 'Sold Quantity', sortable: true },
-    { key: 'income', label: 'Total Income', sortable: true },
-];
-const data: Array<object> = [
-    {
-        name: 'Chai Latte (M)',
-        cost: 80.0,
-        price: 120.0,
-        sold: 1200,
-        income: 48000.0,
-    },
-    { name: 'Coke 1L', cost: 30.0, price: 50.0, sold: 2340, income: 46800.0 },
+    { key: 'quantity', label: 'Sold Quantity', sortable: true },
+    { key: 'sold', label: 'Total Income', sortable: true },
+    { key: 'earnings', label: 'Total Earnings', sortable: true },
 ];
 </script>
 
 <template>
     <div class="p-4 bg-secondaryBg rounded-xl border border-primaryBorder">
         <div class="text-lg my-2">Popular Items</div>
-        <DataTable :columns="dataTableColumns" :data-source="data" />
+        <DataTable :columns="dataTableColumns" :data-source="itemsData" />
     </div>
 </template>
