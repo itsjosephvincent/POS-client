@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as d3 from 'd3';
-import { reportService } from '~/api/admin/ReportService';
+import { reportService } from '~/api/store/ReportService';
 
 const chart = ref(null);
 
@@ -14,7 +14,6 @@ const color = d3.scaleOrdinal(d3.schemeTableau10);
 
 const props = defineProps<{
     date: string | null;
-    store: string | null;
 }>();
 const itemsData = ref([]);
 
@@ -23,9 +22,6 @@ async function fetch() {
         let params: any = {};
         if (props.date) {
             params.date = props.date;
-        }
-        if (props.store && props.store != 'all') {
-            params.store = props.store;
         }
         const response = await reportService.category(params);
         if (response && response.data) {
@@ -47,12 +43,6 @@ watch(
         fetch();
     },
     { immediate: true },
-);
-watch(
-    () => props.store,
-    () => {
-        fetch();
-    },
 );
 
 onMounted(() => {
