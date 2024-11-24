@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { orderService } from '~/api/admin/OrderService';
-import { storeService } from '~/api/admin/StoreService';
-import type { DataTableColumns, Admin, Order, Store } from '~/common/types';
+import { orderService } from '~/api/store/OrderService';
+import type { DataTableColumns, Order, Store } from '~/common/types';
 
 const userStore = useUserStore();
-const user: Admin | null = userStore.getUser;
-
-const storesData: Ref<Array<Store> | null> = ref(null);
-const selectedStore = ref(null);
+const user: Store | null = userStore.getUser;
 
 const selectedDate: Ref<String | null> = ref(null);
 
@@ -29,10 +25,8 @@ async function fetch() {
             sortField: sortField.value,
             sortOrder: sortOrder.value,
             name: filter.value, // filter store names
+            store: user?.uuid,
         };
-        if (selectedStore.value && selectedStore.value != 'all') {
-            params.store = selectedStore.value;
-        }
         if (selectedDate.value) {
             params.date = selectedDate.value;
         }
@@ -52,23 +46,6 @@ async function fetch() {
         console.error(error);
     }
 }
-async function storesFetch() {
-    try {
-        const params = {
-            admin_id: user?.id,
-        };
-        const response = await storeService.stores(params);
-        isLoading.value = false;
-        if (response && response.data) {
-            storesData.value = response.data;
-        } else {
-            throw 'Empty data.';
-        }
-    } catch (error) {
-        isLoading.value = false;
-        console.error(error);
-    }
-}
 
 const dataTableColumns: Array<DataTableColumns> = [
     { key: 'order_number', label: 'Order', sortable: true },
@@ -79,11 +56,6 @@ const dataTableColumns: Array<DataTableColumns> = [
 ];
 
 onMounted(() => {
-    fetch();
-    storesFetch();
-});
-
-watch(selectedStore, () => {
     fetch();
 });
 
@@ -118,7 +90,7 @@ function sortData(column: string, direction: string) {
 }
 function handleRowClick(row: Order) {
     if (row && row.uuid) {
-        navigateTo(`/admin/orders/` + row.uuid);
+        navigateTo(`/store/orders/` + row.uuid);
     }
 }
 function formatDateTime(dateTime: string) {
@@ -145,25 +117,6 @@ function onDateChanged(date: string) {
 const getRowsPerPage = computed(() => rowsPerPage.value || 10);
 const getTotalPages = computed(() => totalPages.value);
 const getCurrentPage = computed(() => currentPage.value);
-const getStoresSelect = computed(() => {
-    if (!storesData.value) return null;
-    let stores: any = [
-        {
-            key: 'all',
-            value: 'all',
-            label: 'All Stores',
-        },
-    ];
-    stores = [
-        ...stores,
-        ...storesData.value.map((d: Store) => ({
-            key: d.uuid,
-            value: d.uuid,
-            label: `${d.store_name} ${d.branch}`,
-        })),
-    ];
-    return stores;
-});
 </script>
 
 <template>
@@ -171,16 +124,7 @@ const getStoresSelect = computed(() => {
         class="w-full flex flex-col items-center justify-center py-4 px-2 lg:mx-0"
     >
         <div class="w-full flex justify-between items-center mb-4">
-            <div class="w-full flex justify-between gap-2 items-center">
-                <ReportDropdown
-                    v-if="storesData"
-                    :options="getStoresSelect"
-                    label="Store"
-                    name="store"
-                    placeholder="Select Store"
-                    v-model="selectedStore"
-                    :pre-selected-data="getStoresSelect[0]"
-                />
+            <div class="w-full flex justify-end gap-2 items-center">
                 <AdminOrdersDatePicker @date-changed="onDateChanged" />
             </div>
             <!-- <AdminOrdersTableFilter /> -->

@@ -20,6 +20,7 @@ const sidebarMenus: Array<SidebarMenu> = [
         name: 'Tables',
         icon: 'table',
     },
+    { id: 'orders', link: '/store/orders', name: 'Orders', icon: 'orders' },
 ];
 </script>
 

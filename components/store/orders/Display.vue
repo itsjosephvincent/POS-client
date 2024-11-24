@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { orderService } from '~/api/admin/OrderService';
+import { orderService } from '~/api/store/OrderService';
 import type { Order, OrderDetail } from '~/common/types';
 
 const route = useRoute();
