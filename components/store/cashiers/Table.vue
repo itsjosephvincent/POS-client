@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { cashierService } from '~/api/store/CashierService';
-import type { DataTableColumns, Cashier, Store } from '~/common/types';
+import type {
+    DataTableColumns,
+    Cashier,
+    Store,
+    SuperAdmin,
+    Admin,
+} from '~/common/types';
 
 const userStore = useUserStore();
-const user: Store | null = userStore.getUser;
+const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
 const data = ref([]);
 const admins = computed(() => data.value);

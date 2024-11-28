@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { storeService } from '~/api/superadmin/StoreService';
-import type { Store, DataTableColumns, SuperAdmin } from '~/common/types';
+import type {
+    Store,
+    DataTableColumns,
+    SuperAdmin,
+    Admin,
+    Cashier,
+} from '~/common/types';
 
 const route = useRoute();
 const userStore = useUserStore();
-const user: SuperAdmin | null = userStore.getUser;
+const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
 const data = ref([]);
 const rowsPerPage = ref(10);

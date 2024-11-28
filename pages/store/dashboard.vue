@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { usePageStore } from '~/stores/page';
 import { reportService } from '~/api/store/ReportService';
-import type { Store, Admin } from '~/common/types';
+import type { Store, Admin, SuperAdmin, Cashier } from '~/common/types';
 
 const pageTitle = 'Dashboard';
 const pageStore = usePageStore();
@@ -14,7 +14,7 @@ useHead({
 });
 
 const userStore = useUserStore();
-const user: Store | null = userStore.getUser;
+const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
 interface SummaryReport {
     total_payments: string;

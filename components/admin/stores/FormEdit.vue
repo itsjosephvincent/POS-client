@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { storeService } from '~/api/admin/StoreService';
-import type { Admin, Store } from '~/common/types';
+import type { Admin, Store, SuperAdmin, Cashier } from '~/common/types';
 
 const route = useRoute();
 const emit = defineEmits(['storeFetch']);
 const userStore = useUserStore();
-const user: Admin | null = userStore.getUser;
+const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
 onMounted(() => {
     fetch();

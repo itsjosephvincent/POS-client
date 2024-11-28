@@ -5,6 +5,9 @@ import {
     type BillingProduct,
     type Cashier,
     type Table,
+    type SuperAdmin,
+    type Admin,
+    type Store,
 } from '~/common/types';
 import useRunningBillFetch from '~/components/cashier/composables/useRunningBillFetch';
 
@@ -13,7 +16,7 @@ const userStore = useUserStore();
 const loadingStore = useLoadingStore();
 const transactionStore = useTransactionStore();
 const runningBillStore = useRunningBillStore();
-const user: Cashier | null = userStore.getUser;
+const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 const isFetching: Ref<boolean> = ref(false);
 
 const tables: Ref<Array<Table> | null> = ref(null);

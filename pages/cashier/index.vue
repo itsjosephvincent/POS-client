@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { productService } from '~/api/cashier/ProductService';
-import type { BillingProduct, Cashier, Product } from '~/common/types';
+import type {
+    BillingProduct,
+    Cashier,
+    Product,
+    SuperAdmin,
+    Admin,
+    Store,
+} from '~/common/types';
 import useProductFilter from '~/components/cashier/composables/useProductFilter';
 
 definePageMeta({
@@ -8,7 +15,7 @@ definePageMeta({
     layout: 'cashier',
 });
 const userStore = useUserStore();
-const user: Cashier | null = userStore.getUser;
+const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 const pageStore = usePageStore();
 const pageTitle = 'Cashier';
 useHead({

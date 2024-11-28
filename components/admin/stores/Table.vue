@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { storeService } from '~/api/admin/StoreService';
-import type { Store, DataTableColumns, Admin } from '~/common/types';
+import type {
+    Store,
+    DataTableColumns,
+    Admin,
+    SuperAdmin,
+    Cashier,
+} from '~/common/types';
 
 const userStore = useUserStore();
-const user: Admin | null = userStore.getUser;
+const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
 const data = ref([]);
 const rowsPerPage = ref(10);

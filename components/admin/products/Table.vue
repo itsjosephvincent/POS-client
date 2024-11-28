@@ -4,12 +4,14 @@ import type {
     Admin,
     DataTableColumns,
     Product,
-    Category,
+    Cashier,
+    SuperAdmin,
+    Store,
 } from '~/common/types';
 
 const viewport = useViewport();
 const userStore = useUserStore();
-const user: Admin | null = userStore.getUser;
+const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
 const isLoading = ref(false);
 const productsData = ref([]);

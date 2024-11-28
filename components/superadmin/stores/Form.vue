@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as yup from 'yup';
 import { storeService } from '~/api/superadmin/StoreService';
-import type { Admin, Store, SuperAdmin } from '~/common/types';
+import type { Admin, Store, SuperAdmin, Cashier } from '~/common/types';
 
 const route = useRoute();
 const props = defineProps<{
@@ -9,7 +9,7 @@ const props = defineProps<{
     editData?: Store;
 }>();
 const userStore = useUserStore();
-const user: SuperAdmin | null = userStore.getUser;
+const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
 const loading = ref(false);
 

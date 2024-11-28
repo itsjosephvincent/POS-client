@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { orderService } from '~/api/admin/OrderService';
 import { storeService } from '~/api/admin/StoreService';
-import type { DataTableColumns, Admin, Order, Store } from '~/common/types';
+import type {
+    DataTableColumns,
+    Admin,
+    Order,
+    Store,
+    SuperAdmin,
+    Cashier,
+} from '~/common/types';
 
 const userStore = useUserStore();
-const user: Admin | null = userStore.getUser;
+const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
 const storesData: Ref<Array<Store> | null> = ref(null);
 const selectedStore = ref(null);

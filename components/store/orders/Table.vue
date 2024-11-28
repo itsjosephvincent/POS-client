@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { orderService } from '~/api/store/OrderService';
-import type { DataTableColumns, Order, Store } from '~/common/types';
+import type {
+    DataTableColumns,
+    Order,
+    Store,
+    SuperAdmin,
+    Admin,
+    Cashier,
+} from '~/common/types';
 
 const userStore = useUserStore();
-const user: Store | null = userStore.getUser;
+const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
 const selectedDate: Ref<String | null> = ref(null);
 

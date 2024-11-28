@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { authService } from '~/api/cashier/AuthService';
+import type { SuperAdmin, Admin, Store, Cashier } from '~/common/types';
 const userStore = useUserStore();
 const pageStore = usePageStore();
-const user: any = userStore.getUser;
+const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
 const showPopup = ref(false);
 const popupRef: Ref<any> = ref(null);
