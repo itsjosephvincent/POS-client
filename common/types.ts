@@ -125,6 +125,7 @@ export interface DataTableColumns {
     key: string;
     label: string;
     sortable?: boolean;
+    desktopOnly?: boolean;
 }
 
 export enum Roles {

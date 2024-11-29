@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { DataTableColumns } from '~/common/types';
 
+const viewport = useViewport();
 const emit = defineEmits(['sortData', 'nextPage', 'previousPage', 'rowClick']);
 
 interface DataTableActions {
@@ -71,7 +72,13 @@ function toggleSorting(column: DataTableColumns) {
                             v-for="column in props.columns"
                             :key="column.key"
                             @click="toggleSorting(column)"
-                            :class="['px-4 py-3 cursor-pointer select-none']"
+                            :class="[
+                                'px-4 py-3 cursor-pointer select-none',
+                                viewport.isLessThan('tablet') &&
+                                column.desktopOnly
+                                    ? 'hidden'
+                                    : '',
+                            ]"
                         >
                             <div
                                 :class="[
@@ -120,6 +127,10 @@ function toggleSorting(column: DataTableColumns) {
                             :class="[
                                 getColumnClass(row, column.key),
                                 'px-4 h-16',
+                                viewport.isLessThan('tablet') &&
+                                column.desktopOnly
+                                    ? 'hidden'
+                                    : '',
                             ]"
                         >
                             <slot

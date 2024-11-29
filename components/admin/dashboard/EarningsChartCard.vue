@@ -128,7 +128,7 @@ function draw() {
 
 <template>
     <div
-        class="bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText"
+        class="w-full md:w-[40%] md:max-w-[450px] bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText flex flex-col justify-center items-center"
     >
         <div class="text-lg">Sold by Store</div>
         <div ref="chart" class="h-fit"></div>

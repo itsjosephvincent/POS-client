@@ -2,6 +2,15 @@
 import * as d3 from 'd3';
 import { reportService } from '~/api/admin/ReportService';
 
+interface CategoryEarnings {
+    category_id: number;
+    name: string;
+    total_quantity: string;
+    total_cost: string;
+    sold: string;
+    earnings: string;
+}
+
 const chart = ref(null);
 
 const width = 200;
@@ -16,7 +25,7 @@ const props = defineProps<{
     date: string | null;
     store: string | null;
 }>();
-const itemsData = ref([]);
+const itemsData: Ref<any> = ref([]);
 
 async function fetch() {
     try {
@@ -29,7 +38,7 @@ async function fetch() {
         }
         const response = await reportService.category(params);
         if (response && response.data) {
-            itemsData.value = response.data.map((i) => {
+            itemsData.value = response.data.map((i: CategoryEarnings) => {
                 return { label: i.name, value: parseFloat(i.earnings) };
             });
             draw();
@@ -125,20 +134,24 @@ function draw() {
 
 <template>
     <div
-        class="bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText flex flex-col justify-center items-center"
+        class="w-full md:w-[40%] bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText flex flex-col justify-center items-center"
     >
         <div class="text-lg">Earnings by Category</div>
         <div ref="chart" class=""></div>
         <div class="flex justify-center items-center my-1">
             <div
                 v-for="(item, index) in itemsData"
-                class="flex justify-start items-center gap-1 mx-2"
+                :key="item.label"
+                class="flex flex-col justify-center items-center gap-1 mx-2"
             >
                 <span
+                    v-if="item.label"
                     :class="['p-2 rounded-md border border-primaryBorder']"
                     :style="`background: ${color(item.label)}`"
                 ></span>
-                <span class="text text-xs">{{ item.label }}</span>
+                <span v-if="item.label" class="text text-xs">{{
+                    item.label
+                }}</span>
             </div>
         </div>
     </div>
