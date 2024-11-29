@@ -134,7 +134,7 @@ function draw() {
 
 <template>
     <div
-        class="w-full md:w-[40%] bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText flex flex-col justify-center items-center"
+        class="w-full md:w-[40%] md:max-w-[450px] bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText flex flex-col justify-center items-center"
     >
         <div class="text-lg">Earnings by Category</div>
         <div ref="chart" class=""></div>
