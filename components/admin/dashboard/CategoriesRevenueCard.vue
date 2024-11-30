@@ -41,7 +41,9 @@ async function fetch() {
             itemsData.value = response.data.map((i: CategoryEarnings) => {
                 return { label: i.name, value: parseFloat(i.earnings) };
             });
-            draw();
+            setTimeout(() => {
+                draw();
+            }, 100);
         } else {
             throw 'Empty data.';
         }
@@ -70,10 +72,14 @@ onMounted(() => {
 
 function draw() {
     d3.select(chart.value).selectAll('*').remove();
+    Array.from(document.body.querySelectorAll('.categories-tooltip')).forEach(
+        (i) => i.remove(),
+    );
 
     const tooltip = d3
         .select('body')
         .append('div')
+        .attr('class', 'categories-tooltip')
         .style('position', 'absolute')
         .style('visibility', 'hidden')
         .style('background-color', 'white')
@@ -130,6 +136,8 @@ function draw() {
             tooltip.style('visibility', 'hidden');
         });
 }
+
+const hasData = computed(() => itemsData?.value && itemsData?.value?.length);
 </script>
 
 <template>
@@ -137,7 +145,13 @@ function draw() {
         class="w-full md:w-[40%] md:max-w-[450px] bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText flex flex-col justify-center items-center"
     >
         <div class="text-lg">Earnings by Category</div>
-        <div ref="chart" class=""></div>
+        <div ref="chart" class="h-fit" v-if="hasData"></div>
+        <div
+            class="h-[120px] w-[200px] flex justify-center items-center text text-secondaryText"
+            v-else
+        >
+            No data to display
+        </div>
         <div class="flex justify-center items-center my-1">
             <div
                 v-for="(item, index) in itemsData"

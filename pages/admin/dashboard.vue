@@ -138,7 +138,10 @@ const getStoresSelect = computed(() => {
             />
         </div>
         <div class="w-full flex flex-wrap gap-4 mb-4">
-            <AdminDashboardEarningsChartCard :date="selectedDate" />
+            <AdminDashboardEarningsChartCard
+                :date="selectedDate"
+                :store="selectedStore"
+            />
             <AdminDashboardCategoriesRevenueCard
                 :date="selectedDate"
                 :store="selectedStore"

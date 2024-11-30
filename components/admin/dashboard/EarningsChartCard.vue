@@ -2,6 +2,15 @@
 import * as d3 from 'd3';
 import { reportService } from '~/api/admin/ReportService';
 
+interface EarningsReport {
+    uuid: string;
+    store_name: string;
+    branch: string;
+    quantity: string | number;
+    sold: string | number;
+    earnings: string | number;
+}
+
 const chart = ref(null);
 
 // Line chart settings
@@ -12,8 +21,9 @@ const color = d3.scaleOrdinal(d3.schemeTableau10);
 
 const props = defineProps<{
     date: string | null;
+    store: string | null;
 }>();
-const itemsData = ref([]);
+const itemsData: Ref<Array<EarningsReport>> = ref([]);
 
 async function fetch() {
     try {
@@ -24,7 +34,9 @@ async function fetch() {
         const response = await reportService.store(params);
         if (response && response.data) {
             itemsData.value = response.data;
-            draw();
+            setTimeout(() => {
+                draw();
+            }, 100);
         } else {
             throw 'Empty data.';
         }
@@ -43,14 +55,24 @@ watch(
     },
     { immediate: true },
 );
+watch(
+    () => props.store,
+    () => {
+        fetch();
+    },
+);
 
 function draw() {
     // Clear previous chart
-    d3.select(chart.value).select('svg').remove();
+    d3.select(chart.value).selectAll('*').remove();
+    Array.from(document.body.querySelectorAll('.earnings-tooltip')).forEach(
+        (i) => i.remove(),
+    );
 
     const tooltip = d3
         .select('body')
         .append('div')
+        .attr('class', 'earnings-tooltip')
         .style('position', 'absolute')
         .style('visibility', 'hidden')
         .style('background-color', 'white')
@@ -82,17 +104,16 @@ function draw() {
 
     const y = d3
         .scaleLinear()
-        .domain([0, d3.max(itemsData.value, (d: any) => parseFloat(d.sold))])
+        .domain([
+            0,
+            d3.max(itemsData.value, (d: any): any => parseFloat(d.sold)),
+        ])
         .range([height, 0]);
 
     // Axes
     svg.append('g')
         .attr('transform', `translate(0,${height})`)
         .call(d3.axisBottom(x));
-    // .selectAll('text')
-    // .attr('transform', 'rotate(-40)')
-    // .style('text-anchor', 'end')
-    // .style('font-size', '8px');
 
     svg.append('g').call(d3.axisLeft(y).ticks(5));
 
@@ -102,7 +123,7 @@ function draw() {
         .enter()
         .append('rect')
         .attr('class', 'bar')
-        .attr('x', (d: any) => x(d.store_name))
+        .attr('x', (d: any): any => x(d.store_name))
         .attr('y', (d: any) => y(parseFloat(d.sold)))
         .attr('value', (d: any) => parseFloat(d.sold))
         .attr('width', x.bandwidth())
@@ -124,6 +145,8 @@ function draw() {
             tooltip.style('visibility', 'hidden');
         });
 }
+
+const hasData = computed(() => itemsData.value?.length);
 </script>
 
 <template>
@@ -131,8 +154,8 @@ function draw() {
         class="w-full md:w-[40%] md:max-w-[450px] bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText flex flex-col justify-center items-center"
     >
         <div class="text-lg">Sold by Store</div>
-        <div ref="chart" class="h-fit"></div>
-        <div class="flex justify-center items-center my-1">
+        <div ref="chart" class="h-fit" v-if="hasData"></div>
+        <div class="flex justify-center items-center my-1" v-if="hasData">
             <div
                 v-for="(item, index) in itemsData"
                 class="flex justify-start items-center gap-1 mx-2"
@@ -143,6 +166,12 @@ function draw() {
                 ></span>
                 <span class="text text-xs">{{ item.store_name }}</span>
             </div>
+        </div>
+        <div
+            class="h-[120px] w-[200px] flex justify-center items-center text text-secondaryText"
+            v-if="!hasData"
+        >
+            No data to display
         </div>
     </div>
 </template>

@@ -37,7 +37,8 @@ export default class BaseAPIService {
         } catch (error: any) {
             if (!error.response) {
                 throw new APIError({
-                    message: 'Network Error.',
+                    message:
+                        'Unable to connect to the server. Please check your internet connection. If the problem persists, contact your system administrator',
                 });
             }
             switch (error.response.status) {
