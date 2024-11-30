@@ -1,9 +1,13 @@
-import APIError from './APIError'
+import APIError from './APIError';
 
 export default class BaseAPIService {
-    async request(url: string, method: string, params: object|null = null): Promise<any> {
-        const runtimeConfig = useRuntimeConfig()
-        let config = null
+    async request(
+        url: string,
+        method: string,
+        params: object | null = null,
+    ): Promise<any> {
+        const runtimeConfig = useRuntimeConfig();
+        let config: any = null;
         if (method === 'GET') {
             // GET
             config = {
@@ -14,7 +18,7 @@ export default class BaseAPIService {
                     Authorization: 'Bearer ' + localStorage.getItem('_token'),
                 },
                 query: params,
-            }
+            };
         } else {
             // POST, PUT, DELETE
             config = {
@@ -25,38 +29,44 @@ export default class BaseAPIService {
                     Authorization: 'Bearer ' + localStorage.getItem('_token'),
                 },
                 body: params,
-            }
+            };
         }
 
         try {
-            return await $fetch(url, config)
+            return await $fetch(url, config);
         } catch (error: any) {
             if (!error.response) {
                 throw new APIError({
-                    message: "Network Error."
-                })  
+                    message: 'Network Error.',
+                });
             }
             switch (error.response.status) {
                 case 400:
+                    throw new APIError(error.response._data);
                 case 422:
-                    throw new APIError(error.response._data)
+                    throw new APIError(error.response._data);
                 case 404:
-                    throw navigateTo('/404')
+                    throw navigateTo('/404');
                 case 401:
-                    this.revokeAccess()
-                    throw new APIError({message: error.response._data.data.message || "Invalid credentials."})
+                    this.revokeAccess();
+                    throw new APIError({
+                        message:
+                            error.response._data.data.message ||
+                            'Invalid credentials.',
+                    });
                 case 500:
-                    throw navigateTo('/500')
+                    throw navigateTo('/500');
                 default:
                     throw new APIError({
-                        message: "Something went wrong. Please try again. If the problem persists, contact your system administrator"
-                    })
+                        message:
+                            'Something went wrong. Please try again. If the problem persists, contact your system administrator',
+                    });
             }
         }
     }
 
     revokeAccess() {
-        localStorage.removeItem('_token')
-        navigateTo('/')
+        localStorage.removeItem('_token');
+        navigateTo('/');
     }
 }

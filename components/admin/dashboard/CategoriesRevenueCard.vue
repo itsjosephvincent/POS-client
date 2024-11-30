@@ -99,7 +99,7 @@ function draw() {
         .value((d: any) => d.value);
 
     // Create the arc generator for the donut slices
-    const arc = d3
+    const arc: any = d3
         .arc()
         .innerRadius(radius * 0.6) // Inner radius for donut hole
         .outerRadius(radius);
