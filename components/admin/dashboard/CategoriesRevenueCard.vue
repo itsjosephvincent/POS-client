@@ -22,7 +22,7 @@ const radius =
 const color = d3.scaleOrdinal(d3.schemeTableau10);
 
 const props = defineProps<{
-    date: string | null;
+    date: Array<Date> | null;
     store: string | null;
 }>();
 const itemsData: Ref<any> = ref([]);
@@ -31,7 +31,9 @@ async function fetch() {
     try {
         let params: any = {};
         if (props.date) {
-            params.date = props.date;
+            params.date = Array.from(
+                props.date.map((i: Date) => Math.floor(i.getTime() / 1000)),
+            ).join(',');
         }
         if (props.store && props.store != 'all') {
             params.store = props.store;

@@ -20,6 +20,9 @@ importers:
       '@vee-validate/nuxt':
         specifier: ^4.13.2
         version: 4.13.2(magicast@0.3.5)(rollup@4.22.2)(vue@3.5.7)
+      '@vuepic/vue-datepicker':
+        specifier: ^10.0.0
+        version: 10.0.0(vue@3.5.7)
       d3:
         specifier: ^7.9.0
         version: 7.9.0
@@ -1247,6 +1250,12 @@ packages:
   '@vue/shared@3.5.7':
     resolution: {integrity: sha512-NBE1PBIvzIedxIc2RZiKXvGbJkrZ2/hLf3h8GlS4/sP9xcXEZMFWOazFkNd6aGeUCMaproe5MHVYB3/4AW9q9g==}
 
+  '@vuepic/vue-datepicker@10.0.0':
+    resolution: {integrity: sha512-ujlk3ahftVQpyCJ8hq7TmOOHrf/XFJI1ZcAh/FRB5Ci62Vq5HmHf6xux5KVi5SPUFRTJY78m+uDhYy1M+8RZ9w==}
+    engines: {node: '>=18.12.0'}
+    peerDependencies:
+      vue: '>=3.2.0'
+
   abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
 
@@ -1789,6 +1798,9 @@ packages:
   d3@7.9.0:
     resolution: {integrity: sha512-e1U46jVP+w7Iut8Jt8ri1YsPOvFpg46k+K8TpCb0P+zjCkjkPnV7WzfDJzMHy1LnA+wj5pLT1wjO901gLXeEhA==}
     engines: {node: '>=12'}
+
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
   db0@0.1.4:
     resolution: {integrity: sha512-Ft6eCwONYxlwLjBXSJxw0t0RYtA5gW9mq8JfBXn9TtC0nDPlqePAhpv9v4g9aONBi6JI1OXHTKKkUYGd+BOrCA==}
@@ -5171,6 +5183,11 @@ snapshots:
 
   '@vue/shared@3.5.7': {}
 
+  '@vuepic/vue-datepicker@10.0.0(vue@3.5.7)':
+    dependencies:
+      date-fns: 4.1.0
+      vue: 3.5.7
+
   abbrev@1.1.1: {}
 
   abort-controller@3.0.0:
@@ -5741,6 +5758,8 @@ snapshots:
       d3-timer: 3.0.1
       d3-transition: 3.0.1(d3-selection@3.0.0)
       d3-zoom: 3.0.0
+
+  date-fns@4.1.0: {}
 
   db0@0.1.4: {}
 

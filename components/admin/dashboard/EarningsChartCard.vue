@@ -20,7 +20,7 @@ const margin = { top: 20, right: 30, bottom: 30, left: 50 };
 const color = d3.scaleOrdinal(d3.schemeTableau10);
 
 const props = defineProps<{
-    date: string | null;
+    date: Array<Date> | null;
     store: string | null;
 }>();
 const itemsData: Ref<Array<EarningsReport>> = ref([]);
@@ -29,7 +29,9 @@ async function fetch() {
     try {
         let params: any = {};
         if (props.date) {
-            params.date = props.date;
+            params.date = Array.from(
+                props.date.map((i: Date) => Math.floor(i.getTime() / 1000)),
+            ).join(',');
         }
         const response = await reportService.store(params);
         if (response && response.data) {

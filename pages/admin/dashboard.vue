@@ -3,6 +3,7 @@ import { usePageStore } from '~/stores/page';
 import { reportService } from '~/api/admin/ReportService';
 import { storeService } from '~/api/admin/StoreService';
 import type { Store, Admin, SuperAdmin, Cashier } from '~/common/types';
+import VueDatePicker from '@vuepic/vue-datepicker';
 
 const pageTitle = 'Dashboard';
 const pageStore = usePageStore();
@@ -27,7 +28,7 @@ interface SummaryReport {
 const storesData: Ref<Array<Store> | null> = ref(null);
 const selectedStore = ref(null);
 
-const selectedDate: Ref<string | null> = ref(null);
+const selectedDate: Ref<Array<Date> | null> = ref(null);
 const summaryData: Ref<SummaryReport | null> = ref(null);
 
 const isLoading = ref(false);
@@ -36,7 +37,11 @@ async function summaryReportFetch() {
     try {
         let params: any = {};
         if (selectedDate.value) {
-            params.date = selectedDate.value;
+            params.date = Array.from(
+                selectedDate.value.map((i: Date) =>
+                    Math.floor(i.getTime() / 1000),
+                ),
+            ).join(',');
         }
         if (selectedStore.value && selectedStore.value != 'all') {
             params.store = selectedStore.value;
@@ -78,13 +83,11 @@ onMounted(() => {
 watch(selectedStore, () => {
     summaryReportFetch();
 });
-
-function onDateChanged(date: string) {
-    selectedDate.value = date;
+watch(selectedDate, () => {
     summaryReportFetch();
-}
+});
 
-const getTotalSales = computed(() =>
+const getTotalIncome = computed(() =>
     summaryData.value ? summaryData.value.total_payments : '0.00',
 );
 const getTotalEarnings = computed(() =>
@@ -114,6 +117,15 @@ const getStoresSelect = computed(() => {
 <template>
     <div class="w-full px-2 md:px-4 pb-10">
         <div class="w-full flex justify-start gap-2 items-center mb-4">
+            <VueDatePicker
+                placeholder="Select Dates"
+                class="date-picker"
+                v-model="selectedDate"
+                range
+                :ui="{
+                    input: 'date-picker-input',
+                }"
+            />
             <ReportDropdown
                 v-if="storesData"
                 :options="getStoresSelect"
@@ -123,12 +135,11 @@ const getStoresSelect = computed(() => {
                 v-model="selectedStore"
                 :pre-selected-data="getStoresSelect[0]"
             />
-            <AdminOrdersDatePicker @date-changed="onDateChanged" />
         </div>
         <div class="w-full flex flex-wrap gap-4 mb-4">
             <AdminDashboardInfoSummaryCard
-                title="Total Sales"
-                :summary="getTotalSales"
+                title="Total Income"
+                :summary="getTotalIncome"
                 icon="cartAdd"
             />
             <AdminDashboardInfoSummaryCard
@@ -153,3 +164,24 @@ const getStoresSelect = computed(() => {
         </div>
     </div>
 </template>
+
+<style>
+.date-picker {
+    width: 340px;
+    height: 40px;
+}
+.date-picker-input {
+    border-radius: 0.75rem;
+    line-height: 26px;
+}
+.dp__main {
+    font-family: 'Poppins', sans-serif;
+}
+.dp__input_focus {
+    border-color: var(--secondary-color);
+    border-width: 2px;
+}
+.dp__input_icon {
+    color: var(--text-primary);
+}
+</style>

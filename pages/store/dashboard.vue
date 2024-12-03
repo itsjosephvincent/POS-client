@@ -55,7 +55,7 @@ function onDateChanged(date: string) {
     summaryReportFetch();
 }
 
-const getTotalSales = computed(() =>
+const getTotalIncome = computed(() =>
     summaryData.value ? summaryData.value.total_payments : '0.00',
 );
 const getTotalEarnings = computed(() =>
@@ -70,8 +70,8 @@ const getTotalEarnings = computed(() =>
         </div>
         <div class="w-full flex flex-wrap gap-4 mb-4">
             <StoreDashboardInfoSummaryCard
-                title="Total Sales"
-                :summary="getTotalSales"
+                title="Total Income"
+                :summary="getTotalIncome"
                 icon="cartAdd"
             />
             <StoreDashboardInfoSummaryCard
