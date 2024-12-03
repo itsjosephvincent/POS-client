@@ -51,10 +51,10 @@ onMounted(() => {
     fetch();
 });
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'store_name', label: 'Store', sortable: true },
-    { key: 'branch', label: 'Branch', sortable: true },
-    { key: 'username', label: 'Username', sortable: true },
-    { key: 'is_active', label: 'Active', sortable: true },
+    { key: 'store_name', label: 'Store', sortable: true, desktopOnly: false },
+    { key: 'branch', label: 'Branch', sortable: true, desktopOnly: true },
+    { key: 'username', label: 'Username', sortable: true, desktopOnly: true },
+    { key: 'is_active', label: 'Active', sortable: true, desktopOnly: false },
 ];
 function columnHeaderClass(column: string) {
     return column === 'is_active' ? 'justify-center' : '';

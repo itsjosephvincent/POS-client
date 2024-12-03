@@ -13,7 +13,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 const userStore = useUserStore();
 const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
-const selectedDate: Ref<String | null> = ref(null);
+const selectedDate: Ref<Array<Date> | null> = ref(null);
 
 const data = ref([]);
 const rowsPerPage = ref(10);
@@ -28,7 +28,6 @@ const isLoading = ref(false);
 async function fetch() {
     try {
         let params: any = {
-            admin_id: user?.id,
             page: currentPage.value,
             sortField: sortField.value,
             sortOrder: sortOrder.value,
@@ -36,7 +35,11 @@ async function fetch() {
             store: user?.uuid,
         };
         if (selectedDate.value) {
-            params.date = selectedDate.value;
+            params.date = Array.from(
+                selectedDate.value.map((i: Date) =>
+                    Math.floor(i.getTime() / 1000),
+                ),
+            ).join(',');
         }
         isLoading.value = true;
         const response = await orderService.all(params);
@@ -69,6 +72,9 @@ const dataTableColumns: Array<DataTableColumns> = [
 ];
 
 onMounted(() => {
+    fetch();
+});
+watch(selectedDate, () => {
     fetch();
 });
 
@@ -122,11 +128,6 @@ function formatDateTime(dateTime: string) {
     return `${year}-${month}-${day} ${hours}:${minutes} ${ampm}`;
 }
 
-function onDateChanged(date: string) {
-    selectedDate.value = date;
-    fetch();
-}
-
 const getRowsPerPage = computed(() => rowsPerPage.value || 10);
 const getTotalPages = computed(() => totalPages.value);
 const getCurrentPage = computed(() => currentPage.value);
@@ -137,7 +138,7 @@ const getCurrentPage = computed(() => currentPage.value);
         class="w-full flex flex-col items-center justify-center py-4 px-2 lg:mx-0"
     >
         <div class="w-full flex justify-between items-center mb-4">
-            <div class="w-full flex justify-end gap-2 items-center">
+            <div class="w-full flex justify-start gap-2 items-center">
                 <VueDatePicker
                     placeholder="Select Dates"
                     class="date-picker"
