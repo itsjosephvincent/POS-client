@@ -61,7 +61,7 @@ const errorClass = computed(() =>
                 errorClass,
             ]"
         >
-            <span>{{ labelText }}</span>
+            <span class="truncate">{{ labelText }}</span>
             <IconSvg
                 :icon="!isOpen ? 'downSmall' : 'upSmall'"
                 size="1em"

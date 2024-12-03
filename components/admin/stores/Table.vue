@@ -28,7 +28,7 @@ async function fetch() {
             page: currentPage.value,
             sortField: sortField.value,
             sortOrder: sortOrder.value,
-            name: filter.value, // filter store names
+            store_name: filter.value, // filter store names
         };
         isLoading.value = true;
         const response = await storeService.stores(params);
@@ -87,7 +87,7 @@ function sortData(column: string, direction: string) {
 }
 function handleRowClick(row: Store) {
     if (row && row.admin_id) {
-        navigateTo(`/admin/stores/` + row.uuid);
+        // navigateTo(`/admin/stores/` + row.uuid);
     }
 }
 const tableActions = [

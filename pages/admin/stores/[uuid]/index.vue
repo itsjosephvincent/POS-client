@@ -21,7 +21,7 @@ async function initializePageData() {
         let params = {
             admin_id: userStore.getUser.id,
         };
-        const response = await storeService.store(
+        const response = await storeService.find(
             route.params.uuid.toString(),
             params,
         );

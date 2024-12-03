@@ -137,7 +137,7 @@ const activeLabel = computed(() => (is_active.value ? 'Active' : 'Inactive'));
             <PrimaryButton
                 type="submit"
                 class="w-full my-3"
-                :label="editData ? 'Create Store' : 'Update Store'"
+                :label="editData ? 'Update Store' : 'Create Store'"
                 :loading="getLoading"
             />
         </form>

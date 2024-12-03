@@ -115,7 +115,7 @@ function toggleSorting(column: DataTableColumns) {
                 </thead>
                 <tbody>
                     <tr
-                        v-if="!props.loading"
+                        v-if="!props.loading && dataSource"
                         v-for="(row, rowIndex) in props.dataSource"
                         :key="rowIndex"
                         @click="$emit('rowClick', row)"
@@ -158,6 +158,12 @@ function toggleSorting(column: DataTableColumns) {
                     </tr>
                 </tbody>
             </table>
+            <div
+                v-if="!dataSource || !dataSource.length"
+                class="px-6 py-4 w-full flex justify-center text-secondaryText bg-white"
+            >
+                No items to show.
+            </div>
         </div>
         <!-- Pagination Controls -->
         <div
