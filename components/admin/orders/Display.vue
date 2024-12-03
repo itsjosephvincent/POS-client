@@ -57,7 +57,7 @@ const getTotal = computed(() => {
         <LoadingCardSkeleton v-if="isFetching" />
         <div
             v-if="orderData"
-            class="w-full max-w-lg lg:w-[500px] p-6 bg-secondaryBg lg:border lg:border-primaryBorder lg:rounded-xl"
+            class="w-full max-w-lg lg:w-[500px] p-0 lg:-6 bg-secondaryBg lg:border lg:border-primaryBorder lg:rounded-xl"
         >
             <div class="font-bold text-primaryText text-lg mb-1">
                 Order #{{ orderData.order_number }}

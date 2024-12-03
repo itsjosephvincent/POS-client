@@ -163,12 +163,14 @@ function closeDeleteModal() {
             <PrimaryButton
                 label="New SKU"
                 icon="plus"
+                :small="true"
                 @click="createButtonHandler"
             />
             <PrimaryButton
                 class=""
                 icon="import"
                 label="Import SKUs"
+                :small="true"
                 @click="importButtonHandler"
             />
             <span class="grow"></span>

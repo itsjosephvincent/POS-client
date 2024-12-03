@@ -82,11 +82,16 @@ async function storesFetch() {
 }
 
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'order_number', label: 'Order', sortable: true },
-    { key: 'store_name', label: 'Store', sortable: true },
-    { key: 'cashier_name', label: 'Cashier', sortable: true },
-    { key: 'payment', label: 'Payment', sortable: true },
-    { key: 'created_at', label: 'Date', sortable: true },
+    { key: 'order_number', label: 'Order', sortable: true, desktopOnly: false },
+    { key: 'store_name', label: 'Store', sortable: true, desktopOnly: true },
+    {
+        key: 'cashier_name',
+        label: 'Cashier',
+        sortable: true,
+        desktopOnly: true,
+    },
+    { key: 'payment', label: 'Payment', sortable: true, desktopOnly: false },
+    { key: 'created_at', label: 'Date', sortable: true, desktopOnly: true },
 ];
 
 onMounted(() => {

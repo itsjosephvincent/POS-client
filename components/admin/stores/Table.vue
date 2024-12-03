@@ -141,7 +141,12 @@ const getCurrentPage = computed(() => currentPage.value);
         class="w-full flex flex-col items-center justify-center py-4 px-2 lg:mx-0"
     >
         <div class="w-full flex justify-between items-center mb-4">
-            <PrimaryButton label="New Store" icon="plus" @click="onCreateNew" />
+            <PrimaryButton
+                label="New Store"
+                icon="plus"
+                :small="true"
+                @click="onCreateNew"
+            />
             <DataSearch
                 class="self-end"
                 placeholder="Find Store"

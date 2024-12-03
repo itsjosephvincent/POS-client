@@ -37,7 +37,9 @@ const roundedClass = computed(() => {
             :icon="props.icon"
             :color="props.iconColor || 'white'"
         />
-        <span v-if="!loading">{{ getLabel }}</span>
+        <span v-if="!loading" :class="small ? 'hidden md:block' : ''">{{
+            getLabel
+        }}</span>
         <IconSvg v-if="loading" icon="loading" color="white" size="2em" />
     </button>
 </template>
