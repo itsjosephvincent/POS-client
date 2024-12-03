@@ -8,6 +8,7 @@ import type {
     Admin,
     Cashier,
 } from '~/common/types';
+import VueDatePicker from '@vuepic/vue-datepicker';
 
 const userStore = useUserStore();
 const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
@@ -55,11 +56,16 @@ async function fetch() {
 }
 
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'order_number', label: 'Order', sortable: true },
-    { key: 'store_name', label: 'Store', sortable: true },
-    { key: 'cashier_name', label: 'Cashier', sortable: true },
-    { key: 'payment', label: 'Payment', sortable: true },
-    { key: 'created_at', label: 'Date', sortable: true },
+    { key: 'order_number', label: 'Order', sortable: true, desktopOnly: false },
+    { key: 'store_name', label: 'Store', sortable: true, desktopOnly: true },
+    {
+        key: 'cashier_name',
+        label: 'Cashier',
+        sortable: true,
+        desktopOnly: true,
+    },
+    { key: 'payment', label: 'Payment', sortable: true, desktopOnly: false },
+    { key: 'created_at', label: 'Date', sortable: true, desktopOnly: true },
 ];
 
 onMounted(() => {
@@ -132,7 +138,15 @@ const getCurrentPage = computed(() => currentPage.value);
     >
         <div class="w-full flex justify-between items-center mb-4">
             <div class="w-full flex justify-end gap-2 items-center">
-                <AdminOrdersDatePicker @date-changed="onDateChanged" />
+                <VueDatePicker
+                    placeholder="Select Dates"
+                    class="date-picker"
+                    v-model="selectedDate"
+                    range
+                    :ui="{
+                        input: 'date-picker-input',
+                    }"
+                />
             </div>
             <!-- <AdminOrdersTableFilter /> -->
         </div>

@@ -36,7 +36,7 @@ function closeDeleteModal() {
 <template>
     <div
         :class="[
-            'group relative h-36 w-28 md:w-40 p-4 bg-secondaryBg border border-primaryBorder rounded-xl flex flex-col justify-center items-center gap-2 cursor-pointer text-primaryColor hover:text-secondaryColor hover:border-secondaryColor',
+            'group relative h-36 w-40 md:w-40 p-4 bg-secondaryBg border border-primaryBorder rounded-xl flex flex-col justify-center items-center gap-2 cursor-pointer text-primaryColor hover:text-secondaryColor hover:border-secondaryColor',
         ]"
     >
         <div class="font-bold select-none text-wrap text-center">

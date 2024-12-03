@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import { reportService } from '~/api/store/ReportService';
-
-interface DataTableColumns {
-    key: string;
-    label: string;
-    sortable: boolean;
-}
+import type { DataTableColumns } from '~/common/types';
 
 const props = defineProps<{
-    date: string | null;
+    date: Array<Date> | null;
 }>();
 const itemsData = ref([]);
 
@@ -16,7 +11,9 @@ async function fetch() {
     try {
         let params: any = {};
         if (props.date) {
-            params.date = props.date;
+            params.date = Array.from(
+                props.date.map((i: Date) => Math.floor(i.getTime() / 1000)),
+            ).join(',');
         }
         const response = await reportService.popular(params);
         if (response && response.data) {
@@ -38,12 +35,22 @@ watch(
 );
 
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'product_name', label: 'Name', sortable: true },
-    { key: 'cost', label: 'Cost', sortable: true },
-    { key: 'price', label: 'Price', sortable: true },
-    { key: 'quantity', label: 'Sold Quantity', sortable: true },
-    { key: 'sold', label: 'Total Income', sortable: true },
-    { key: 'earnings', label: 'Total Earnings', sortable: true },
+    { key: 'product_name', label: 'Name', sortable: false },
+    { key: 'cost', label: 'Cost', sortable: false, desktopOnly: true },
+    { key: 'price', label: 'Price', sortable: false, desktopOnly: true },
+    {
+        key: 'quantity',
+        label: 'Sold Quantity',
+        sortable: false,
+        desktopOnly: false,
+    },
+    { key: 'sold', label: 'Total Income', sortable: false, desktopOnly: false },
+    {
+        key: 'earnings',
+        label: 'Total Earnings',
+        sortable: false,
+        desktopOnly: true,
+    },
 ];
 </script>
 

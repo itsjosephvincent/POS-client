@@ -26,9 +26,9 @@ const itemToDelete: Ref<Cashier | null> = ref(null);
 const isLoading = ref(false);
 
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'name', label: 'Name', sortable: true },
-    { key: 'username', label: 'Username', sortable: true },
-    { key: 'is_active', label: 'Active', sortable: true },
+    { key: 'name', label: 'Name', sortable: true, desktopOnly: false },
+    { key: 'username', label: 'Username', sortable: true, desktopOnly: true },
+    { key: 'is_active', label: 'Active', sortable: true, desktopOnly: false },
 ];
 function columnHeaderClass(column: string) {
     return column === 'is_active' ? 'justify-center' : '';
@@ -115,7 +115,7 @@ const tableActions = [
     },
 ];
 function handleRowClick(row: Cashier) {
-    navigateTo(`/store/cashiers/${row.uuid}`);
+    // navigateTo(`/store/cashiers/${row.uuid}`);
 }
 function createButtonHandler() {
     navigateTo(`/store/cashiers/new`);
@@ -149,6 +149,7 @@ function closeDeleteModal() {
             <PrimaryButton
                 label="New Cashier"
                 icon="plus"
+                :small="true"
                 @click="createButtonHandler"
             />
             <span class="grow"></span>

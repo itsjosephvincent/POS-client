@@ -13,7 +13,7 @@ const radius =
 const color = d3.scaleOrdinal(d3.schemeTableau10);
 
 const props = defineProps<{
-    date: string | null;
+    date: Array<Date> | null;
 }>();
 const itemsData = ref([]);
 
@@ -21,7 +21,9 @@ async function fetch() {
     try {
         let params: any = {};
         if (props.date) {
-            params.date = props.date;
+            params.date = Array.from(
+                props.date.map((i: Date) => Math.floor(i.getTime() / 1000)),
+            ).join(',');
         }
         const response = await reportService.category(params);
         if (response && response.data) {
@@ -111,24 +113,35 @@ function draw() {
             tooltip.style('visibility', 'hidden');
         });
 }
+const hasData = computed(() => itemsData?.value && itemsData?.value?.length);
 </script>
 
 <template>
     <div
-        class="bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText flex flex-col justify-center items-center"
+        class="w-full md:w-[40%] md:max-w-[450px] bg-secondaryBg p-4 rounded-xl border border-primaryBorder text-primaryText flex flex-col justify-center items-center"
     >
         <div class="text-lg">Earnings by Category</div>
-        <div ref="chart" class=""></div>
+        <div ref="chart" class="h-fit" v-if="hasData"></div>
+        <div
+            class="h-[120px] w-[200px] flex justify-center items-center text text-secondaryText"
+            v-else
+        >
+            No data to display
+        </div>
         <div class="flex justify-center items-center my-1">
             <div
                 v-for="(item, index) in itemsData"
-                class="flex justify-start items-center gap-1 mx-2"
+                :key="item.label"
+                class="flex flex-col justify-center items-center gap-1 mx-2"
             >
                 <span
+                    v-if="item.label"
                     :class="['p-2 rounded-md border border-primaryBorder']"
                     :style="`background: ${color(item.label)}`"
                 ></span>
-                <span class="text text-xs">{{ item.label }}</span>
+                <span v-if="item.label" class="text text-xs">{{
+                    item.label
+                }}</span>
             </div>
         </div>
     </div>
