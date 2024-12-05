@@ -16,6 +16,7 @@ useHead({
 });
 
 const userStore = useUserStore();
+const dateStore = useDateStore();
 const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
 interface SummaryReport {
@@ -28,7 +29,7 @@ interface SummaryReport {
 const storesData: Ref<Array<Store> | null> = ref(null);
 const selectedStore = ref(null);
 
-const selectedDate: Ref<Array<Date> | null> = ref(null);
+const selectedDate: Ref<Array<Date> | null> = ref(dateStore.getDate || null);
 const summaryData: Ref<SummaryReport | null> = ref(null);
 
 const isLoading = ref(false);
@@ -83,7 +84,8 @@ onMounted(() => {
 watch(selectedStore, () => {
     summaryReportFetch();
 });
-watch(selectedDate, () => {
+watch(selectedDate, (value) => {
+    dateStore.setDate(value);
     summaryReportFetch();
 });
 

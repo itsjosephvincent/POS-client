@@ -6,6 +6,7 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 
 const pageTitle = 'Dashboard';
 const pageStore = usePageStore();
+const dateStore = useDateStore();
 definePageMeta({
     layout: 'store',
     middleware: ['store'],
@@ -24,7 +25,7 @@ interface SummaryReport {
     date: string;
 }
 
-const selectedDate: Ref<Array<Date> | null> = ref(null);
+const selectedDate: Ref<Array<Date> | null> = ref(dateStore.getDate || null);
 const summaryData: Ref<SummaryReport | null> = ref(null);
 
 const isLoading = ref(false);
@@ -55,7 +56,8 @@ onMounted(() => {
     summaryReportFetch();
 });
 
-watch(selectedDate, () => {
+watch(selectedDate, (value) => {
+    dateStore.setDate(value);
     summaryReportFetch();
 });
 

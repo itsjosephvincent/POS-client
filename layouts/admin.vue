@@ -17,6 +17,12 @@ const sidebarMenus: Array<SidebarMenu> = [
         icon: 'categories',
     },
     { id: 'orders', link: '/admin/orders', name: 'Orders', icon: 'orders' },
+    {
+        id: 'reports',
+        link: '/admin/reports',
+        name: 'Reports',
+        icon: 'reporting',
+    },
 ];
 </script>
 

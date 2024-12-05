@@ -32,7 +32,7 @@ async function fetch() {
         isFetching.value = false;
         if (response.data) {
             categoriesData.value = response.data;
-            categoryStore.setCategories(response.data);
+            // categoryStore.setCategories(response.data);
         }
     } catch (error) {
         isFetching.value = false;

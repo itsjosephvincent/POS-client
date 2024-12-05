@@ -11,9 +11,10 @@ import type {
 import VueDatePicker from '@vuepic/vue-datepicker';
 
 const userStore = useUserStore();
+const dateStore = useDateStore();
 const user: SuperAdmin | Admin | Store | Cashier | null = userStore.getUser;
 
-const selectedDate: Ref<Array<Date> | null> = ref(null);
+const selectedDate: Ref<Array<Date> | null> = ref(dateStore.getDate || null);
 
 const data = ref([]);
 const rowsPerPage = ref(10);
@@ -74,7 +75,8 @@ const dataTableColumns: Array<DataTableColumns> = [
 onMounted(() => {
     fetch();
 });
-watch(selectedDate, () => {
+watch(selectedDate, (value) => {
+    dateStore.setDate(value);
     fetch();
 });
 
