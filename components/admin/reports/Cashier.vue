@@ -66,7 +66,7 @@ const dataTableColumns: Array<DataTableColumns> = [
 </script>
 
 <template>
-    <div class="w-full mt-4 rounded-xl p-6 min-h-60 bg-secondaryBg">
+    <div class="w-full flex flex-col items-center justify-center py-4 lg:mx-0">
         <DataTable
             :columns="dataTableColumns"
             :data-source="itemsData"

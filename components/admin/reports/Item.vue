@@ -37,7 +37,7 @@ watch(
     { immediate: true },
 );
 const dataTableColumns: Array<DataTableColumns> = [
-    { key: 'name', label: 'Product', sortable: false },
+    { key: 'name', label: 'Product', sortable: false, desktopOnly: false },
     {
         key: 'items_sold',
         label: 'Items Sold',
@@ -48,13 +48,13 @@ const dataTableColumns: Array<DataTableColumns> = [
         key: 'net_sales',
         label: 'Net Sales',
         sortable: false,
-        desktopOnly: true,
+        desktopOnly: false,
     },
     {
         key: 'cogs',
         label: 'Cost of Goods',
         sortable: false,
-        desktopOnly: false,
+        desktopOnly: true,
     },
     {
         key: 'gross_profit',
@@ -66,7 +66,7 @@ const dataTableColumns: Array<DataTableColumns> = [
 </script>
 
 <template>
-    <div class="w-full mt-4 rounded-xl p-6 min-h-60 bg-secondaryBg">
+    <div class="w-full flex flex-col items-center justify-center py-4 lg:mx-0">
         <DataTable
             :columns="dataTableColumns"
             :data-source="itemsData"
