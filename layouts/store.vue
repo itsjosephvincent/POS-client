@@ -9,6 +9,12 @@ const sidebarMenus: Array<SidebarMenu> = [
         icon: 'home',
     },
     {
+        id: 'reports',
+        link: '/store/reports',
+        name: 'Reports',
+        icon: 'reporting',
+    },
+    {
         id: 'cashiers',
         link: '/store/cashiers',
         name: 'Cashiers',

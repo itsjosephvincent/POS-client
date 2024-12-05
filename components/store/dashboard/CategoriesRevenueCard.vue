@@ -2,6 +2,15 @@
 import * as d3 from 'd3';
 import { reportService } from '~/api/store/ReportService';
 
+interface CategoryEarnings {
+    category_id: number;
+    name: string;
+    total_quantity: string;
+    total_cost: string;
+    sold: string;
+    earnings: string;
+}
+
 const chart = ref(null);
 
 const width = 200;
@@ -27,7 +36,7 @@ async function fetch() {
         }
         const response = await reportService.category(params);
         if (response && response.data) {
-            itemsData.value = response.data.map((i) => {
+            itemsData.value = response.data.map((i: CategoryEarnings) => {
                 return { label: i.name, value: parseFloat(i.earnings) };
             });
             draw();

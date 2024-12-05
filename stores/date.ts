@@ -5,13 +5,13 @@ interface DateState {
 }
 
 export const useDateStore = defineStore(
-    'category',
+    'date',
     () => {
         const state: DateState = reactive({
             date: null,
         });
-        function setDate(date: Array<Date> | null) {
-            state.date = date;
+        function setDate(dates: Array<Date> | null) {
+            state.date = dates;
         }
         function clear() {
             state.date = null;
@@ -24,5 +24,5 @@ export const useDateStore = defineStore(
             getDate,
         };
     },
-    { persist: true },
+    { persist: false },
 );

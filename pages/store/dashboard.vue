@@ -56,7 +56,7 @@ onMounted(() => {
     summaryReportFetch();
 });
 
-watch(selectedDate, (value) => {
+watch(selectedDate, (value: any) => {
     dateStore.setDate(value);
     summaryReportFetch();
 });

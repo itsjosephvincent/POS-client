@@ -8,6 +8,12 @@ const sidebarMenus: Array<SidebarMenu> = [
         name: 'Dashboard',
         icon: 'home',
     },
+    {
+        id: 'reports',
+        link: '/admin/reports',
+        name: 'Reports',
+        icon: 'reporting',
+    },
     { id: 'stores', link: '/admin/stores', name: 'Stores', icon: 'warehouse' },
     { id: 'skus', link: '/admin/skus', name: 'SKUs', icon: 'products' },
     {
@@ -17,12 +23,6 @@ const sidebarMenus: Array<SidebarMenu> = [
         icon: 'categories',
     },
     { id: 'orders', link: '/admin/orders', name: 'Orders', icon: 'orders' },
-    {
-        id: 'reports',
-        link: '/admin/reports',
-        name: 'Reports',
-        icon: 'reporting',
-    },
 ];
 </script>
 

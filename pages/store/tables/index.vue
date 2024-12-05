@@ -45,7 +45,7 @@ function onAddNew() {
 
 <template>
     <div class="w-full px-6">
-        <LoadingClassificationListSkeleton v-if="isFetching" />
+        <LoadingCategoryListSkeleton v-if="isFetching" />
         <div v-else class="w-full flex flex-col items-start">
             <PrimaryButton
                 class="mb-6"
