@@ -51,6 +51,27 @@ class ReportService extends BaseAPIService {
             params,
         );
     }
+    async item_sales_daily(params: object) {
+        return await this.request(
+            `/store/reports/item_sales_daily`,
+            'GET',
+            params,
+        );
+    }
+    async cashier_sales_daily(params: object) {
+        return await this.request(
+            `/store/reports/cashier_sales_daily`,
+            'GET',
+            params,
+        );
+    }
+    async category_sales_daily(params: object) {
+        return await this.request(
+            `/store/reports/category_sales_daily`,
+            'GET',
+            params,
+        );
+    }
 }
 
 export const reportService = ReportService.getInstance();

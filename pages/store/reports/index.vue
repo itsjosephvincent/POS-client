@@ -51,17 +51,26 @@ watch(selectedDate, (value) => {
             />
         </div>
 
-        <StoreReportsItem
+        <div
+            class="flex flex-col gap-2 justify-center items-center my-2"
             v-if="selectedReport === 'item'"
-            :date="selectedDate"
-        />
-        <StoreReportsCashier
+        >
+            <StoreReportsItemChart :date="selectedDate" />
+            <StoreReportsItem :date="selectedDate" />
+        </div>
+        <div
+            class="flex flex-col gap-2 justify-center items-center my-2"
             v-if="selectedReport === 'cashier'"
-            :date="selectedDate"
-        />
-        <StoreReportsCategory
+        >
+            <StoreReportsCashierChart :date="selectedDate" />
+            <StoreReportsCashier :date="selectedDate" />
+        </div>
+        <div
+            class="flex flex-col gap-2 justify-center items-center my-2"
             v-if="selectedReport === 'category'"
-            :date="selectedDate"
-        />
+        >
+            <StoreReportsCategoryChart :date="selectedDate" />
+            <StoreReportsCategory :date="selectedDate" />
+        </div>
     </div>
 </template>
